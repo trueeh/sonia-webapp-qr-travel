@@ -3,12 +3,35 @@
   <head>
     <meta charset="UTF-8">
     <title>QR Travel</title>
-    <link rel="stylesheet" type="text/css" href="css/main.css">
+    <link rel="stylesheet" type="text/css" href="/css/main.css">
   </head>
   <body>
-    <h1>Raum</h1>
-    
-    <img th:src="'/qrcode?p=' + ${pin}" />
-    
+    <div class='qrbody'>
+      <img id="qrlogo" src="/image/logo.png" />
+      <div th:if="${room != null}">
+        <h1><div th:text="${room.roomType.description}" /></h1>
+        <h2><div th:text="${room.description}" /></h2>
+        <img th:src="'/qrcode?p=' + ${room.pin}" /><br/>
+        <p><span class='qrlabel'>PIN:</span><span class='qrsource' th:text="${room.pin}" /></p>
+        <p><span class='qrlabel'>Registration unter:</span> <span class='qrsource'>https://qr.sonia.de</span></p>
+        <p><span class='qrlabel' id='noAttendees' th:text="'Aktuell: ' + ${noAttendees} + ' Personen'" /></p>
+        
+        <script th:inline="javascript">
+          function getNumberOfAttendees() {
+            var noa = document.getElementById('noAttendees');
+            var pin = [[${room.pin}]];
+            
+            fetch('/room?p=' + pin ).then(resp=>resp.json()).then(function(room){
+              noa.innerHTML = "Aktuell: " + room.attendeeCounter + " Personen";
+            });
+          }
+          setInterval( getNumberOfAttendees, 15e3 );
+        </script>
+        
+      </div>
+      <div th:if="${room == null}">
+        <h1>Unbekannte PIN</h1>
+      </div>
+    </div>
   </body>
 </html>

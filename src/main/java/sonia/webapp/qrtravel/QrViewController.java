@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import sonia.webapp.qrtravel.db.Database;
 
 @Controller
 public class QrViewController
@@ -23,11 +24,12 @@ public class QrViewController
 
   @GetMapping("/view")
   public String qrPage(
-    @RequestParam(name = "p", required = false) String pin,
+    @RequestParam(name = "p", required = true) String pin,
     HttpServletResponse response, Model model)
   {
     LOGGER.info("pin = " + pin);
-    model.addAttribute("pin", pin);
+    model.addAttribute("room", Database.findRoom(pin));
+    model.addAttribute("noAttendees", 1 );
     return "view";
   }
 }

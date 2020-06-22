@@ -61,7 +61,7 @@ public class QrCodeController
     QRCodeWriter barcodeWriter = new QRCodeWriter();
     
     Map hintMap = new HashMap();
-    hintMap.put( EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.H );
+    hintMap.put( EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.M );
 
     BitMatrix bitMatrix
       = barcodeWriter.encode( barcodeText, BarcodeFormat.QR_CODE, 640, 640, hintMap );

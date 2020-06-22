@@ -1,3 +1,38 @@
+body {
+  margin: 0px;
+  background-color: lightgray;
+}
+
 h1 {
     color: darkblue;
+    font-size: 40pt;
+}
+
+h2 {
+    font-size: 32pt;
+}
+
+.qrbody
+{
+  font-family: sans-serif;
+  width: 100%;
+  text-align: center;
+}
+
+.qrlabel
+{
+  font-size: 32pt;
+}
+
+.qrsource
+{
+  font-size: 36pt;
+  font-family: monospace;
+  margin-left: 0.5em;
+}
+
+#qrlogo {
+  position: fixed;
+  top: 10px;
+  left: 10px;
 }
