@@ -6,10 +6,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 import javax.xml.bind.annotation.XmlRootElement;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -18,59 +20,50 @@ import lombok.ToString;
 @XmlRootElement
 @JsonIgnoreProperties(ignoreUnknown = true)
 @ToString
-public class AuthToken
+public class QrTravelToken
 {
-  private AuthToken()
-  {
-  }
-  
+  public final static String QR_TRAVEL_TOKEN = "QrTravelToken";
+  public final static String UNKNOWN_TOKEN = "unknown";
   private final static Config CONFIG = Config.getInstance();
+  private final static org.slf4j.Logger LOGGER = LoggerFactory.getLogger(QrTravelToken.class.getName());
   
-  public AuthToken(String originalUri)
+  private QrTravelToken()
   {
-    this.originalUri = originalUri;
+  }
+
+  public void addToHttpServletResponse(HttpServletResponse response)
+  {
+    response.addCookie(toCookie());
+    response.addHeader("Cache-Control", "no-cache, no-store, max-age=0, must-revalidate");
+    response.addHeader("Pragma", "no-cache");    
   }
   
-  public static AuthToken fromCookieValue(String value)
+  public static QrTravelToken fromCookieValue(String value)
   {
-    AuthToken session = null;
+    QrTravelToken token = null;
     
-    if (!AuthController.UNAUTHORIZED.equalsIgnoreCase(value))
+    if (!UNKNOWN_TOKEN.equalsIgnoreCase(value))
     {
       ObjectMapper objectMapper = new ObjectMapper();
       try
       {
         value = Cipher.decrypt(value);
-        session = objectMapper.readValue(value, AuthToken.class);
+        token = objectMapper.readValue(value, QrTravelToken.class);
       }
       catch (Exception ex)
       {
-        Logger.getLogger(AuthToken.class.getName()).log(Level.SEVERE, null, ex);
+        Logger.getLogger(QrTravelToken.class.getName()).log(Level.SEVERE, null, ex);
       }
     }
     
-    return session;
-  }
-  
-  public static Cookie getLogoutCookie()
-  {
-    Cookie cookie = new AuthToken().toCookie();
-    cookie.setMaxAge(1);
-    return cookie;
-  }
-  
-  public static AuthToken fromCookieValue(String value, String originalUri)
-  {
-    AuthToken token = fromCookieValue(value);
-    
     if (token == null)
     {
-      token = new AuthToken(originalUri);
+      token = new QrTravelToken();
     }
-    
+
     return token;
   }
-  
+
   public Cookie toCookie()
   {
     Cookie cookie = null;
@@ -80,40 +73,37 @@ public class AuthToken
     {
       String value = objectMapper.writeValueAsString(this);
       value = Cipher.encrypt(value);      
-      cookie = new Cookie(AuthController.AUTH_SERVICE_TOKEN, value);
+      cookie = new Cookie(QR_TRAVEL_TOKEN, value);
       cookie.setPath("/");
       cookie.setMaxAge(CONFIG.getTokenTimeout());
       cookie.setHttpOnly(true);
     }
     catch (Exception ex)
     {
-      Logger.getLogger(AuthToken.class.getName()).log(Level.SEVERE, null, ex);
+      Logger.getLogger(QrTravelToken.class.getName()).log(Level.SEVERE, null, ex);
     }
     
     return cookie;
   }
   
-  public void incrementLoginCounter()
-  {
-    loginCounter++;
-  }
   
   @Getter
   @Setter
-  @JsonProperty("uri")
-  private String originalUri;
+  @JsonProperty("ml")
+  private String mail;
   
   @Getter
   @Setter
-  private String uid;
+  @JsonProperty("ph")
+  private String phone;
   
   @Getter
   @Setter
-  @JsonProperty("auth")
-  private boolean authenticated;
+  @JsonProperty("sn")
+  private String sureName;
   
   @Getter
   @Setter
-  @JsonProperty("cnt")
-  private int loginCounter;
+  @JsonProperty("gn")
+  private int givenName;
 }

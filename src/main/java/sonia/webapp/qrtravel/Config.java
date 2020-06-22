@@ -253,7 +253,7 @@ public class Config
     config.ldapHostPort = 636;
     config.ldapHostSSL = true;
     config.ldapBaseDn = "dc=sonia,dc=de";
-    config.ldapBindDn = "cn=Directory Manager";
+    config.ldapBindDn = "cn=qrreader,ou=Special Users,dc=sonia,dc=de";
     config.ldapBindPassword = "<not set>";
     config.ldapSearchScope = "SUB";
     config.ldapSearchAttribute = "mail";
