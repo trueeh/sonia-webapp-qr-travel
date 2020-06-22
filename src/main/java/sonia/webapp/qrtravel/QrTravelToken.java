@@ -57,8 +57,7 @@ public class QrTravelToken
       }
       catch (Exception ex)
       {
-        Logger.getLogger(QrTravelToken.class.getName()).log(Level.SEVERE, null,
-          ex);
+        LOGGER.error("creating cookie ", ex);
       }
     }
 
@@ -86,7 +85,7 @@ public class QrTravelToken
     }
     catch (Exception ex)
     {
-      LOGGER.error("creating cookie ", ex );
+      LOGGER.error("creating cookie ", ex);
     }
 
     return cookie;
