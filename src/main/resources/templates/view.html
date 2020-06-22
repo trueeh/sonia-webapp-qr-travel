@@ -13,7 +13,7 @@
         <h2><div th:text="${room.description}" /></h2>
         <img th:src="'/qrcode?p=' + ${room.pin}" /><br/>
         <p><span class='qrlabel'>PIN:</span><span class='qrsource' th:text="${room.pin}" /></p>
-        <p><span class='qrlabel'>Registration unter:</span> <span class='qrsource'>https://qr.sonia.de</span></p>
+        <p><span class='qrlabel'>Registration unter:</span> <span class='qrsource' th:text="${webServiceUrl}"/></p>
         <p><span class='qrlabel' id='noAttendees' th:text="'Aktuell: ' + ${room.attendeeCounter} + ' Personen'" /></p>
         
         <script th:inline="javascript">

@@ -28,6 +28,7 @@ public class QrViewController
     HttpServletResponse response, Model model)
   {
     LOGGER.info("pin = " + pin);
+    model.addAttribute("webServiceUrl", CONFIG.getWebServiceUrl());
     model.addAttribute("room", Database.findRoom(pin));
     return "view";
   }
