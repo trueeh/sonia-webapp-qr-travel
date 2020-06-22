@@ -31,7 +31,7 @@ import java.security.GeneralSecurityException;
 
 
 import javax.net.ssl.SSLSocketFactory;
-import sonia.nginx.ldap.auth.Config;
+import sonia.webapp.qrtravel.Config;
 
 /**
  *

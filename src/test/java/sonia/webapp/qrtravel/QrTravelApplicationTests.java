@@ -1,10 +1,10 @@
-package sonia.nginx.ldap.auth;
+package sonia.webapp.qrtravel;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class SoniaNginxLdapAuthServiceApplicationTests {
+class QrTravelApplicationTests {
 
 	@Test
 	void contextLoads() {

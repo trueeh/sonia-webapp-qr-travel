@@ -13,7 +13,7 @@
  * obtained from Ostfalia University of Applied Sciences.
  */
 
-package sonia.nginx.ldap.auth;
+package sonia.webapp.qrtravel;
  
 import sonia.commons.crypt.cipher.AesSimpleCipher;
  

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package sonia.nginx.ldap.auth;
+package sonia.webapp.qrtravel;
 
 import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
@@ -13,8 +13,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
-import static sonia.nginx.ldap.auth.AuthController.AUTH_SERVICE_TOKEN;
-import static sonia.nginx.ldap.auth.AuthController.UNAUTHORIZED;
+import static sonia.webapp.qrtravel.AuthController.AUTH_SERVICE_TOKEN;
+import static sonia.webapp.qrtravel.AuthController.UNAUTHORIZED;
 
 @Controller
 public class LoginController
@@ -34,7 +34,7 @@ public class LoginController
     AuthToken token = AuthToken.fromCookieValue(tokenValue, originalUri);
     AuthController.addTokenToHttpServletResponse(token, response);
     model.addAttribute("counter", token.getLoginCounter() + 1);
-    model.addAttribute("authServiceUri", CONFIG.getAuthServiceUri());
+    model.addAttribute("authServiceUri", CONFIG.getWebServiceUrl());
     return "login";
   }
 

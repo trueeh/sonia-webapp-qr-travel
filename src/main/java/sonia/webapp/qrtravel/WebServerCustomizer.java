@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package sonia.nginx.ldap.auth;
+package sonia.webapp.qrtravel;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,6 +25,6 @@ public class WebServerCustomizer
   public void customize(TomcatServletWebServerFactory factory)
   {
     LOGGER.info("WebServerCustomizer.customize");
-    factory.setPort(CONFIG.getAuthServicePort());
+    factory.setPort(CONFIG.getWebServicePort());
   }
 }

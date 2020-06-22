@@ -1,17 +1,12 @@
-package sonia.nginx.ldap.auth;
+package sonia.webapp.qrtravel;
 
 import com.google.common.base.Strings;
-import com.google.common.io.CharStreams;
 import com.unboundid.ldap.sdk.BindResult;
 import com.unboundid.ldap.sdk.LDAPConnection;
 import com.unboundid.ldap.sdk.LDAPException;
 import com.unboundid.ldap.sdk.SearchResult;
 import com.unboundid.ldap.sdk.SearchResultEntry;
 import com.unboundid.ldap.sdk.SearchScope;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
 import java.text.MessageFormat;
 import java.util.List;
 import java.util.logging.Level;
@@ -62,7 +57,7 @@ public class AuthController
                  defaultValue = UNAUTHORIZED) String tokenValue)
   {
     LOGGER.debug("ckeck");
-    System.out.println("- check home url=" + CONFIG.getHomeUrl());
+    //System.out.println("- check home url=" + CONFIG.getHomeUrl());
     System.out.println("  - x-original-uri=" + originalUri);
 
     AuthToken token = AuthToken.fromCookieValue(tokenValue);
@@ -79,7 +74,7 @@ public class AuthController
   public RedirectView logout(HttpServletResponse response)
   {
     addTokenToHttpServletResponse(null, response);
-    return new RedirectView(CONFIG.getHomeUrl());
+    return new RedirectView(CONFIG.getWebServiceUrl());
   }  
   
   @RequestMapping(value = "/auth", method = RequestMethod.POST,
@@ -91,7 +86,7 @@ public class AuthController
     @RequestParam(name = "password", defaultValue = "") String password,
     HttpServletRequest request, HttpServletResponse response)
   {
-    String homeUrl = CONFIG.getHomeUrl();
+    String homeUrl = CONFIG.getWebServiceUrl();
 
     RedirectView view = new RedirectView(homeUrl);
 

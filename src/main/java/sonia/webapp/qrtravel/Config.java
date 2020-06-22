@@ -1,4 +1,4 @@
-package sonia.nginx.ldap.auth;
+package sonia.webapp.qrtravel;
 
 //~--- non-JDK imports --------------------------------------------------------
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -246,10 +246,9 @@ public class Config
   public static void main( String args[] ) throws Exception
   {
     Config.getInstance();
-    config.tokenTimeout = 60 * 60 * 8; // timeout in s == 8h
-    config.authServiceUri = "/auth-service";
-    config.authServicePort = 8080;
-    config.homeUrl = "http://localhost:8800";
+    config.tokenTimeout = 60 * 60 * 24 * 365; // timeout in s == 8h
+    config.webServicePort = 8080;
+    config.webServiceUrl = "https://qr.sonia.de";
     config.ldapHostName = "opendj";
     config.ldapHostPort = 1389;
     config.ldapHostSSL = false;
@@ -259,6 +258,10 @@ public class Config
     config.ldapSearchScope = "ONE";
     config.ldapSearchAttribute = "uid";
     config.ldapSearchFilter = "(uid={0})";
+    config.dbDriverClassName = "org.postgresql.Driver";
+    config.dbUrl = "jdbc:postgresql://qr.sonia.de:5432/qr";
+    config.dbUser = "qr";
+    config.dbPassword = "qr";
     Config.writeConfig();
   }
   
@@ -268,14 +271,23 @@ public class Config
   private int tokenTimeout;
   
   @Getter
-  private String authServiceUri;
+  private String dbUrl;
   
   @Getter
-  private int authServicePort;
-  
-  @Getter
-  private String homeUrl;
+  private String dbDriverClassName;
 
+  @Getter
+  private String dbUser;
+
+  @Getter
+  private String dbPassword;
+  
+  @Getter
+  private String webServiceUrl;
+  
+  @Getter
+  private int webServicePort;
+  
   @Getter
   private String ldapHostName;
   

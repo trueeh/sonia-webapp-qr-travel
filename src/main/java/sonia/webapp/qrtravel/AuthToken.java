@@ -1,4 +1,4 @@
-package sonia.nginx.ldap.auth;
+package sonia.webapp.qrtravel;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
