@@ -8,11 +8,11 @@
   <body>
     <h1>QR Travel</h1>
     <form>
-      <label for="id1">PIN</label> <input id='id1' type='text' name='pin' /></br>
-      <label for="id2">Mail</label> <input id='id2' type='text' name='mail' /></br>
-      <label for="id3">Phone</label> <input id='id3' type='text' name='phone' /></br>
-      <label for="id4">Surname</label> <input id='id4' type='text' name='sn' /></br>
-      <label for="id5">Givenname</label> <input id='id5' type='text' name='givenName' /></br>
+      <label for="id1">PIN</label> <input id='id1' type='text' name='pin' th:value="${pin}" /></br>
+      <label for="id2">Mail</label> <input id='id2' type='text' name='mail' th:value="${mail}" /></br>
+      <label for="id3">Phone</label> <input id='id3' type='text' name='phone' th:value="${phone}" /></br>
+      <label for="id4">Surname</label> <input id='id4' type='text' name='sn' th:value="${surname}" /></br>
+      <label for="id5">Givenname</label> <input id='id5' type='text' name='givenName' th:value="${givenname}" /></br>
     </form>
   </body>
 </html>
