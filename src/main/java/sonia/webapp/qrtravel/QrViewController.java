@@ -29,7 +29,6 @@ public class QrViewController
   {
     LOGGER.info("pin = " + pin);
     model.addAttribute("room", Database.findRoom(pin));
-    model.addAttribute("noAttendees", 1 );
     return "view";
   }
 }
