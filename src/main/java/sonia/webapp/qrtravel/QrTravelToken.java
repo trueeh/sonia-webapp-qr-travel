@@ -105,5 +105,5 @@ public class QrTravelToken
   @Getter
   @Setter
   @JsonProperty("gn")
-  private int givenName;
+  private String givenName;
 }
