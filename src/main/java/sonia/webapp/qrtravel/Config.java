@@ -249,19 +249,19 @@ public class Config
     config.tokenTimeout = 60 * 60 * 24 * 365; // timeout in s == 8h
     config.webServicePort = 8080;
     config.webServiceUrl = "https://qr.sonia.de";
-    config.ldapHostName = "opendj";
-    config.ldapHostPort = 1389;
-    config.ldapHostSSL = false;
-    config.ldapBaseDn = "ou=people,dc=example,dc=com";
+    config.ldapHostName = "dps1.sonia.de";
+    config.ldapHostPort = 636;
+    config.ldapHostSSL = true;
+    config.ldapBaseDn = "dc=sonia,dc=de";
     config.ldapBindDn = "cn=Directory Manager";
-    config.ldapBindPassword = "password";
-    config.ldapSearchScope = "ONE";
-    config.ldapSearchAttribute = "uid";
-    config.ldapSearchFilter = "(uid={0})";
+    config.ldapBindPassword = "<not set>";
+    config.ldapSearchScope = "SUB";
+    config.ldapSearchAttribute = "mail";
+    config.ldapSearchFilter = "(mail={0})";
     config.dbDriverClassName = "org.postgresql.Driver";
     config.dbUrl = "jdbc:postgresql://qr.sonia.de:5432/qr";
     config.dbUser = "qr";
-    config.dbPassword = "qr";
+    config.dbPassword = "<not set>";
     Config.writeConfig();
   }
   
