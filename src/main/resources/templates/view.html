@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8">
+    <title>QR Travel</title>
+    <link rel="stylesheet" type="text/css" href="css/main.css">
+  </head>
+  <body>
+    <h1>Raum</h1>
+    
+    <img th:src="'/qrcode?p=' + ${pin}" />
+    
+  </body>
+</html>
