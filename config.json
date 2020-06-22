@@ -1,0 +1,15 @@
+{
+  "tokenTimeout" : 28800,
+  "authServiceUri" : "/auth-service",
+  "authServicePort" : 8080,
+  "homeUrl" : "http://localhost:8800",
+  "ldapHostName" : "opendj",
+  "ldapHostPort" : 1389,
+  "ldapHostSSL" : false,
+  "ldapBindDn" : "cn=Directory Manager",
+  "ldapBindPassword" : "password",
+  "ldapBaseDn" : "ou=people,dc=example,dc=com",
+  "ldapSearchFilter" : "(uid={0})",
+  "ldapSearchAttribute" : "uid",
+  "ldapSearchScope" : "ONE"
+}
