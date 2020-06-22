@@ -23,10 +23,14 @@ import org.slf4j.LoggerFactory;
 public class QrTravelToken
 {
   public final static String QR_TRAVEL_TOKEN = "QrTravelToken";
+
   public final static String UNKNOWN_TOKEN = "unknown";
+
   private final static Config CONFIG = Config.getInstance();
-  private final static org.slf4j.Logger LOGGER = LoggerFactory.getLogger(QrTravelToken.class.getName());
-  
+
+  private final static org.slf4j.Logger LOGGER = LoggerFactory.getLogger(
+    QrTravelToken.class.getName());
+
   private QrTravelToken()
   {
   }
@@ -34,14 +38,15 @@ public class QrTravelToken
   public void addToHttpServletResponse(HttpServletResponse response)
   {
     response.addCookie(toCookie());
-    response.addHeader("Cache-Control", "no-cache, no-store, max-age=0, must-revalidate");
-    response.addHeader("Pragma", "no-cache");    
+    response.addHeader("Cache-Control",
+      "no-cache, no-store, max-age=0, must-revalidate");
+    response.addHeader("Pragma", "no-cache");
   }
-  
+
   public static QrTravelToken fromCookieValue(String value)
   {
     QrTravelToken token = null;
-    
+
     if (!UNKNOWN_TOKEN.equalsIgnoreCase(value))
     {
       ObjectMapper objectMapper = new ObjectMapper();
@@ -52,10 +57,11 @@ public class QrTravelToken
       }
       catch (Exception ex)
       {
-        Logger.getLogger(QrTravelToken.class.getName()).log(Level.SEVERE, null, ex);
+        Logger.getLogger(QrTravelToken.class.getName()).log(Level.SEVERE, null,
+          ex);
       }
     }
-    
+
     if (token == null)
     {
       token = new QrTravelToken();
@@ -68,11 +74,11 @@ public class QrTravelToken
   {
     Cookie cookie = null;
     ObjectMapper objectMapper = new ObjectMapper();
-    
+
     try
     {
       String value = objectMapper.writeValueAsString(this);
-      value = Cipher.encrypt(value);      
+      value = Cipher.encrypt(value);
       cookie = new Cookie(QR_TRAVEL_TOKEN, value);
       cookie.setPath("/");
       cookie.setMaxAge(CONFIG.getTokenTimeout());
@@ -80,28 +86,27 @@ public class QrTravelToken
     }
     catch (Exception ex)
     {
-      Logger.getLogger(QrTravelToken.class.getName()).log(Level.SEVERE, null, ex);
+      LOGGER.error("creating cookie ", ex );
     }
-    
+
     return cookie;
   }
-  
-  
+
   @Getter
   @Setter
   @JsonProperty("ml")
   private String mail;
-  
+
   @Getter
   @Setter
   @JsonProperty("ph")
   private String phone;
-  
+
   @Getter
   @Setter
   @JsonProperty("sn")
   private String sureName;
-  
+
   @Getter
   @Setter
   @JsonProperty("gn")
