@@ -64,7 +64,7 @@ public class QrCodeController
     hintMap.put( EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.M );
 
     BitMatrix bitMatrix
-      = barcodeWriter.encode( barcodeText, BarcodeFormat.QR_CODE, 640, 640, hintMap );
+      = barcodeWriter.encode( barcodeText, BarcodeFormat.QR_CODE, 480, 480, hintMap );
     
     return MatrixToImageWriter.toBufferedImage(bitMatrix);
   }
