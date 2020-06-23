@@ -23,10 +23,6 @@ public class RoomController
   public Room room(
     @RequestParam(name = "p", required = true) String pin )
   {
-    LOGGER.info("pin = " + pin);
-    
-    Room room = Database.findRoom(pin);
-        
-    return room;
+    return Database.findRoom(pin);
   }
 }
