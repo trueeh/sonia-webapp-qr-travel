@@ -5,10 +5,16 @@
  */
 package sonia.webapp.qrtravel.db;
 
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.TypedQuery;
@@ -28,14 +34,17 @@ public class Database
   private final static Logger LOGGER = LoggerFactory.getLogger(
     Database.class.getName());
 
-    /** Field description */
+  /**
+   * Field description
+   */
   private final static String PERSISTANCE_UNIT_NAME = "qrPU";
 
-  /** Field description */
+  /**
+   * Field description
+   */
   private final static Database SINGLETON = new Database();
 
   //~--- constructors ---------------------------------------------------------
-
   /**
    * Constructs ...
    *
@@ -46,42 +55,65 @@ public class Database
 
     properties.put("javax.persistence.jdbc.url", CONFIG.getDbUrl());
     properties.put("javax.persistence.jdbc.user", CONFIG.getDbUser());
-    properties.put("javax.persistence.jdbc.driver", CONFIG.getDbDriverClassName());
+    properties.put("javax.persistence.jdbc.driver", CONFIG.
+      getDbDriverClassName());
     properties.put("javax.persistence.jdbc.password", CONFIG.getDbPassword());
 
-    this.entityManagerFactory = new org.hibernate.jpa
-      .HibernatePersistenceProvider().createEntityManagerFactory(
-      PERSISTANCE_UNIT_NAME, properties);
+    this.entityManagerFactory = new org.hibernate.jpa.HibernatePersistenceProvider().
+      createEntityManagerFactory(
+        PERSISTANCE_UNIT_NAME, properties);
+
+    roomCache = CacheBuilder.newBuilder().expireAfterWrite(10, TimeUnit.SECONDS).
+      build(new CacheLoader<String, Room>()
+      {
+        @Override
+        public Room load(String pin)
+        {
+          LOGGER.debug("load room cache for pin=" + pin);
+          return getEntityManager().find(Room.class, pin);
+        }
+      });
   }
 
   public static void initialize()
   {
     LOGGER.info("Initialize Database");
-    for( RoomType rt : listRoomTypes())
+    for (RoomType rt : listRoomTypes())
     {
-      System.out.println( rt );
+      System.out.println(rt);
     }
-    
-    Room room = findRoom( "123456" );
-        
-    System.out.println( room );
+
+    Room room = findRoom("123456");
+
+    System.out.println(room);
   }
-  
-  public static Room findRoom( String pin )
+
+  public static Room findRoom(String pin)
   {
-    return getEntityManager().find( Room.class, pin );
+    Room room = null;
+
+    try
+    {
+      room = SINGLETON.roomCache.get(pin);
+    }
+    catch (ExecutionException ex)
+    {
+      LOGGER.error("Room PIN=" + pin + " not found!");
+    }
+
+    return room;
   }
-  
+
   private static EntityManager getEntityManager()
   {
     return SINGLETON.entityManagerFactory.createEntityManager();
   }
-  
+
   public static List<RoomType> listRoomTypes()
   {
     List<Object[]> resultList;
     List<RoomType> result = null;
-    
+
     TypedQuery<Object[]> query = getEntityManager().createNamedQuery(
       "listRoomTypes", Object[].class);
 
@@ -103,7 +135,8 @@ public class Database
 
     return result;
   }
-  
-  
-  private final EntityManagerFactory entityManagerFactory;
+
+  private transient LoadingCache<String, Room> roomCache;
+
+  private transient final EntityManagerFactory entityManagerFactory;
 }
