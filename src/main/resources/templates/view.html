@@ -14,7 +14,7 @@
         <img th:src="'/qrcode?p=' + ${room.pin}" /><br/>
         <p><span class='qrlabel'>PIN:</span><span class='qrsource' th:text="${room.pin}" /></p>
         <p><span class='qrlabel'>Registration unter:</span> <span class='qrsource' th:text="${webServiceUrl}"/></p>
-        <p><span class='qrlabel' id='noAttendees' th:text="'Aktuell: ' + ${room.attendeeCounter} + ' Personen'" /></p>
+        <p><span class='qrlabel' id='noAttendees' th:text="'Aktuell: ' + ${room.attendeesCount} + ' Personen'" /></p>
         
         <script th:inline="javascript">
           function getNumberOfAttendees() {
@@ -22,7 +22,7 @@
             var pin = [[${room.pin}]];
             
             fetch('/room?p=' + pin ).then(resp=>resp.json()).then(function(room){
-              noa.innerHTML = "Aktuell: " + room.attendeeCounter + " Personen";
+              noa.innerHTML = "Aktuell: " + room.attendeesCount + " Personen";
             });
           }
           setInterval( getNumberOfAttendees, 15e3 );

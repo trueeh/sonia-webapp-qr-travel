@@ -26,7 +26,7 @@ public class RoomController
     LOGGER.info("pin = " + pin);
     
     Room room = Database.findRoom(pin);
-    
+        
     return room;
   }
 }
