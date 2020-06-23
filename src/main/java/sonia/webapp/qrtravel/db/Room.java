@@ -5,6 +5,7 @@
  */
 package sonia.webapp.qrtravel.db;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Column;
@@ -55,13 +56,13 @@ public class Room implements Serializable
 
   @Getter
   @Column(name = "owner_uid")
-  private String ownerUid;
+  private @JsonIgnore String ownerUid;
 
   @Getter
   private String domain;
 
   @Getter
-  private String creation;
+  private @JsonIgnore String creation;
 
   @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "rtype", nullable = false)
@@ -73,5 +74,5 @@ public class Room implements Serializable
     fetch = FetchType.EAGER
   )
   @Getter
-  private List<Attendee> attendees;
+  private @JsonIgnore List<Attendee> attendees;
 }
