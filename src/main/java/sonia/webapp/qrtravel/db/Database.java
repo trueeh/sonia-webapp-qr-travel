@@ -96,7 +96,7 @@ public class Database
     {
       room = SINGLETON.roomCache.get(pin);
     }
-    catch (ExecutionException ex)
+    catch (Exception ex)
     {
       LOGGER.error("Room PIN=" + pin + " not found!");
     }
