@@ -19,12 +19,12 @@ import static sonia.webapp.qrtravel.QrTravelToken.UNKNOWN_TOKEN;
 import sonia.webapp.qrtravel.db.Database;
 
 @Controller
-public class HomeController
+public class SampleController
 {
   private final static Config CONFIG = Config.getInstance();
-  private final static Logger LOGGER = LoggerFactory.getLogger(HomeController.class.getName());
+  private final static Logger LOGGER = LoggerFactory.getLogger(SampleController.class.getName());
   
-  @GetMapping("/")
+  @GetMapping("/sample")
   public String home(@RequestHeader(name = "x-original-uri", required = false,
                                       defaultValue = "") String originalUri,
     @RequestParam( name="p", required = false ) String pin,
@@ -33,25 +33,33 @@ public class HomeController
   {
     QrTravelToken token = QrTravelToken.fromCookieValue(tokenValue);
     
-    LOGGER.info( "pin = " + pin );   
-    LOGGER.info( "token = " + token.toString() );
- 
-/*
+    LOGGER.info( "pin = " + pin );
+    
+    LOGGER.info( "token mail = " + token.getMail() );
+    LOGGER.info( "token phone = " + token.getPhone() );
+    LOGGER.info( "token surname = " + token.getSurname() );
+    LOGGER.info( "token given name = " + token.getGivenName() );
+    
+    /*
     token.setMail("t.ludewig@ostfalia.de");
     token.setPhone("+49 5331 939 19000");
     token.setGivenName("Thorsten");
     token.setSurname("Ludewig");
-    token.setUid("th");
-    token.setPassword("Hallo Welt!");
-*/
-
+    */
+    
     model.addAttribute("room", Database.findRoom(pin));
-    model.addAttribute("pin", pin);
-    model.addAttribute("token", token);
+    model.addAttribute("pin", pin );
+    model.addAttribute("mail", token.getMail());
+    model.addAttribute("phone", token.getPhone());
+    model.addAttribute("surname", token.getSurname());
+    model.addAttribute("givenname", token.getGivenName());
+   
+   //  model.addAttribute("description", description );
+   //  model.addAttribute("studentNumber", studentNumber );
  
     token.setLastPin(pin);
     token.addToHttpServletResponse(response);
-    return "home";
+    return "sample";
   }
 
 }

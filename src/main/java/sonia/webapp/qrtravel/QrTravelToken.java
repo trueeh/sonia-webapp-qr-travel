@@ -74,6 +74,7 @@ public class QrTravelToken
 
     try
     {
+      this.lastAccess = System.currentTimeMillis();
       String value = objectMapper.writeValueAsString(this);
       value = Cipher.encrypt(value);
       cookie = new Cookie(QR_TRAVEL_TOKEN, value);
@@ -102,10 +103,34 @@ public class QrTravelToken
   @Getter
   @Setter
   @JsonProperty("sn")
-  private String sureName;
+  private String surname;
 
   @Getter
   @Setter
   @JsonProperty("gn")
   private String givenName;
+
+  @Getter
+  @Setter
+  @JsonProperty("lp")
+  private String lastPin;
+  
+  @Getter
+  @JsonProperty("ts")
+  private long lastAccess;
+  
+  @Setter
+  @Getter
+  @JsonProperty("id")
+  private String uid;
+  
+  @Setter
+  @Getter
+  @JsonProperty("pw")
+  private String password;
+  
+  @Setter
+  @Getter
+  @JsonProperty("lc")
+  private String location;
 }
