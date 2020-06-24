@@ -53,6 +53,7 @@ public class HomeController
     model.addAttribute("room", Database.findRoom(pin));
     model.addAttribute("pin", pin);
     model.addAttribute("token", token);
+    model.addAttribute("submitButtonText", "Kommen" ); // TODO
  
     token.setLastPin(pin);
     token.addToHttpServletResponse(response);
@@ -74,6 +75,7 @@ public class HomeController
     model.addAttribute("room", Database.findRoom(attendeeInfo.getPin()));
     model.addAttribute("pin", attendeeInfo.getPin());
     model.addAttribute("token", token);
+    model.addAttribute("submitButtonText", "Gehen" ); // TODO
  
     token.setLastPin(attendeeInfo.getPin());
     token.addToHttpServletResponse(response);
