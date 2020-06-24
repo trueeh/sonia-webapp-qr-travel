@@ -25,6 +25,7 @@ public class AttendeeController
   public AttendeeInfo attendee(
     @RequestParam(name = "mail", required = true) String mail )
   {
+    /*
     LOGGER.info("mail = " + mail);
     
     AttendeeInfo attendee = new AttendeeInfo();
@@ -41,6 +42,7 @@ public class AttendeeController
       attendee.setMail(mail.toLowerCase());
     }
     
-    return attendee;
+    return attendee; */
+    return null;
   }
 }
