@@ -100,7 +100,6 @@ public class LdapUtil
         mail
       });
 
-      //System.out.println(searchFilter);
       SearchResult searchResult = connection.search(CONFIG.getLdapBaseDn(),
         getSearchScope(), searchFilter,
         "uid", "mail", "sn", "givenName", "soniaStudentNumber");

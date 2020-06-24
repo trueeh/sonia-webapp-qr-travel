@@ -217,8 +217,11 @@ public class HomeController
           if ( account != null )
           {
             attendee.setEmail(account.getMail());
+            token.setMail(account.getMail());
             attendee.setGivenname(account.getGivenName());
+            token.setGivenName(account.getGivenName());
             attendee.setSurname(account.getSn());
+            token.setSurname(account.getSn());
             attendee.setStudentnumber(account.getSoniaStudentNumber());
           }
           else
