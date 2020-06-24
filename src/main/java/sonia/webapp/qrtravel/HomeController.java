@@ -43,8 +43,8 @@ public class HomeController
     token.setSurname("Ludewig");
     token.setUid("th");
     token.setPassword("Hallo Welt!");
+    token.setLocation("Irgendwo");
 */
-
     model.addAttribute("room", Database.findRoom(pin));
     model.addAttribute("pin", pin);
     model.addAttribute("token", token);

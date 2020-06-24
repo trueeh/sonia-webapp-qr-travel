@@ -6,6 +6,7 @@
 package sonia.webapp.qrtravel.db;
 
 import java.io.Serializable;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import lombok.Getter;
@@ -49,4 +50,8 @@ public class Attendee implements Serializable
   
   @Getter
   private String location;
+  
+  @Getter
+  @Column(name = "cookieUUID")
+  private String cookieUUID;
 }

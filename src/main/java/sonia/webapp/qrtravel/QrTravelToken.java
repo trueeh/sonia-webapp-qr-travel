@@ -3,6 +3,7 @@ package sonia.webapp.qrtravel;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.UUID;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -31,6 +32,7 @@ public class QrTravelToken
 
   private QrTravelToken()
   {
+    uuid = UUID.randomUUID().toString();
   }
 
   public void addToHttpServletResponse(HttpServletResponse response)
@@ -132,5 +134,9 @@ public class QrTravelToken
   @Setter
   @Getter
   @JsonProperty("lc")
-  private String location;
+  private String location;  
+  
+  @Getter
+  @JsonProperty("uu")
+  private String uuid;
 }
