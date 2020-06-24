@@ -5,13 +5,12 @@
  */
 package sonia.webapp.qrtravel;
 
+import com.google.common.base.Strings;
 import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -40,15 +39,6 @@ public class HomeController
     LOGGER.info( "pin = " + pin );   
     LOGGER.info( "token = " + token.toString() );
  
-/*
-    token.setMail("t.ludewig@ostfalia.de");
-    token.setPhone("+49 5331 939 19000");
-    token.setGivenName("Thorsten");
-    token.setSurname("Ludewig");
-    token.setUid("th");
-    token.setPassword("Hallo Welt!");
-    token.setLocation("Irgendwo");
-*/
     model.addAttribute("attendeeInfo", new AttendeeInfo());
     model.addAttribute("room", Database.findRoom(pin));
     model.addAttribute("pin", pin);
@@ -71,7 +61,15 @@ public class HomeController
     LOGGER.info( "pin = " + attendeeInfo.getPin() );   
     LOGGER.info( "token = " + token.toString() );
     LOGGER.info( "attendeeInfo = " + attendeeInfo.toString() );
- 
+
+    if ( !Strings.isNullOrEmpty(attendeeInfo.getGivenName())) token.setGivenName(attendeeInfo.getGivenName());
+    if ( !Strings.isNullOrEmpty(attendeeInfo.getSurname())) token.setSurname(attendeeInfo.getSurname());
+    if ( !Strings.isNullOrEmpty(attendeeInfo.getMail())) token.setMail(attendeeInfo.getMail());
+    if ( !Strings.isNullOrEmpty(attendeeInfo.getPhone())) token.setPhone(attendeeInfo.getPhone());
+    if ( !Strings.isNullOrEmpty(attendeeInfo.getUid())) token.setUid(attendeeInfo.getUid());
+    if ( !Strings.isNullOrEmpty(attendeeInfo.getPassword())) token.setPassword(attendeeInfo.getPassword());
+    if ( !Strings.isNullOrEmpty(attendeeInfo.getLocation())) token.setLocation(attendeeInfo.getLocation());
+    
     model.addAttribute("room", Database.findRoom(attendeeInfo.getPin()));
     model.addAttribute("pin", attendeeInfo.getPin());
     model.addAttribute("token", token);
