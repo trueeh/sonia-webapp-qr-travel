@@ -6,6 +6,7 @@
 package sonia.webapp.qrtravel.db;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.google.common.base.Strings;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Column;
@@ -41,7 +42,13 @@ public class Room implements Serializable
     
     if ( attendees != null )
     {
-      count = attendees.size();
+      for( Attendee a : attendees )
+      {
+        if( Strings.isNullOrEmpty(a.getDeparture()))
+        {
+          count++;
+        }
+      }
     }
     
     return count;
