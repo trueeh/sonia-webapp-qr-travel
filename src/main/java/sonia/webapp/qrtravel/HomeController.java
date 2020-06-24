@@ -85,6 +85,7 @@ public class HomeController
     model.addAttribute("pin", attendeeInfo.getPin());
     model.addAttribute("token", token);
     model.addAttribute("submitButtonText", "Gehen" ); // TODO
+    model.addAttribute("dataCommitted", true ); // TODO
  
     token.setLastPin(attendeeInfo.getPin());
     token.addToHttpServletResponse(response);

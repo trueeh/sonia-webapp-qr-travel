@@ -1,10 +1,10 @@
 function showCommitMessage()
 {
 
-  formPin = $("#PIN").val();
+  formPin = $("#pin").val();
   formMail = $("#mail").val();
-  formGivenName = $("#givenname").val();
-  formSureName = $("#surename").val();
+  formGivenName = $("#givenName").val();
+  formSureName = $("#surname").val();
 
   $("#valuesForMessage").html(
           "<p>" + formPin + "</p>" +
