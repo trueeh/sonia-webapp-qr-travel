@@ -39,12 +39,17 @@ public class HomeController
     LOGGER.info( "pin = " + pin );   
     LOGGER.info( "token = " + token.toString() );
  
+    if ( pin == null || ! pin.equals(token.getLastPin()))
+    {
+      token.setLocation(null);
+    }
+
     model.addAttribute("attendeeInfo", new AttendeeInfo());
     model.addAttribute("room", Database.findRoom(pin));
     model.addAttribute("pin", pin);
     model.addAttribute("token", token);
     model.addAttribute("submitButtonText", "Kommen" ); // TODO
- 
+     
     token.setLastPin(pin);
     token.addToHttpServletResponse(response);
     return "home";
@@ -70,6 +75,12 @@ public class HomeController
     if ( !Strings.isNullOrEmpty(attendeeInfo.getPassword())) token.setPassword(attendeeInfo.getPassword());
     if ( !Strings.isNullOrEmpty(attendeeInfo.getLocation())) token.setLocation(attendeeInfo.getLocation());
     
+    if ( attendeeInfo == null ||  attendeeInfo.getPin() == null 
+        || ! attendeeInfo.getPin().equals(token.getLastPin()))
+    {
+      token.setLocation(null);
+    }
+
     model.addAttribute("room", Database.findRoom(attendeeInfo.getPin()));
     model.addAttribute("pin", attendeeInfo.getPin());
     model.addAttribute("token", token);

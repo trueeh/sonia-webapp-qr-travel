@@ -23,6 +23,7 @@
 
       <div th:if="${room == null}">
         <div class="row">
+          <div class="d-none d-md-block col-md-3 ">&nbsp;</div>
           <div class="col-xs-12 col-sm-12 col-md-6 mt-1" style="text-align: center;">
             <h1 id="roomtype" >Raum-PIN?</h1>
             <div th:if="${pin != null}">
@@ -46,6 +47,7 @@
 
       <div th:if="${room != null}">
         <div class="row">
+          <div class="d-none d-md-block col-md-3 ">&nbsp;</div>
           <div class="col-xs-12 col-sm-12 col-md-6 mt-1" style="text-align: center;">
             <h1 id="roomtype" ><span th:text="${room.roomType.description}" th:remove="tag" /></h1>
             <h3 id="roomdesc" ><span th:text="${room.description}" th:remove="tag" /></h3>
@@ -89,7 +91,7 @@
             <div class="form-row">
               <div class="d-none d-md-block col-md-3">&nbsp;</div>
               <div class="col-xs-12 col-sm-12 col-md-6 mt-1" style="text-align: center;">
-                <input type="text" name="location" id="location" size="35" placeholder="Platz-Nr." class="form-control input-lg text-center" >
+                <input type="text" name="location" id="location" size="35" placeholder="Platz-Nr." th:value="${token.location}" class="form-control input-lg text-center" >
               </div>
             </div>           
           </div>
