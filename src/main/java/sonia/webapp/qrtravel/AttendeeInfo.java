@@ -43,4 +43,12 @@ public class AttendeeInfo
   @Getter
   @Setter
   private String location;
+
+  @Getter
+  @Setter
+  private String uid;
+
+  @Getter
+  @Setter
+  private String password;
 }
