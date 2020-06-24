@@ -5,6 +5,7 @@
  */
 package sonia.webapp.qrtravel.db;
 
+import com.google.common.base.Strings;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
@@ -12,13 +13,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Level;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
-import org.apache.catalina.Host;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sonia.webapp.qrtravel.Config;
@@ -107,6 +108,68 @@ public class Database
   private static EntityManager getEntityManager()
   {
     return SINGLETON.entityManagerFactory.createEntityManager();
+  }
+
+  public static void persist( Attendee attendee )
+  { 
+    LOGGER.info( "persist attendee=" + attendee.toString());
+
+    try (Session session = getEntityManager().unwrap(Session.class))
+    {
+      Transaction transaction = session.beginTransaction();
+      if ( attendee.getId() == 0)
+      {
+        session.save(attendee);
+      }
+      else
+      {
+        session.update(attendee);
+      }
+      transaction.commit();
+    }
+  }
+  
+  public static Attendee merge( Attendee attendee )
+  {
+    Session session = getEntityManager().unwrap(Session.class);
+    Transaction transaction = session.beginTransaction();
+    transaction.begin();
+    Attendee a = getEntityManager().merge(attendee);
+    transaction.commit();
+    return a;
+  }
+  
+  public static Attendee lastAttendeeEntry(String pin, String uuid)
+  {
+    Attendee lastAttendee = null;
+
+    if (!Strings.isNullOrEmpty(pin) && !Strings.isNullOrEmpty(uuid))
+    {
+      List<Attendee> resultList;
+      TypedQuery<Attendee> query = getEntityManager().createNamedQuery( "lastAttendeeEntry", Attendee.class);
+
+      
+      query.setParameter("pin", pin);
+      query.setParameter("uuid", uuid);
+
+      try
+      {
+        resultList = query.getResultList();
+     
+        if ( resultList != null && resultList.size() > 0 )
+        {
+          lastAttendee = resultList.get(0);
+        }
+      }
+      catch (javax.persistence.NoResultException e)
+      {
+        LOGGER.trace("findByName: ", e);
+      }
+
+      System.out.println(lastAttendee);
+    }
+
+    return lastAttendee;
   }
 
   public static List<RoomType> listRoomTypes()
