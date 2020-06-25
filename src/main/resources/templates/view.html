@@ -12,8 +12,8 @@
         <h1><div th:text="${room.roomType.description}" /></h1>
         <h2><div th:text="${room.description}" /></h2>
         <img th:src="${qrUrl}" /><br/>
-        <p><span class='qrlabel'>PIN:</span><span class='qrsource' th:text="${room.pin}" /></p>
         <p><span class='qrlabel'>Registration unter:</span> <span class='qrsource' th:text="${webServiceUrl}"/></p>
+        <p><span class='qrlabel'>PIN:</span><span class='qrsource' th:text="${room.pin}" /></p>
 
         <div th:if="${location != null}">
           <p><span class='qrlabel'>Platz-Nr.:</span> <span class='qrsource' th:text="${location}" /></p>
