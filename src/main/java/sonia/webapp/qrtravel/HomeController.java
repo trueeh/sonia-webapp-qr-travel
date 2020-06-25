@@ -42,11 +42,12 @@ public class HomeController
   @GetMapping("/")
   public String home(
     @RequestParam(name = "p", required = false) String pin,
+    @RequestParam(name = "l", required = false) String location,
     @CookieValue(value = QR_TRAVEL_TOKEN, defaultValue = UNKNOWN_TOKEN) String tokenValue,
     HttpServletResponse response, Model model)
   {
     QrTravelToken token = QrTravelToken.fromCookieValue(tokenValue);
-
+    
     LOGGER.info("Home GET Request");
     LOGGER.info("pin = " + pin);
     LOGGER.info("token = " + token.toString());
@@ -89,6 +90,11 @@ public class HomeController
 
     LOGGER.info(token.toString());
 
+    if ( location != null )
+    {
+      token.setLocation(location);
+    }
+    
     model.addAttribute("attendeeInfo", new AttendeeInfo());
     model.addAttribute("room", Database.findRoom(pin));
     model.addAttribute("pin", pin);
