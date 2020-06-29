@@ -106,25 +106,25 @@
             <div class="form-row">
               <div class="d-none d-md-block col-md-3">&nbsp;</div>
               <div class="col-xs-12 col-sm-12 col-md-6 mt-1" style="text-align: center;">
-                <input type="text" name="mail" id="mail" size="35" placeholder="e-Mail" th:value="${token.mail}" class="form-control input-lg text-center" >
+                <input type="text" required="true" name="mail" id="mail" size="35" placeholder="e-Mail" th:value="${token.mail}" class="form-control input-lg text-center" >
               </div>
             </div>
             <div class="form-row">
               <div class="d-none d-md-block col-md-3">&nbsp;</div>
               <div class="col-xs-12 col-sm-12 col-md-6 mt-1" style="text-align: center;">
-                <input type="text" name="phone" id="phone" maxlength="24" size="35" placeholder="Telefonnummer" th:value="${token.phone}" class="form-control input-lg text-center" >
+                <input type="text" required="true" name="phone" id="phone" maxlength="24" size="35" placeholder="Telefonnummer" th:value="${token.phone}" class="form-control input-lg text-center" >
               </div>
             </div>           
             <div class="form-row">
               <div class="d-none d-md-block col-md-3">&nbsp;</div>
               <div class="col-xs-12 col-sm-12 col-md-6 mt-1" style="text-align: center;">
-                <input type="text" name="givenName" id="givenName" size="35" placeholder="Vorname" th:value="${token.givenName}" class="form-control input-lg text-center" >
+                <input type="text" required="true" name="givenName" id="givenName" size="35" placeholder="Vorname" th:value="${token.givenName}" class="form-control input-lg text-center" >
               </div>
             </div>           
             <div class="form-row">
               <div class="d-none d-md-block col-md-3">&nbsp;</div>
               <div class="col-xs-12 col-sm-12 col-md-6 mt-1" style="text-align: center;">
-                <input type="text" name="surname" id="surname" size="35" placeholder="Nachname" th:value="${token.surname}" class="form-control input-lg text-center" >
+                <input type="text" required="true" name="surname" id="surname" size="35" placeholder="Nachname" th:value="${token.surname}" class="form-control input-lg text-center" >
               </div>
             </div>           
             <div class="form-row">
@@ -139,7 +139,7 @@
             <div class="form-row">
               <div class="d-none d-md-block col-md-3">&nbsp;</div>
               <div class="col-xs-12 col-sm-12 col-md-6 mt-1" style="text-align: center;">
-                <input type="text" name="phone" id="phone" maxlength="24" size="35" placeholder="Telefonnummer" th:value="${token.phone}" class="form-control input-lg text-center" >
+                <input type="text" required="true" name="phone" id="phone" maxlength="24" size="35" placeholder="Telefonnummer" th:value="${token.phone}" class="form-control input-lg text-center" >
               </div>
             </div>           
             <div class="form-row">
@@ -151,13 +151,13 @@
             <div class="form-row">
               <div class="d-none d-md-block col-md-3">&nbsp;</div>
               <div class="col-xs-12 col-sm-12 col-md-6 mt-1" style="text-align: center;">
-                <input type="text" name="uid" id="uid" maxlength="10" size="35" placeholder="Account-ID" th:value="${token.uid}" class="form-control input-lg text-center" >
+                <input type="text" required="true" name="uid" id="uid" maxlength="10" size="35" placeholder="Account-ID" th:value="${token.uid}" class="form-control input-lg text-center" >
               </div>
             </div>
             <div class="form-row">
               <div class="d-none d-md-block col-md-3">&nbsp;</div>
               <div class="col-xs-12 col-sm-12 col-md-6 mt-1" style="text-align: center;">
-                <input type="password" name="password" id="password" maxlength="24" size="35" placeholder="Password" th:value="${token.password}" class="form-control input-lg text-center" >
+                <input type="password" required="true" name="password" id="password" maxlength="24" size="35" placeholder="Password" th:value="${token.password}" class="form-control input-lg text-center" >
               </div>
             </div>           
           </div>
