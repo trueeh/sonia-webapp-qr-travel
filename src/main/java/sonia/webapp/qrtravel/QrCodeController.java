@@ -38,14 +38,22 @@ public class QrCodeController
 
   @GetMapping(produces = MediaType.IMAGE_PNG_VALUE)
   public ResponseEntity<BufferedImage> qrCode(
-    @RequestParam(name = "p", required = false) String pin)
+    @RequestParam(name = "p", required = false) String pin,
+    @RequestParam(name = "l", required = false) String location )
   {
-    LOGGER.info("pin = " + pin);
+    LOGGER.info("pin = " + pin + ", location=" + location );
 
     BufferedImage image = null;
+    
+    String url = CONFIG.getWebServiceUrl()+"/?p=" + pin;
+    if( location != null )
+    {
+      url += "&l=" + location;
+    }
+    
     try
     {
-      image = generateQRCodeImage( CONFIG.getWebServiceUrl()+"/?p=" + pin );
+      image = generateQRCodeImage( url );
     }
     catch (WriterException ex)
     {

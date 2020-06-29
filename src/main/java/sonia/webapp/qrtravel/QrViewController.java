@@ -25,11 +25,21 @@ public class QrViewController
   @GetMapping("/view")
   public String qrPage(
     @RequestParam(name = "p", required = true) String pin,
+    @RequestParam(name = "l", required = false) String location,
     HttpServletResponse response, Model model)
   {
-    LOGGER.info("pin = " + pin);
+    LOGGER.info("pin = " + pin + ", location=" + location );
+    
+    String qrUrl = "/qrcode?p=" + pin;
+    if ( location != null )
+    {
+      qrUrl += "&l=" + location;
+    }
+    
     model.addAttribute("webServiceUrl", CONFIG.getWebServiceUrl());
     model.addAttribute("room", Database.findRoom(pin));
+    model.addAttribute("location", location );
+    model.addAttribute("qrUrl", qrUrl );
     return "view";
   }
 }
