@@ -23,7 +23,7 @@ function showCommitMessage()
 function checkAndSend(formObject)
 {
   //check pin
-  if (formObject.PIN.value.length != 6)
+  if (formObject.pin.value.length != 6)
   {
     $("#invalidEntryModalMessageInfoText").html("Die eingetragene Raum Pin ist zu kurz.");
     $('#invalidEntryModalMessage').modal('show');
@@ -38,14 +38,13 @@ function checkAndSend(formObject)
   }
 
   //check phone number
-
   wrong = false;
-  if (!/^\+?([0-9]*)\)?[-. ]?([0-9]*)[-. ]?([0-9]*)$/.test(formObject.phonenumber.value))
+  if (!/^\+?([0-9]*)\)?[-. ]?([0-9]*)[-. ]?([0-9]*)$/.test(formObject.phone.value))
   {
     wrong = true;
   }
 
-  if (formObject.phonenumber.value.length < 5)
+  if (formObject.phone.value.length < 5)
   {
     wrong = true;
   }
