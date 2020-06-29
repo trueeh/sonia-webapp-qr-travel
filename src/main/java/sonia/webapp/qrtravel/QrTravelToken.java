@@ -124,11 +124,13 @@ public class QrTravelToken
   @Setter
   @Getter
   @JsonProperty("id")
+  @ToString.Exclude
   private String uid;
   
   @Setter
   @Getter
   @JsonProperty("pw")
+  @ToString.Exclude
   private String password;
   
   @Setter
