@@ -148,7 +148,8 @@ public class Database
       List<Attendee> resultList;
       TypedQuery<Attendee> query = getEntityManager().createNamedQuery( "lastAttendeeEntry", Attendee.class);
 
-      
+      query.setFirstResult(0);
+      query.setMaxResults(1);
       query.setParameter("pin", pin);
       query.setParameter("uuid", uuid);
 
