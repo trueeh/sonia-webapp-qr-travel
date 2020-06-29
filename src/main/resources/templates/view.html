@@ -19,7 +19,7 @@
           <p><span class='qrlabel'>Platz-Nr.:</span> <span class='qrsource' th:text="${location}" /></p>
         </div>
         
-        <div th:if="${location == null}">
+        <div class="noprint" th:if="${location == null}">
           <p><span class='qrlabel' id='noAttendees' th:text="'Aktuell: ' + ${room.attendeesCount} + ' Personen'" /></p>
           <script th:inline="javascript">
             function getNumberOfAttendees() {
