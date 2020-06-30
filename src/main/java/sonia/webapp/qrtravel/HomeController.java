@@ -62,44 +62,52 @@ public class HomeController
       LOGGER.info("token = " + token.toString());
     }
 
-    Attendee attendee = Database.lastAttendeeEntry(pin, token.getUuid());
-
     String submitButtonText = "Kommen";
+    Room room = null;
 
-    if (attendee != null && attendee.getDeparture() == null)
+    if (!Strings.isNullOrEmpty(pin))
     {
-      submitButtonText = "Gehen";
-    }
+      room = Database.findRoom(pin);
 
-    if (pin == null || !pin.equals(token.getLastPin()))
-    {
-      token.setLocation(null);
-    }
-
-    if (attendee != null && token.getMail() != null && token.getMail().length()
-      > 0)
-    {
-      LdapAccount account = LdapUtil.searchForMail(token.getMail());
-      if (account != null)
+      if (!Strings.isNullOrEmpty(token.getUuid()))
       {
-        if (account.getSoniaStudentNumber() != null)
+        Attendee attendee = Database.lastAttendeeEntry(pin, token.getUuid());
+        LOGGER.info("last db entry = " + attendee.toString());
+        
+        if (attendee != null && attendee.getDeparture() == null)
         {
-          attendee.setStudentnumber(account.getSoniaStudentNumber());
+          submitButtonText = "Gehen";
         }
-        if (account.getMail() != null)
+
+        if (pin == null || !pin.equals(token.getLastPin()))
         {
-          attendee.setEmail(account.getMail());
-          token.setMail(account.getMail());
+          token.setLocation(null);
         }
-        if (account.getUid() != null)
+
+        if (attendee != null && token.getMail() != null && token.getMail().
+          length() > 0)
         {
-          token.setUid(account.getUid());
+          LdapAccount account = LdapUtil.searchForMail(token.getMail());
+          if (account != null)
+          {
+            if (account.getSoniaStudentNumber() != null)
+            {
+              attendee.setStudentnumber(account.getSoniaStudentNumber());
+            }
+            if (account.getMail() != null)
+            {
+              attendee.setEmail(account.getMail());
+              token.setMail(account.getMail());
+            }
+            if (account.getUid() != null)
+            {
+              token.setUid(account.getUid());
+            }
+          }
+          LOGGER.info(attendee.toString());
         }
       }
-      LOGGER.info(attendee.toString());
     }
-
-    LOGGER.info(token.toString());
 
     if (location != null)
     {
@@ -107,12 +115,14 @@ public class HomeController
     }
 
     model.addAttribute("attendeeInfo", new AttendeeInfo());
-    model.addAttribute("room", Database.findRoom(pin));
+    model.addAttribute("room", room);
     model.addAttribute("pin", pin);
     model.addAttribute("token", token);
     model.addAttribute("submitButtonText", submitButtonText);
 
     token.setLastPin(pin);
+    LOGGER.info("Response token = " + token.toString());
+
     token.addToHttpServletResponse(response);
     return "home";
   }
