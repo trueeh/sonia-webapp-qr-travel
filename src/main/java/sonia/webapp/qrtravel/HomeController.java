@@ -39,6 +39,12 @@ public class HomeController
   private final static Logger LOGGER = LoggerFactory.getLogger(
     HomeController.class.getName());
 
+  @GetMapping("/kaputt")
+  public void kaputt()
+  {
+    throw new RuntimeException("kaputt");
+  }
+
   @GetMapping("/")
   public String home(
     @RequestParam(name = "p", required = false) String pin,
@@ -47,15 +53,15 @@ public class HomeController
     HttpServletResponse response, Model model)
   {
     QrTravelToken token = QrTravelToken.fromCookieValue(tokenValue);
-    
+
     LOGGER.info("Home GET Request");
     LOGGER.info("pin = " + pin);
 
-    if ( !Strings.isNullOrEmpty( token.getMail() ))
+    if (!Strings.isNullOrEmpty(token.getMail()))
     {
       LOGGER.info("token = " + token.toString());
     }
-    
+
     Attendee attendee = Database.lastAttendeeEntry(pin, token.getUuid());
 
     String submitButtonText = "Kommen";
@@ -70,7 +76,8 @@ public class HomeController
       token.setLocation(null);
     }
 
-    if ( attendee != null && token.getMail() != null && token.getMail().length() > 0)
+    if (attendee != null && token.getMail() != null && token.getMail().length()
+      > 0)
     {
       LdapAccount account = LdapUtil.searchForMail(token.getMail());
       if (account != null)
@@ -94,11 +101,11 @@ public class HomeController
 
     LOGGER.info(token.toString());
 
-    if ( location != null )
+    if (location != null)
     {
       token.setLocation(location);
     }
-    
+
     model.addAttribute("attendeeInfo", new AttendeeInfo());
     model.addAttribute("room", Database.findRoom(pin));
     model.addAttribute("pin", pin);
@@ -221,10 +228,10 @@ public class HomeController
           && attendeeInfo.getPassword() != null && attendeeInfo.getPassword().
           length() > 0)
         {
-          LdapAccount account = LdapUtil.bind(attendeeInfo.getUid(), 
-             attendeeInfo.getPassword() );
-          
-          if ( account != null )
+          LdapAccount account = LdapUtil.bind(attendeeInfo.getUid(),
+            attendeeInfo.getPassword());
+
+          if (account != null)
           {
             attendee.setEmail(account.getMail());
             token.setMail(account.getMail());
@@ -245,16 +252,15 @@ public class HomeController
         }
       }
     }
-    
-    
-    LOGGER.info( attendee.toString() );
-    
-    if ( attendee.getEmail() != null )
+
+    LOGGER.info(attendee.toString());
+
+    if (attendee.getEmail() != null)
     {
       Database.persist(attendee);
     }
 
-    model.addAttribute("room", room );
+    model.addAttribute("room", room);
     model.addAttribute("pin", attendeeInfo.getPin());
     model.addAttribute("token", token);
     model.addAttribute("submitButtonText", submitButtonText);
