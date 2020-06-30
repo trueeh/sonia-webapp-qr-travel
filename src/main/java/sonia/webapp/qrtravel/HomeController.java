@@ -50,8 +50,12 @@ public class HomeController
     
     LOGGER.info("Home GET Request");
     LOGGER.info("pin = " + pin);
-    LOGGER.info("token = " + token.toString());
 
+    if ( !Strings.isNullOrEmpty( token.getMail() ))
+    {
+      LOGGER.info("token = " + token.toString());
+    }
+    
     Attendee attendee = Database.lastAttendeeEntry(pin, token.getUuid());
 
     String submitButtonText = "Kommen";
