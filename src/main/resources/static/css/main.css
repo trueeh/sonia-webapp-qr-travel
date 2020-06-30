@@ -43,3 +43,11 @@ h2 {
     display: none;
   }
 }
+
+#footer {
+  position: absolute;
+  bottom: 16px;
+  font-family: sans-serif;
+  width: 100%;
+  text-align: center;
+}

@@ -72,11 +72,15 @@ public class HomeController
       if (!Strings.isNullOrEmpty(token.getUuid()))
       {
         Attendee attendee = Database.lastAttendeeEntry(pin, token.getUuid());
-        LOGGER.info("last db entry = " + attendee.toString());
-        
-        if (attendee != null && attendee.getDeparture() == null)
+
+        if (attendee != null)
         {
-          submitButtonText = "Gehen";
+          LOGGER.info("last db entry = " + attendee.toString());
+
+          if (attendee.getDeparture() == null)
+          {
+            submitButtonText = "Gehen";
+          }
         }
 
         if (pin == null || !pin.equals(token.getLastPin()))
