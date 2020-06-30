@@ -39,7 +39,7 @@ function checkAndSend(formObject)
 
   //check phone number
   wrong = false;
-  if (!/^\+?([0-9]*)\)?[-. ]?([0-9]*)[-. ]?([0-9]*)$/.test(formObject.phone.value))
+  if (!/^\+?([0-9]*)\)?([-. \/]?([0-9]*))+$/.test(formObject.phone.value))
   {
     wrong = true;
   }
