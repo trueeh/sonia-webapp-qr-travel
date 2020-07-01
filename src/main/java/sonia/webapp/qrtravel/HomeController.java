@@ -14,12 +14,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import static sonia.webapp.qrtravel.QrTravelToken.QR_TRAVEL_TOKEN;
 import static sonia.webapp.qrtravel.QrTravelToken.UNKNOWN_TOKEN;
 import sonia.webapp.qrtravel.db.Attendee;
@@ -50,7 +53,7 @@ public class HomeController
     @RequestParam(name = "p", required = false) String pin,
     @RequestParam(name = "l", required = false) String location,
     @CookieValue(value = QR_TRAVEL_TOKEN, defaultValue = UNKNOWN_TOKEN) String tokenValue,
-    HttpServletResponse response, Model model)
+    HttpServletResponse response, Model model )
   {
     QrTravelToken token = QrTravelToken.fromCookieValue(tokenValue);
 
@@ -85,7 +88,7 @@ public class HomeController
 
         if (pin == null || !pin.equals(token.getLastPin()))
         {
-          token.setLocation(null);
+          // token.setLocation(null);
         }
 
         if (attendee != null && token.getMail() != null && token.getMail().
@@ -118,7 +121,7 @@ public class HomeController
       token.setLocation(location);
     }
 
-    model.addAttribute("attendeeInfo", new AttendeeInfo());
+//     model.addAttribute("attendeeInfo", new AttendeeForm());
     model.addAttribute("room", room);
     model.addAttribute("pin", pin);
     model.addAttribute("token", token);
@@ -128,14 +131,30 @@ public class HomeController
     LOGGER.info("Response token = " + token.toString());
 
     token.addToHttpServletResponse(response);
+
+    if (room != null)
+    {
+      if (room.getRoomType().getRtype() != 1)
+      {
+        return "redirect:/registration?p=" + pin + ((location != null) ? ("&l="
+          + location) : "");
+      }
+      else
+      {
+        return "redirect:/exam?p=" + pin + ((location != null) ? ("&l="
+          + location) : "");        
+      }
+    }
+
     return "home";
   }
 
+  /*
   @RequestMapping(value = "/", method = RequestMethod.POST)
   public String postHome(
     @CookieValue(value = QR_TRAVEL_TOKEN, defaultValue = UNKNOWN_TOKEN) String tokenValue,
-    @ModelAttribute AttendeeInfo attendeeInfo, HttpServletResponse response,
-    HttpServletRequest request, Model model)
+    @ModelAttribute AttendeeForm attendeeInfo, HttpServletResponse response,
+    HttpServletRequest request, Model model, BindingResult bindingResult)
   {
     QrTravelToken token = QrTravelToken.fromCookieValue(tokenValue);
 
@@ -282,7 +301,12 @@ public class HomeController
 
     token.setLastPin(attendeeInfo.getPin());
     token.addToHttpServletResponse(response);
+
+    ObjectError oe = new ObjectError("phone",
+      "Telefonnummer mindestlänge 4 Zahlen");
+    bindingResult.addError(oe);
+
     return "home";
   }
-
+*/
 }

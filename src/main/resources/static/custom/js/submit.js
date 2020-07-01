@@ -30,11 +30,14 @@ function checkAndSend(formObject)
     return;
   }
   // check mail
-  if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(formObject.mail.value))
+  if ( typeof formObject.mail !== 'undefined' )
   {
-    $("#invalidEntryModalMessageInfoText").html("Die eingetragene Mail ist ungültig.");
-    $('#invalidEntryModalMessage').modal('show');
-    return;
+    if ( !/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(formObject.mail.value))
+    {
+      $("#invalidEntryModalMessageInfoText").html("Die eingetragene Mail ist ungültig.");
+      $('#invalidEntryModalMessage').modal('show');
+      return;
+    }
   }
 
   //check phone number
@@ -48,6 +51,8 @@ function checkAndSend(formObject)
   {
     wrong = true;
   }
+
+  wrong = false;
 
   if (wrong)
   {

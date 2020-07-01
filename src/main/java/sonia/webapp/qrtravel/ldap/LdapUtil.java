@@ -5,6 +5,7 @@
  */
 package sonia.webapp.qrtravel.ldap;
 
+import com.google.common.base.Strings;
 import com.unboundid.ldap.sdk.BindResult;
 import com.unboundid.ldap.sdk.LDAPConnection;
 import com.unboundid.ldap.sdk.LDAPException;
@@ -50,20 +51,24 @@ public class LdapUtil
 
       LOGGER.info("dn=" + dn);
 
-      try
+      if (!Strings.isNullOrEmpty(dn))
       {
-        BindResult bindResult = connection.bind(dn, password);
-        if (bindResult.getResultCode() == ResultCode.SUCCESS)
+        try
         {
-          LOGGER.info("dn=" + dn + " bind success");
-          account = new LdapAccount(connection.getEntry(dn, "uid", "mail", "sn",
-            "givenName", "soniaStudentNumber"));
-          LOGGER.info(account.toString());
+          BindResult bindResult = connection.bind(dn, password);
+          if (bindResult.getResultCode() == ResultCode.SUCCESS)
+          {
+            LOGGER.info("dn=" + dn + " bind success");
+            account = new LdapAccount(connection.getEntry(dn, "uid", "mail",
+              "sn",
+              "givenName", "soniaStudentNumber"));
+            LOGGER.info(account.toString());
+          }
         }
-      }
-      catch (LDAPException ex)
-      {
-        LOGGER.info("dn=" + dn + " bind failed");
+        catch (LDAPException ex)
+        {
+          LOGGER.info("dn=" + dn + " bind failed");
+        }
       }
     }
     catch (LDAPException ex)
