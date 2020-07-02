@@ -77,7 +77,7 @@ public class Database
 
   public static void initialize()
   {
-    LOGGER.info("Initialize Database");
+    LOGGER.debug("Initialize Database");
     for (RoomType rt : listRoomTypes())
     {
       System.out.println(rt);
@@ -111,7 +111,7 @@ public class Database
 
   public static void persist( Attendee attendee )
   { 
-    LOGGER.info( "persist attendee=" + attendee.toString());
+    LOGGER.debug( "persist attendee=" + attendee.toString());
 
     try (Session session = getEntityManager().unwrap(Session.class))
     {
@@ -166,7 +166,7 @@ public class Database
         LOGGER.trace("findByName: ", e);
       }
 
-      System.out.println(lastAttendee);
+      LOGGER.debug( "Last attendee: " + lastAttendee );
     }
 
     return lastAttendee;

@@ -28,6 +28,8 @@ import static sonia.webapp.qrtravel.QrTravelToken.UNKNOWN_TOKEN;
 import sonia.webapp.qrtravel.db.Attendee;
 import sonia.webapp.qrtravel.db.Database;
 import sonia.webapp.qrtravel.db.Room;
+import sonia.webapp.qrtravel.ldap.LdapAccount;
+import sonia.webapp.qrtravel.ldap.LdapUtil;
 
 @Controller
 public class RegistrationController
@@ -119,9 +121,9 @@ public class RegistrationController
     String submitButtonText = "Kommen";
     QrTravelToken token = QrTravelToken.fromCookieValue(tokenValue);
 
-    LOGGER.info("Home GET Request");
-    LOGGER.info("pin = " + pin);
-    LOGGER.info("location = " + location);
+    LOGGER.debug("Home GET Request");
+    LOGGER.debug("pin = " + pin);
+    LOGGER.debug("location = " + location);
 
     if (!Strings.isNullOrEmpty(pin))
     {
@@ -129,7 +131,7 @@ public class RegistrationController
 
       if (!Strings.isNullOrEmpty(token.getMail()))
       {
-        LOGGER.info("Request token = " + token.toString());
+        LOGGER.debug("Request token = " + token.toString());
       }
 
       if (!Strings.isNullOrEmpty(location))
@@ -150,7 +152,7 @@ public class RegistrationController
 
         if (attendee != null)
         {
-          LOGGER.info("last db entry = " + attendee.toString());
+          LOGGER.debug("last db entry = " + attendee.toString());
 
           if (attendee.getDeparture() == null)
           {
@@ -165,7 +167,7 @@ public class RegistrationController
     model.addAttribute("submitButtonText", submitButtonText);
 
     token.setLastPin(pin);
-    LOGGER.info("Response token = " + token.toString());
+    LOGGER.debug("Response token = " + token.toString());
 
     token.addToHttpServletResponse(response);
     return "registration";
@@ -181,10 +183,10 @@ public class RegistrationController
   {
     QrTravelToken token = QrTravelToken.fromCookieValue(tokenValue);
 
-    LOGGER.info("Home POST Request");
-    LOGGER.info("pin = " + registrationForm.getPin());
-    LOGGER.info("Request token = " + token.toString());
-    LOGGER.info("registrationForm = " + registrationForm.toString());
+    LOGGER.debug("Home POST Request");
+    LOGGER.debug("pin = " + registrationForm.getPin());
+    LOGGER.debug("Request token = " + token.toString());
+    LOGGER.debug("registrationForm = " + registrationForm.toString());
 
     Room room = Database.findRoom(registrationForm.getPin());
 
@@ -198,7 +200,7 @@ public class RegistrationController
       attendee = Database.lastAttendeeEntry(registrationForm.getPin(),
         token.getUuid());
 
-      LOGGER.info("last db entry = " + attendee.toString());
+      LOGGER.debug("last db entry = " + attendee );
 
       if (!bindingResult.hasErrors())
       {
@@ -236,6 +238,26 @@ public class RegistrationController
     {
       if (attendee != null && attendee.getEmail() != null)
       {
+        LdapAccount account = LdapUtil.searchForMail(attendee.getEmail());
+        if (account != null)
+        {
+          if (account.getSoniaStudentNumber() != null)
+          {
+            attendee.setStudentnumber(account.getSoniaStudentNumber());
+          }
+          if (account.getMail() != null)
+          {
+            LOGGER.debug("Setting eMail to: " + account.getMail());
+            attendee.setEmail(account.getMail());
+            token.setMail(account.getMail());
+            registrationForm.setMail(account.getMail());
+          }
+          if (account.getUid() != null)
+          {
+            token.setUid(account.getUid());
+          }
+        }
+        
         Database.persist(attendee);
       }
       dataCommitted = true;
@@ -249,7 +271,7 @@ public class RegistrationController
     token.setLastPin(registrationForm.getPin());
     token.addToHttpServletResponse(response);
 
-    LOGGER.info("Response token = " + token.toString());
+    LOGGER.debug("Response token = " + token.toString());
     return "registration";
   }
 

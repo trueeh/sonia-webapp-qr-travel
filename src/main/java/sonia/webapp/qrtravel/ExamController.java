@@ -28,6 +28,8 @@ import static sonia.webapp.qrtravel.QrTravelToken.UNKNOWN_TOKEN;
 import sonia.webapp.qrtravel.db.Attendee;
 import sonia.webapp.qrtravel.db.Database;
 import sonia.webapp.qrtravel.db.Room;
+import sonia.webapp.qrtravel.ldap.LdapAccount;
+import sonia.webapp.qrtravel.ldap.LdapUtil;
 
 @Controller
 public class ExamController
@@ -111,9 +113,9 @@ public class ExamController
     String submitButtonText = "Kommen";
     QrTravelToken token = QrTravelToken.fromCookieValue(tokenValue);
 
-    LOGGER.info("Home GET Request");
-    LOGGER.info("pin = " + pin);
-    LOGGER.info("location = " + location);
+    LOGGER.debug("Home GET Request");
+    LOGGER.debug("pin = " + pin);
+    LOGGER.debug("location = " + location);
 
     if (!Strings.isNullOrEmpty(pin))
     {
@@ -121,7 +123,7 @@ public class ExamController
 
       if (!Strings.isNullOrEmpty(token.getMail()))
       {
-        LOGGER.info("Request token = " + token.toString());
+        LOGGER.debug("Request token = " + token.toString());
       }
 
       if (!Strings.isNullOrEmpty(location))
@@ -142,7 +144,7 @@ public class ExamController
 
         if (attendee != null)
         {
-          LOGGER.info("last db entry = " + attendee.toString());
+          LOGGER.debug("last db entry = " + attendee.toString());
 
           if (attendee.getDeparture() == null)
           {
@@ -157,7 +159,7 @@ public class ExamController
     model.addAttribute("submitButtonText", submitButtonText);
 
     token.setLastPin(pin);
-    LOGGER.info("Response token = " + token.toString());
+    LOGGER.debug("Response token = " + token.toString());
 
     token.addToHttpServletResponse(response);
     return "exam";
@@ -174,10 +176,10 @@ public class ExamController
     String errorMessage = null;
     QrTravelToken token = QrTravelToken.fromCookieValue(tokenValue);
 
-    LOGGER.info("Home POST Request");
-    LOGGER.info("pin = " + examForm.getPin());
-    LOGGER.info("Request token = " + token.toString());
-    LOGGER.info("examForm = " + examForm.toString());
+    LOGGER.debug("Home POST Request");
+    LOGGER.debug("pin = " + examForm.getPin());
+    LOGGER.debug("Request token = " + token.toString());
+    LOGGER.debug("examForm = " + examForm.toString());
 
     if (PW_IS_SET.equalsIgnoreCase(examForm.getPassword()))
     {
@@ -202,7 +204,7 @@ public class ExamController
         attendee.setArrive(DATE_TIME.format(new Date()));
       }
 
-      LOGGER.info("last db entry = " + attendee.toString());
+      LOGGER.debug("last db entry = " + attendee.toString());
 
       if (attendee.getId() != 0 && attendee.getDeparture() == null)
       {
@@ -212,8 +214,8 @@ public class ExamController
 
     exchangeData(examForm, token, attendee);
 
-    LOGGER.info("uid=" + examForm.getUserId() + " / " + token.getUid());
-    LOGGER.info("pwd=" + examForm.getPassword() + " / " + token.getPassword());
+    LOGGER.trace("uid=" + examForm.getUserId() + " / " + token.getUid());
+    LOGGER.trace("pwd=" + examForm.getPassword() + " / " + token.getPassword());
 
     if (attendee != null && attendee.getDeparture() == null)
     {
@@ -233,14 +235,28 @@ public class ExamController
     }
     else
     {
-      errorMessage = "Zugangsdaten falsch!";
-      if (attendee != null && attendee.getEmail() != null)
-      {
+      LdapAccount account = LdapUtil.bind(examForm.getUserId(),
+        examForm.getPassword());
 
+      if (account != null)
+      {
+        attendee.setEmail(account.getMail());
+        token.setMail(account.getMail());
+        attendee.setGivenname(account.getGivenName());
+        token.setGivenName(account.getGivenName());
+        attendee.setSurname(account.getSn());
+        token.setSurname(account.getSn());
+        attendee.setStudentnumber(account.getSoniaStudentNumber());
+
+        //
         // Database.persist(attendee);
+        examForm.setPassword(PW_IS_SET);
+        dataCommitted = true;
       }
-      examForm.setPassword(PW_IS_SET);
-      // dataCommitted = true;
+      else
+      {
+        errorMessage = "Zugangsdaten falsch!";
+      }
     }
 
     model.addAttribute("room", room);
@@ -252,7 +268,7 @@ public class ExamController
     token.setLastPin(examForm.getPin());
     token.addToHttpServletResponse(response);
 
-    LOGGER.info("Response token = " + token.toString());
+    LOGGER.debug("Response token = " + token.toString());
     return "exam";
   }
 

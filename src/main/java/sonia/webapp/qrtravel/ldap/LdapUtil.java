@@ -49,7 +49,7 @@ public class LdapUtil
         dn = searchResult.getSearchEntries().get(0).getDN();
       }
 
-      LOGGER.info("dn=" + dn);
+      LOGGER.debug("dn=" + dn);
 
       if (!Strings.isNullOrEmpty(dn))
       {
@@ -58,16 +58,16 @@ public class LdapUtil
           BindResult bindResult = connection.bind(dn, password);
           if (bindResult.getResultCode() == ResultCode.SUCCESS)
           {
-            LOGGER.info("dn=" + dn + " bind success");
+            LOGGER.debug("dn=" + dn + " bind success");
             account = new LdapAccount(connection.getEntry(dn, "uid", "mail",
               "sn",
               "givenName", "soniaStudentNumber"));
-            LOGGER.info(account.toString());
+            LOGGER.debug(account.toString());
           }
         }
         catch (LDAPException ex)
         {
-          LOGGER.info("dn=" + dn + " bind failed");
+          LOGGER.debug("dn=" + dn + " bind failed");
         }
       }
     }
@@ -91,7 +91,7 @@ public class LdapUtil
     LdapAccount account = null;
     LDAPConnection connection = null;
 
-    LOGGER.info("LDAP search for mail = " + mail);
+    LOGGER.debug("LDAP search for mail = " + mail);
 
     try
     {
@@ -115,7 +115,7 @@ public class LdapUtil
       if (searchResultEntry.size() > 0)
       {
         account = new LdapAccount(searchResultEntry.get(0));
-        LOGGER.info(account.toString());
+        LOGGER.debug(account.toString());
       }
     }
     catch (LDAPException ex)

@@ -57,12 +57,12 @@ public class HomeController
   {
     QrTravelToken token = QrTravelToken.fromCookieValue(tokenValue);
 
-    LOGGER.info("Home GET Request");
-    LOGGER.info("pin = " + pin);
+    LOGGER.debug("Home GET Request");
+    LOGGER.debug("pin = " + pin);
 
     if (!Strings.isNullOrEmpty(token.getMail()))
     {
-      LOGGER.info("token = " + token.toString());
+      LOGGER.debug("token = " + token.toString());
     }
 
     String submitButtonText = "Kommen";
@@ -78,7 +78,7 @@ public class HomeController
 
         if (attendee != null)
         {
-          LOGGER.info("last db entry = " + attendee.toString());
+          LOGGER.debug("last db entry = " + attendee.toString());
 
           if (attendee.getDeparture() == null)
           {
@@ -111,7 +111,7 @@ public class HomeController
               token.setUid(account.getUid());
             }
           }
-          LOGGER.info(attendee.toString());
+          LOGGER.debug(attendee.toString());
         }
       }
     }
@@ -128,7 +128,7 @@ public class HomeController
     model.addAttribute("submitButtonText", submitButtonText);
 
     token.setLastPin(pin);
-    LOGGER.info("Response token = " + token.toString());
+    LOGGER.debug("Response token = " + token.toString());
 
     token.addToHttpServletResponse(response);
 
@@ -158,10 +158,10 @@ public class HomeController
   {
     QrTravelToken token = QrTravelToken.fromCookieValue(tokenValue);
 
-    LOGGER.info("Home POST Request");
-    LOGGER.info("pin = " + attendeeInfo.getPin());
-    LOGGER.info("token = " + token.toString());
-    LOGGER.info("attendeeInfo = " + attendeeInfo.toString());
+    LOGGER.debug("Home POST Request");
+    LOGGER.debug("pin = " + attendeeInfo.getPin());
+    LOGGER.debug("token = " + token.toString());
+    LOGGER.debug("attendeeInfo = " + attendeeInfo.toString());
 
     Room room = Database.findRoom(attendeeInfo.getPin());
     Attendee attendee = Database.lastAttendeeEntry(attendeeInfo.getPin(), token.
@@ -286,7 +286,7 @@ public class HomeController
       }
     }
 
-    LOGGER.info(attendee.toString());
+    LOGGER.debug(attendee.toString());
 
     if (attendee.getEmail() != null)
     {

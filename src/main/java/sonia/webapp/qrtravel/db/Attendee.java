@@ -41,7 +41,7 @@ public class Attendee implements Serializable
   @PrePersist
   public void prePersist()
   {
-    LOGGER.info("prePersist " + this.getClass().getCanonicalName());
+    LOGGER.debug("prePersist " + this.getClass().getCanonicalName());
   }
 
   /**
@@ -51,7 +51,7 @@ public class Attendee implements Serializable
   @PreUpdate
   public void preUpdate()
   {
-    LOGGER.info("preUpdate " + this.getClass().getCanonicalName());
+    LOGGER.debug("preUpdate " + this.getClass().getCanonicalName());
   }
 
   @Override
