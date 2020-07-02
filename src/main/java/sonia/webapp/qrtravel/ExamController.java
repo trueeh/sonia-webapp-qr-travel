@@ -193,17 +193,24 @@ public class ExamController
 
     token.setLocation(examForm.getLocation());
 
+    boolean initialRequest = true;
+    
     if (!Strings.isNullOrEmpty(token.getUuid()))
     {
       attendee = Database.lastAttendeeEntry(examForm.getPin(),
         token.getUuid());
 
+      if ( attendee != null )
+      {
+        initialRequest = false;
+      }
+      
       if (attendee == null || attendee.getDeparture() != null)
       {
         attendee = new Attendee();
         attendee.setArrive(DATE_TIME.format(new Date()));
       }
-
+      
       LOGGER.debug("last db entry = " + attendee.toString());
 
       if (attendee.getId() != 0 && attendee.getDeparture() == null)
@@ -249,7 +256,7 @@ public class ExamController
         attendee.setStudentnumber(account.getSoniaStudentNumber());
 
         //
-        // Database.persist(attendee);
+        Database.persist(attendee);
         examForm.setPassword(PW_IS_SET);
         dataCommitted = true;
       }
@@ -257,6 +264,11 @@ public class ExamController
       {
         errorMessage = "Zugangsdaten falsch!";
       }
+    }
+    
+    if ( initialRequest )
+    {
+      submitButtonText = "Kommen";
     }
 
     model.addAttribute("room", room);
