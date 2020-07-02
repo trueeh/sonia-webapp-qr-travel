@@ -21,6 +21,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.build.timestamp.format>yyyy-MM-dd HH:mm:ss</maven.build.timestamp.format>
     <build.timestamp>${maven.build.timestamp}</build.timestamp>
+    <logback.conf>logback.xml</logback.conf>
   </properties>
 
   <dependencies>
@@ -164,5 +165,14 @@
       -->            
     </plugins>
   </build>
+
+  <profiles>
+    <profile>
+      <id>devel</id>
+      <properties>
+        <logback.conf>logback.devel.xml</logback.conf>
+      </properties>
+    </profile>
+  </profiles>
 
 </project>
