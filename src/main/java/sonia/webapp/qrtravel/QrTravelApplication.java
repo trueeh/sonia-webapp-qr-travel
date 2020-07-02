@@ -11,6 +11,8 @@ public class QrTravelApplication
 {
   public static void main(String[] args) throws LDAPException
   {
+    System.setProperty("app.home", ".");
+    Config.getInstance();
     Database.initialize();
     SpringApplication.run(QrTravelApplication.class, args);
   }

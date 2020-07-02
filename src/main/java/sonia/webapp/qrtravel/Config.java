@@ -240,6 +240,8 @@ public class Config
       fileName = resourceFileName;
     }
 
+    LOGGER.debug( "config filename = " + fileName );
+    
     return new File(fileName);
   }
 

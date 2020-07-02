@@ -2,3 +2,5 @@ target
 config.json
 private/
 app.home_IS_UNDEFINED/
+config/
+logs/
