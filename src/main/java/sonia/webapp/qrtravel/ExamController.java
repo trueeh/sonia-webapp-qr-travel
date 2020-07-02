@@ -187,30 +187,24 @@ public class ExamController
     }
 
     Room room = Database.findRoom(examForm.getPin());
-
-    String submitButtonText = "Kommen";
     Attendee attendee = null;
 
     token.setLocation(examForm.getLocation());
 
-    boolean initialRequest = true;
-    
+    boolean createEntry = false;
+
     if (!Strings.isNullOrEmpty(token.getUuid()))
     {
       attendee = Database.lastAttendeeEntry(examForm.getPin(),
         token.getUuid());
 
-      if ( attendee != null )
-      {
-        initialRequest = false;
-      }
-      
       if (attendee == null || attendee.getDeparture() != null)
       {
+        createEntry = true;
         attendee = new Attendee();
         attendee.setArrive(DATE_TIME.format(new Date()));
       }
-      
+
       LOGGER.debug("last db entry = " + attendee.toString());
 
       if (attendee.getId() != 0 && attendee.getDeparture() == null)
@@ -224,11 +218,6 @@ public class ExamController
     LOGGER.trace("uid=" + examForm.getUserId() + " / " + token.getUid());
     LOGGER.trace("pwd=" + examForm.getPassword() + " / " + token.getPassword());
 
-    if (attendee != null && attendee.getDeparture() == null)
-    {
-      submitButtonText = "Gehen";
-    }
-
     boolean dataCommitted = false;
 
     if (bindingResult.hasErrors())
@@ -237,7 +226,7 @@ public class ExamController
       List<FieldError> fel = bindingResult.getFieldErrors();
       for (FieldError fe : fel)
       {
-        LOGGER.error(fe.toString());
+        LOGGER.trace(fe.toString());
       }
     }
     else
@@ -265,15 +254,11 @@ public class ExamController
         errorMessage = "Zugangsdaten falsch!";
       }
     }
-    
-    if ( initialRequest )
-    {
-      submitButtonText = "Kommen";
-    }
 
     model.addAttribute("room", room);
     model.addAttribute("pin", examForm.getPin());
-    model.addAttribute("submitButtonText", submitButtonText);
+    model.addAttribute("submitButtonText",
+      (createEntry ^ dataCommitted) ? "Kommen" : "Gehen");
     model.addAttribute("dataCommitted", dataCommitted);
     model.addAttribute("errorMessage", errorMessage);
 
