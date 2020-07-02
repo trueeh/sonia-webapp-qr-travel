@@ -146,7 +146,7 @@ public class ExamController
         {
           LOGGER.debug("last db entry = " + attendee.toString());
 
-          if (attendee.getDeparture() == null)
+          if (attendee.getDeparture() != null)
           {
             createEntry = true;
           }

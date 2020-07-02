@@ -155,7 +155,7 @@ public class RegistrationController
         {
           LOGGER.debug("last db entry = " + attendee );
 
-          if (attendee.getDeparture() == null)
+          if (attendee.getDeparture() != null)
           {
             createEntry = true;
           }
