@@ -14,13 +14,13 @@
  */
 
 
-package sonia.commons.ldap;
+package sonia.webapp.qrtravel.ldap;
 
 /**
  *
  * @author Sebastian Sdorra
  */
-public class LDAPConnectionException extends RuntimeException
+public class LdapConnectionException extends RuntimeException
 {
 
   /** Field description */
@@ -32,7 +32,7 @@ public class LDAPConnectionException extends RuntimeException
    * Constructs ...
    *
    */
-  public LDAPConnectionException() {}
+  public LdapConnectionException() {}
 
   /**
    * Constructs ...
@@ -40,7 +40,7 @@ public class LDAPConnectionException extends RuntimeException
    *
    * @param message
    */
-  public LDAPConnectionException(String message)
+  public LdapConnectionException(String message)
   {
     super(message);
   }
@@ -51,7 +51,7 @@ public class LDAPConnectionException extends RuntimeException
    *
    * @param cause
    */
-  public LDAPConnectionException(Throwable cause)
+  public LdapConnectionException(Throwable cause)
   {
     super(cause);
   }
@@ -63,7 +63,7 @@ public class LDAPConnectionException extends RuntimeException
    * @param message
    * @param cause
    */
-  public LDAPConnectionException(String message, Throwable cause)
+  public LdapConnectionException(String message, Throwable cause)
   {
     super(message, cause);
   }

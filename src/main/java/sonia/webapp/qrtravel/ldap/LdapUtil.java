@@ -16,7 +16,6 @@ import com.unboundid.ldap.sdk.SearchScope;
 import java.text.MessageFormat;
 import java.util.List;
 import org.slf4j.LoggerFactory;
-import sonia.commons.ldap.LDAPConnectionFactory;
 import sonia.webapp.qrtravel.Config;
 
 /**
@@ -37,7 +36,7 @@ public class LdapUtil
 
     try
     {
-      connection = LDAPConnectionFactory.getConnection();
+      connection = LdapConnectionFactory.getConnection();
       SearchResult searchResult = connection.search(CONFIG.getLdapBaseDn(),
         getSearchScope(), "(uid=" + uid + ")",
         "uid");
@@ -95,7 +94,7 @@ public class LdapUtil
 
     try
     {
-      connection = LDAPConnectionFactory.getConnection();
+      connection = LdapConnectionFactory.getConnection();
 
       MessageFormat searchFormat = new MessageFormat(CONFIG.
         getLdapSearchFilter());

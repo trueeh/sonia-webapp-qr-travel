@@ -42,8 +42,6 @@ public class ExamController
   private final static SimpleDateFormat DATE_TIME = new SimpleDateFormat(
     "yyyy-MM-dd HH:mm:ss");
 
-  private final static Config CONFIG = Config.getInstance();
-
   private final static Logger LOGGER = LoggerFactory.getLogger(
     ExamController.class.getName());
 
