@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package sonia.webapp.qrtravel;
+package sonia.webapp.qrtravel.form;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;

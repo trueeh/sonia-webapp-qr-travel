@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package sonia.webapp.qrtravel;
+package sonia.webapp.qrtravel.controller;
 
 import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import sonia.webapp.qrtravel.Config;
 import sonia.webapp.qrtravel.db.Database;
 
 @Controller
