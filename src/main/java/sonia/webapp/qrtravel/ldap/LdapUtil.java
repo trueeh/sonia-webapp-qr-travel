@@ -22,20 +22,20 @@ import sonia.webapp.qrtravel.Config;
  *
  * @author th
  */
-public class Ldap2Util
+public class LdapUtil
 {
-  private final static org.slf4j.Logger LOGGER = LoggerFactory.getLogger(Ldap2Util.class.getName());
+  private final static org.slf4j.Logger LOGGER = LoggerFactory.getLogger(LdapUtil.class.getName());
 
   private final static Config CONFIG = Config.getInstance();
 
-  public static Ldap2Account bind(String uid, String password)
+  public static LdapAccount bind(String uid, String password)
   {
-    Ldap2Account account = null;
+    LdapAccount account = null;
     LDAPConnection connection = null;
 
     try
     {
-      connection = Ldap2ConnectionFactory.getConnection();
+      connection = LdapConnectionFactory.getConnection();
       SearchResult searchResult = connection.search(CONFIG.getLdapBaseDn(),
         getSearchScope(), "(uid=" + uid + ")",
         "uid");
@@ -57,7 +57,7 @@ public class Ldap2Util
           if (bindResult.getResultCode() == ResultCode.SUCCESS)
           {
             LOGGER.debug("dn=" + dn + " bind success");
-            account = new Ldap2Account(connection.getEntry(dn, "uid", "mail",
+            account = new LdapAccount(connection.getEntry(dn, "uid", "mail",
               "sn",
               "givenName", "soniaStudentNumber"));
             LOGGER.debug(account.toString());
@@ -84,16 +84,16 @@ public class Ldap2Util
     return account;
   }
 
-  public static Ldap2Account searchForMail(String mail)
+  public static LdapAccount searchForMail(String mail)
   {
-    Ldap2Account account = null;
+    LdapAccount account = null;
     LDAPConnection connection = null;
 
     LOGGER.debug("LDAP search for mail = " + mail);
 
     try
     {
-      connection = Ldap2ConnectionFactory.getConnection();
+      connection = LdapConnectionFactory.getConnection();
 
       MessageFormat searchFormat = new MessageFormat(CONFIG.
         getLdapSearchFilter());
@@ -112,7 +112,7 @@ public class Ldap2Util
 
       if (searchResultEntry.size() > 0)
       {
-        account = new Ldap2Account(searchResultEntry.get(0));
+        account = new LdapAccount(searchResultEntry.get(0));
         LOGGER.debug(account.toString());
       }
     }
