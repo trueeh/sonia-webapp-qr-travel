@@ -37,7 +37,7 @@ import sonia.webapp.qrtravel.Config;
  *
  * @author th
  */
-public final class LdapConnectionFactory
+public final class Ldap2ConnectionFactory
 {
   private final static Config CONFIG = Config.getInstance();
  
@@ -47,7 +47,7 @@ public final class LdapConnectionFactory
    * Constructs ...
    *
    */
-  private LdapConnectionFactory() {}
+  private Ldap2ConnectionFactory() {}
 
   //~--- methods --------------------------------------------------------------
 
@@ -112,7 +112,7 @@ public final class LdapConnectionFactory
     }
     catch (GeneralSecurityException ex)
     {
-      throw new LdapConnectionException("could not create ldap connection", ex);
+      throw new Ldap2ConnectionException("could not create ldap connection", ex);
     }
   }
 }

@@ -20,7 +20,7 @@ package sonia.webapp.qrtravel.ldap;
  *
  * @author Sebastian Sdorra
  */
-public class LdapConnectionException extends RuntimeException
+public class Ldap2ConnectionException extends RuntimeException
 {
 
   /** Field description */
@@ -32,7 +32,7 @@ public class LdapConnectionException extends RuntimeException
    * Constructs ...
    *
    */
-  public LdapConnectionException() {}
+  public Ldap2ConnectionException() {}
 
   /**
    * Constructs ...
@@ -40,7 +40,7 @@ public class LdapConnectionException extends RuntimeException
    *
    * @param message
    */
-  public LdapConnectionException(String message)
+  public Ldap2ConnectionException(String message)
   {
     super(message);
   }
@@ -51,7 +51,7 @@ public class LdapConnectionException extends RuntimeException
    *
    * @param cause
    */
-  public LdapConnectionException(Throwable cause)
+  public Ldap2ConnectionException(Throwable cause)
   {
     super(cause);
   }
@@ -63,7 +63,7 @@ public class LdapConnectionException extends RuntimeException
    * @param message
    * @param cause
    */
-  public LdapConnectionException(String message, Throwable cause)
+  public Ldap2ConnectionException(String message, Throwable cause)
   {
     super(message, cause);
   }

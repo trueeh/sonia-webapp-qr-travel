@@ -15,9 +15,9 @@ import lombok.ToString;
  * @author th
  */
 @ToString
-public class LdapAccount
+public class Ldap2Account
 {
-  public LdapAccount(Entry entry)
+  public Ldap2Account(Entry entry)
   {
     this.dn = entry.getDN();
     this.uid = entry.getAttributeValue("uid");

@@ -31,8 +31,8 @@ import static sonia.webapp.qrtravel.QrTravelToken.UNKNOWN_TOKEN;
 import sonia.webapp.qrtravel.db.Attendee;
 import sonia.webapp.qrtravel.db.Database;
 import sonia.webapp.qrtravel.db.Room;
-import sonia.webapp.qrtravel.ldap.LdapAccount;
-import sonia.webapp.qrtravel.ldap.LdapUtil;
+import sonia.webapp.qrtravel.ldap.Ldap2Account;
+import sonia.webapp.qrtravel.ldap.Ldap2Util;
 
 @Controller
 public class ExamController
@@ -236,7 +236,7 @@ public class ExamController
     }
     else
     {
-      LdapAccount account = LdapUtil.bind(examForm.getUserId(),
+      Ldap2Account account = Ldap2Util.bind(examForm.getUserId(),
         examForm.getPassword());
 
       if (account != null)
