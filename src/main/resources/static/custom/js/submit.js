@@ -7,11 +7,14 @@ function showCommitMessage()
   formSureName = $("#surname").val();
 
   $("#valuesForMessage").html(
-          "<p>" + formPin + "</p>" +
+          "<p>" + formPin + "</p>" );
+          /*
+          +
           "<p>" + formMail + "</p>" +
           "<p>" + formGivenName + "</p>" +
           "<p>" + formSureName + "</p>"
           );
+*/
 
   $('#sendDataModalMessage').modal('show');
   setTimeout(function () {
