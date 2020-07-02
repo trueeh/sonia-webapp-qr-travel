@@ -118,12 +118,13 @@ public class RegistrationController
     HttpServletResponse response, Model model, RegistrationForm registrationForm)
   {
     Room room = null;
-    String submitButtonText = "Kommen";
     QrTravelToken token = QrTravelToken.fromCookieValue(tokenValue);
 
     LOGGER.debug("Home GET Request");
     LOGGER.debug("pin = " + pin);
     LOGGER.debug("location = " + location);
+
+    boolean createEntry = false;
 
     if (!Strings.isNullOrEmpty(pin))
     {
@@ -145,26 +146,30 @@ public class RegistrationController
       {
         room = Database.findRoom(pin);
       }
-
+      
       if (!Strings.isNullOrEmpty(token.getUuid()))
       {
         Attendee attendee = Database.lastAttendeeEntry(pin, token.getUuid());
 
         if (attendee != null)
         {
-          LOGGER.debug("last db entry = " + attendee.toString());
+          LOGGER.debug("last db entry = " + attendee );
 
           if (attendee.getDeparture() == null)
           {
-            submitButtonText = "Gehen";
+            createEntry = true;
           }
+        }
+        else
+        {
+          createEntry = true;
         }
       }
     }
 
     model.addAttribute("room", room);
     model.addAttribute("pin", pin);
-    model.addAttribute("submitButtonText", submitButtonText);
+    model.addAttribute("submitButtonText", ( createEntry ? "Kommen" : "Gehen"));
 
     token.setLastPin(pin);
     LOGGER.debug("Response token = " + token.toString());
@@ -190,8 +195,8 @@ public class RegistrationController
 
     Room room = Database.findRoom(registrationForm.getPin());
 
-    String submitButtonText = "Kommen";
     Attendee attendee = null;
+    boolean createEntry = false;
 
     token.setLocation(registrationForm.getLocation());
 
@@ -206,6 +211,7 @@ public class RegistrationController
       {
         if (attendee == null || attendee.getDeparture() != null)
         {
+          createEntry = true;
           attendee = new Attendee();
           attendee.setArrive(DATE_TIME.format(new Date()));
         }
@@ -218,20 +224,15 @@ public class RegistrationController
 
     exchangeData(registrationForm, token, attendee);
 
-    if (attendee != null && attendee.getDeparture() == null)
-    {
-      submitButtonText = "Gehen";
-    }
-
     boolean dataCommitted = false;
 
     if (bindingResult.hasErrors())
     {
-      LOGGER.error("bind result has errors");
+      LOGGER.trace("bind result has errors");
       List<FieldError> fel = bindingResult.getFieldErrors();
       for (FieldError fe : fel)
       {
-        LOGGER.error(fe.toString());
+        LOGGER.trace(fe.toString());
       }
     }
     else
@@ -265,7 +266,8 @@ public class RegistrationController
 
     model.addAttribute("room", room);
     model.addAttribute("pin", registrationForm.getPin());
-    model.addAttribute("submitButtonText", submitButtonText);
+    model.addAttribute("submitButtonText",
+      (createEntry ^ dataCommitted) ? "Kommen" : "Gehen");
     model.addAttribute("dataCommitted", dataCommitted);
 
     token.setLastPin(registrationForm.getPin());

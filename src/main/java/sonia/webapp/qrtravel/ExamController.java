@@ -110,13 +110,13 @@ public class ExamController
     HttpServletResponse response, Model model, ExamForm examForm)
   {
     Room room = null;
-    String submitButtonText = "Kommen";
     QrTravelToken token = QrTravelToken.fromCookieValue(tokenValue);
+    boolean createEntry = false;
 
     LOGGER.debug("Home GET Request");
     LOGGER.debug("pin = " + pin);
     LOGGER.debug("location = " + location);
-
+    
     if (!Strings.isNullOrEmpty(pin))
     {
       examForm.setPin(pin);
@@ -148,15 +148,19 @@ public class ExamController
 
           if (attendee.getDeparture() == null)
           {
-            submitButtonText = "Gehen";
+            createEntry = true;
           }
+        }
+        else
+        {
+          createEntry = true;
         }
       }
     }
 
     model.addAttribute("room", room);
     model.addAttribute("pin", pin);
-    model.addAttribute("submitButtonText", submitButtonText);
+    model.addAttribute("submitButtonText", createEntry ? "Kommen" : "Gehen");
 
     token.setLastPin(pin);
     LOGGER.debug("Response token = " + token.toString());
