@@ -15,6 +15,10 @@ public class QrTravelApplication
     {
       System.setProperty("app_home", ".");
     }
+    if (System.getProperty("app.home") == null)
+    {
+      System.setProperty("app.home", ".");
+    }
     Config.getInstance();
     Database.initialize();
     SpringApplication.run(QrTravelApplication.class, args);
