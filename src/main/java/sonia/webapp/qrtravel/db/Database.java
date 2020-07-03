@@ -80,12 +80,8 @@ public class Database
     LOGGER.debug("Initialize Database");
     for (RoomType rt : listRoomTypes())
     {
-      System.out.println(rt);
+      LOGGER.info(rt.toString());
     }
-
-    Room room = findRoom("123456");
-
-    System.out.println(room);
   }
 
   public static Room findRoom(String pin)

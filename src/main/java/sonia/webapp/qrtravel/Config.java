@@ -68,7 +68,7 @@ public class Config
   //~--- static initializers --------------------------------------------------
   static
   {
-    APP_HOME = System.getProperty("app_home");
+    APP_HOME = System.getProperty("app.home");
 
     try
     {

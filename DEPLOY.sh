@@ -1,5 +1,3 @@
 #!/bin/bash
-
-mvn clean install
-
+./BUILD.sh
 scp target/qr-travel.jar root@qr.sonia.de:
