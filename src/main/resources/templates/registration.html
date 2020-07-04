@@ -17,8 +17,9 @@
 
   <body>
     <div class="container">
+      <div th:replace="cookieMessage :: cookieMessage" />      
       <img id="qrlogo" width="64" height="64" src="/image/logo.png" />
-
+      
       <!-- confirmation message alert -->
       <div id="sendDataModalMessage" class="modal fade" tabindex="-1">
         <div class="modal-dialog">

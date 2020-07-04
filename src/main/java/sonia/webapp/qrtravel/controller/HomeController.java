@@ -6,7 +6,6 @@
 package sonia.webapp.qrtravel.controller;
 
 import com.google.common.base.Strings;
-import java.text.SimpleDateFormat;
 import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,7 +31,7 @@ public class HomeController
   {
     throw new RuntimeException("kaputt");
   }
-
+  
   @GetMapping("/")
   public String home(
     @RequestParam(name = "p", required = false) String pin,
@@ -65,7 +64,6 @@ public class HomeController
     model.addAttribute("room", room);
     model.addAttribute("pin", pin);
     model.addAttribute("token", token);
-
     token.setLastPin(pin);
     LOGGER.debug("Response token = " + token.toString());
 

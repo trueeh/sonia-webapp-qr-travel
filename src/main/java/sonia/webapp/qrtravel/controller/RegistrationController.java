@@ -123,7 +123,7 @@ public class RegistrationController
     Room room = null;
     QrTravelToken token = QrTravelToken.fromCookieValue(tokenValue);
 
-    LOGGER.debug("Home GET Request");
+    LOGGER.debug("Registration GET Request");
     LOGGER.debug("pin = " + pin);
     LOGGER.debug("location = " + location);
 
@@ -172,6 +172,7 @@ public class RegistrationController
 
     model.addAttribute("room", room);
     model.addAttribute("pin", pin);
+    model.addAttribute("token", token);
     model.addAttribute("submitButtonText", ( createEntry ? "Kommen" : "Gehen"));
 
     token.setLastPin(pin);
@@ -191,7 +192,7 @@ public class RegistrationController
   {
     QrTravelToken token = QrTravelToken.fromCookieValue(tokenValue);
 
-    LOGGER.debug("Home POST Request");
+    LOGGER.debug("Registration POST Request");
     LOGGER.debug("pin = " + registrationForm.getPin());
     LOGGER.debug("Request token = " + token.toString());
     LOGGER.debug("registrationForm = " + registrationForm.toString());
@@ -268,6 +269,7 @@ public class RegistrationController
     }
 
     model.addAttribute("room", room);
+    model.addAttribute("token", token);
     model.addAttribute("pin", registrationForm.getPin());
     model.addAttribute("submitButtonText",
       (createEntry ^ dataCommitted) ? "Kommen" : "Gehen");

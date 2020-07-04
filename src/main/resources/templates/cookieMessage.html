@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+  </head>
+
+  <body>
+    <div th:fragment="cookieMessage">
+      <div id="cookieHeader" th:unless="${token.cookieAccepted}">
+        <div >Dieser Web-Dienst verwendet einen technisch notwendigen Cookie. 
+          Sollten Sie mit der Verwendung nicht einverstanden sein, 
+          müssen Sie sich am Servicedesk schriftlich in die Personenliste eintragen.
+          <input style="margin-top: 0.5em;" type="button" value="Cookie akzeptieren" 
+                 onClick="acceptCookie()"> 
+        </div>
+      </div>
+    </div>     
+  </body>
+</html>

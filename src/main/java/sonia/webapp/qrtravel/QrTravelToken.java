@@ -94,6 +94,11 @@ public class QrTravelToken
 
   @Getter
   @Setter
+  @JsonProperty("ca")
+  private boolean cookieAccepted;
+
+  @Getter
+  @Setter
   @JsonProperty("ml")
   private String mail;
 

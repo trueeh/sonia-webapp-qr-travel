@@ -114,7 +114,7 @@ public class ExamController
     QrTravelToken token = QrTravelToken.fromCookieValue(tokenValue);
     boolean createEntry = false;
 
-    LOGGER.debug("Home GET Request");
+    LOGGER.debug("Exam GET Request");
     LOGGER.debug("pin = " + pin);
     LOGGER.debug("location = " + location);
     
@@ -161,6 +161,7 @@ public class ExamController
 
     model.addAttribute("room", room);
     model.addAttribute("pin", pin);
+    model.addAttribute("token", token);
     model.addAttribute("submitButtonText", createEntry ? "Kommen" : "Gehen");
 
     token.setLastPin(pin);
@@ -181,7 +182,7 @@ public class ExamController
     String errorMessage = null;
     QrTravelToken token = QrTravelToken.fromCookieValue(tokenValue);
 
-    LOGGER.debug("Home POST Request");
+    LOGGER.debug("Exam POST Request");
     LOGGER.debug("pin = " + examForm.getPin());
     LOGGER.debug("Request token = " + token.toString());
     LOGGER.debug("examForm = " + examForm.toString());
@@ -261,6 +262,7 @@ public class ExamController
     }
 
     model.addAttribute("room", room);
+    model.addAttribute("token", token);
     model.addAttribute("pin", examForm.getPin());
     model.addAttribute("submitButtonText",
       (createEntry ^ dataCommitted) ? "Kommen" : "Gehen");

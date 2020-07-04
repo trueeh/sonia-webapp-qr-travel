@@ -78,3 +78,11 @@ function checkAndSendForNoPin(formObject)
 
   formObject.submit();
 }
+
+function acceptCookie()
+{
+  fetch('/acceptCookie').then(resp => resp.json()).then(function (value){
+    console.log("cookie accepted = " + value.cookieAccepted );
+    window.location.reload(true);
+  });
+}

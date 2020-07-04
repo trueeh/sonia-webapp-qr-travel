@@ -19,6 +19,7 @@
 
   <body>
     <div class="container">
+      <div th:replace="cookieMessage :: cookieMessage" />      
       <img id="qrlogo" width="64" height="64" src="/image/logo.png" />
 
       <div th:if="${room == null}">
