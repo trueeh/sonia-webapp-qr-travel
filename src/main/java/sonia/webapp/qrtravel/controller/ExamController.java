@@ -23,7 +23,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import sonia.webapp.qrtravel.Config;
 import sonia.webapp.qrtravel.form.ExamForm;
 import sonia.webapp.qrtravel.QrTravelToken;
 import static sonia.webapp.qrtravel.QrTravelToken.QR_TRAVEL_TOKEN;

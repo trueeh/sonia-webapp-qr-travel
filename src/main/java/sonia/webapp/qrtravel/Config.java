@@ -315,5 +315,11 @@ public class Config
   private String ldapSearchAttribute;
 
   @Getter
-  private String ldapSearchScope;  
+  private String ldapSearchScope;
+  
+  @Getter
+  private long checkExpiredInterval;
+  
+  @Getter
+  private boolean enableCheckExpired;  
 }

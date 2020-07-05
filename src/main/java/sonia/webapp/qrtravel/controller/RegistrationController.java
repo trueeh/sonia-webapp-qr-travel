@@ -169,6 +169,8 @@ public class RegistrationController
         }
       }
     }
+    
+    LOGGER.debug( "create entry = " + createEntry );
 
     model.addAttribute("room", room);
     model.addAttribute("pin", pin);
@@ -224,6 +226,10 @@ public class RegistrationController
           attendee.setDeparture(DATE_TIME.format(new Date()));
         }
       }
+      else
+      {
+        createEntry = true;
+      }
     }
 
     exchangeData(registrationForm, token, attendee);
@@ -267,7 +273,9 @@ public class RegistrationController
       }
       dataCommitted = true;
     }
-
+    
+    LOGGER.debug( "create entry = " + createEntry + ", data commited = " + dataCommitted );
+    
     model.addAttribute("room", room);
     model.addAttribute("token", token);
     model.addAttribute("pin", registrationForm.getPin());

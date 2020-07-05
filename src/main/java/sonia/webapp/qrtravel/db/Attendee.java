@@ -41,6 +41,7 @@ public class Attendee implements Serializable
   @PrePersist
   public void prePersist()
   {
+    createdTimestamp = System.currentTimeMillis();
     LOGGER.debug("prePersist " + this.getClass().getCanonicalName());
   }
 
@@ -51,6 +52,7 @@ public class Attendee implements Serializable
   @PreUpdate
   public void preUpdate()
   {
+    updatedTimestamp = System.currentTimeMillis();
     LOGGER.debug("preUpdate " + this.getClass().getCanonicalName());
   }
 
@@ -127,4 +129,10 @@ public class Attendee implements Serializable
   @Setter
   @Column(name = "cookie_uuid")
   private String cookieUUID;
+
+  @Getter
+  private long createdTimestamp;
+  
+  @Getter
+  private long updatedTimestamp;
 }
