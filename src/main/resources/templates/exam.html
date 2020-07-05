@@ -17,111 +17,112 @@
 
   <body>
     <div class="container">
-      <div th:replace="cookieMessage :: cookieMessage" />      
+      <div th:replace="fragments :: cookieMessage" />      
       <img id="qrlogo" width="64" height="64" src="/image/logo.png" />
-
-      <!-- confirmation message alert -->
-      <div id="sendDataModalMessage" class="modal fade" tabindex="-1">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title">Vielen Dank.</h5>
-              <button type="button" class="close" data-dismiss="modal">&times;</button>
-            </div>
-            <div class="modal-body">
-              <p>Folgenden Daten wurden gebucht.</p>
-              <p id="valuesForMessage"></p>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal" >OK</button>
+      <div th:if="${token.cookieAccepted}">
+        <!-- confirmation message alert -->
+        <div id="sendDataModalMessage" class="modal fade" tabindex="-1">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title">Vielen Dank.</h5>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+              </div>
+              <div class="modal-body">
+                <p>Folgenden Daten wurden gebucht.</p>
+                <p id="valuesForMessage"></p>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" >OK</button>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-      <!-- end confirmation message alert -->
+        <!-- end confirmation message alert -->
 
-      <div th:if="${room == null}">
-        <div class="row">
-          <div class="d-none d-md-block col-md-3 ">&nbsp;</div>
-          <div class="col-xs-12 col-sm-12 col-md-6 mt-1" style="text-align: center;">
-            <h1 id="roomtype" >Raum-PIN?</h1>
-            <div th:if="${pin != null}">
-              <h3 id="roompin" >Raum <span th:text="${pin}" /> nicht gefunden!</h3>
+        <div th:if="${room == null}">
+          <div class="row">
+            <div class="d-none d-md-block col-md-3 ">&nbsp;</div>
+            <div class="col-xs-12 col-sm-12 col-md-6 mt-1" style="text-align: center;">
+              <h1 id="roomtype" >Raum-PIN?</h1>
+              <div th:if="${pin != null}">
+                <h3 id="roompin" >Raum <span th:text="${pin}" /> nicht gefunden!</h3>
+              </div>
             </div>
+            <div class="d-none d-md-block col-md-3 ">&nbsp;</div>
           </div>
-          <div class="d-none d-md-block col-md-3 ">&nbsp;</div>
+
+          <form th:action="@{/}" name="nopin" method="GET">
+            <div class="form-row">
+              <div class="d-none d-md-block col-md-3">&nbsp;</div>
+              <div class="col-xs-12 col-sm-12 col-md-6 mt-1" style="text-align: center;">
+                <input type="submit" value="Zurück" class="form-control input-lg text-center">
+              </div>
+            </div>
+          </form>
         </div>
 
-        <form th:action="@{/}" name="nopin" method="GET">
-          <div class="form-row">
-            <div class="d-none d-md-block col-md-3">&nbsp;</div>
+        <div th:if="${room != null}">
+          <div class="row">
+            <div class="d-none d-md-block col-md-3 ">&nbsp;</div>
             <div class="col-xs-12 col-sm-12 col-md-6 mt-1" style="text-align: center;">
-              <input type="submit" value="Zurück" class="form-control input-lg text-center">
+              <h1 id="roomtype" ><span th:text="${room.roomType.description}" th:remove="tag" /></h1>
+              <h3 id="roomdesc" ><span th:text="${room.description}" th:remove="tag" /></h3>
             </div>
+            <div class="d-none d-md-block col-md-3 ">&nbsp;</div>
           </div>
-        </form>
-      </div>
 
-      <div th:if="${room != null}">
-        <div class="row">
-          <div class="d-none d-md-block col-md-3 ">&nbsp;</div>
-          <div class="col-xs-12 col-sm-12 col-md-6 mt-1" style="text-align: center;">
-            <h1 id="roomtype" ><span th:text="${room.roomType.description}" th:remove="tag" /></h1>
-            <h3 id="roomdesc" ><span th:text="${room.description}" th:remove="tag" /></h3>
-          </div>
-          <div class="d-none d-md-block col-md-3 ">&nbsp;</div>
+          <form name="regForm" action="#" th:action="@{/exam}" th:object="${examForm}" method="POST" >
+            <div class="form-row">
+              <div class="d-none d-md-block col-md-3">&nbsp;</div>
+              <div class="col-xs-12 col-sm-12 col-md-6 mt-1" style="text-align: center;">
+                <div th:if="${#fields.hasErrors('pin')}" th:errors="*{pin}">Error</div>
+                <input type="text" maxlength="6" size="35" th:field="*{pin}" readonly="true" class="form-control input-lg text-center" >
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="d-none d-md-block col-md-3">&nbsp;</div>
+              <div class="col-xs-12 col-sm-12 col-md-6 mt-1" style="text-align: center;">
+                <div th:if="${#fields.hasErrors('location')}" th:errors="*{location}">Error</div>
+                <input type="text" size="35" placeholder="Platz-Nr." th:field="*{location}" class="form-control input-lg text-center" >
+              </div>
+            </div>           
+
+            <div class="form-row">
+              <div class="d-none d-md-block col-md-3">&nbsp;</div>
+              <div class="col-xs-12 col-sm-12 col-md-6 mt-1" style="text-align: center;">
+                <div th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}">Error</div>
+                <input type="text" maxlength="24" size="35" placeholder="Telefonnummer" th:field="*{phone}" class="form-control input-lg text-center" >
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="d-none d-md-block col-md-3">&nbsp;</div>
+              <div class="col-xs-12 col-sm-12 col-md-6 mt-1" style="text-align: center;">
+                <div th:if="${errorMessage}"><br/><div th:text="${errorMessage}"></div></div>
+                <div th:if="${#fields.hasErrors('userId')}" th:errors="*{userId}">Error</div>
+                <input type="text" size="35" placeholder="Account-ID" th:field="*{userId}" class="form-control input-lg text-center" >
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="d-none d-md-block col-md-3">&nbsp;</div>
+              <div class="col-xs-12 col-sm-12 col-md-6 mt-1" style="text-align: center;">
+                <div th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Error</div>
+                <input type="password" size="35" placeholder="Passwort" id="password" name="password" th:value="${examForm.password}" class="form-control input-lg text-center" >
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="d-none d-md-block col-md-3">&nbsp;</div>
+              <div class="col-xs-12 col-sm-12 col-md-6 mt-4 " style="text-align: center">
+                <button type="submit" class="text-white btn btn-primary btn-lg btn-block"><div th:text="${submitButtonText}" th:remove="tag" /></button>
+              </div>
+              <div class="d-none d-md-block col-md-3">&nbsp;</div>
+            </div>
+          </form>        
         </div>
-
-        <form name="regForm" action="#" th:action="@{/exam}" th:object="${examForm}" method="POST" >
-          <div class="form-row">
-            <div class="d-none d-md-block col-md-3">&nbsp;</div>
-            <div class="col-xs-12 col-sm-12 col-md-6 mt-1" style="text-align: center;">
-              <div th:if="${#fields.hasErrors('pin')}" th:errors="*{pin}">Error</div>
-              <input type="text" maxlength="6" size="35" th:field="*{pin}" readonly="true" class="form-control input-lg text-center" >
-            </div>
-          </div>
-
-          <div class="form-row">
-            <div class="d-none d-md-block col-md-3">&nbsp;</div>
-            <div class="col-xs-12 col-sm-12 col-md-6 mt-1" style="text-align: center;">
-              <div th:if="${#fields.hasErrors('location')}" th:errors="*{location}">Error</div>
-              <input type="text" size="35" placeholder="Platz-Nr." th:field="*{location}" class="form-control input-lg text-center" >
-            </div>
-          </div>           
-
-          <div class="form-row">
-            <div class="d-none d-md-block col-md-3">&nbsp;</div>
-            <div class="col-xs-12 col-sm-12 col-md-6 mt-1" style="text-align: center;">
-              <div th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}">Error</div>
-              <input type="text" maxlength="24" size="35" placeholder="Telefonnummer" th:field="*{phone}" class="form-control input-lg text-center" >
-            </div>
-          </div>
-          
-          <div class="form-row">
-            <div class="d-none d-md-block col-md-3">&nbsp;</div>
-            <div class="col-xs-12 col-sm-12 col-md-6 mt-1" style="text-align: center;">
-              <div th:if="${errorMessage}"><br/><div th:text="${errorMessage}"></div></div>
-              <div th:if="${#fields.hasErrors('userId')}" th:errors="*{userId}">Error</div>
-              <input type="text" size="35" placeholder="Account-ID" th:field="*{userId}" class="form-control input-lg text-center" >
-            </div>
-          </div>
-          
-          <div class="form-row">
-            <div class="d-none d-md-block col-md-3">&nbsp;</div>
-            <div class="col-xs-12 col-sm-12 col-md-6 mt-1" style="text-align: center;">
-              <div th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Error</div>
-              <input type="password" size="35" placeholder="Passwort" id="password" name="password" th:value="${examForm.password}" class="form-control input-lg text-center" >
-            </div>
-          </div>
-          
-          <div class="form-row">
-            <div class="d-none d-md-block col-md-3">&nbsp;</div>
-            <div class="col-xs-12 col-sm-12 col-md-6 mt-4 " style="text-align: center">
-              <button type="submit" class="text-white btn btn-primary btn-lg btn-block"><div th:text="${submitButtonText}" th:remove="tag" /></button>
-            </div>
-            <div class="d-none d-md-block col-md-3">&nbsp;</div>
-          </div>
-        </form>        
       </div>
     </div>
 

@@ -37,10 +37,13 @@ public class QrTravelToken
 
   public void addToHttpServletResponse(HttpServletResponse response)
   {
-    response.addCookie(toCookie());
-    response.addHeader("Cache-Control",
-      "no-cache, no-store, max-age=0, must-revalidate");
-    response.addHeader("Pragma", "no-cache");
+    if (cookieAccepted)
+    {
+      response.addCookie(toCookie());
+      response.addHeader("Cache-Control",
+        "no-cache, no-store, max-age=0, must-revalidate");
+      response.addHeader("Pragma", "no-cache");
+    }
   }
 
   public static QrTravelToken fromCookieValue(String value)
@@ -121,28 +124,28 @@ public class QrTravelToken
   @Setter
   @JsonProperty("lp")
   private String lastPin;
-  
+
   @Getter
   @JsonProperty("ts")
   private long lastAccess;
-  
+
   @Setter
   @Getter
   @JsonProperty("id")
   @ToString.Exclude
   private String uid;
-  
+
   @Setter
   @Getter
   @JsonProperty("pw")
   @ToString.Exclude
   private String password;
-  
+
   @Setter
   @Getter
   @JsonProperty("lc")
-  private String location;  
-  
+  private String location;
+
   @Getter
   @JsonProperty("uu")
   private String uuid;

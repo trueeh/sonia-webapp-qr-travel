@@ -19,33 +19,33 @@
 
   <body>
     <div class="container">
-      <div th:replace="cookieMessage :: cookieMessage" />      
+      <div th:replace="fragments :: cookieMessage" />      
       <img id="qrlogo" width="64" height="64" src="/image/logo.png" />
-
-      <div th:if="${room == null}">
-        <div class="row">
-          <div class="d-none d-md-block col-md-3 ">&nbsp;</div>
-          <div class="col-xs-12 col-sm-12 col-md-6 mt-1" style="text-align: center;">
-            <h1 id="roomtype" >Raum-PIN?</h1>
-            <div th:if="${pin != null}">
-              <h3 id="roompin" >Raum <span th:text="${pin}" /> nicht gefunden!</h3>
-            </div>
-          </div>
-          <div class="d-none d-md-block col-md-3 ">&nbsp;</div>
-        </div>
-
-        <form name="nopin" method="GET">
-          <div class="form-row">
-            <div class="d-none d-md-block col-md-3">&nbsp;</div>
+      <div th:if="${token.cookieAccepted}">
+        <div th:if="${room == null}">
+          <div class="row">
+            <div class="d-none d-md-block col-md-3 ">&nbsp;</div>
             <div class="col-xs-12 col-sm-12 col-md-6 mt-1" style="text-align: center;">
-              <input type="text" name="p" id="pin" maxlength="6" size="35"
-                     oninput="this.value=this.value.replace(/[^0-9]/g,'');checkAndSendForNoPin(document.forms.nopin);"
-                     placeholder="Raum-PIN" class="form-control input-lg text-center">
+              <h1 id="roomtype" >Raum-PIN?</h1>
+              <div th:if="${pin != null}">
+                <h3 id="roompin" >Raum <span th:text="${pin}" /> nicht gefunden!</h3>
+              </div>
             </div>
+            <div class="d-none d-md-block col-md-3 ">&nbsp;</div>
           </div>
-        </form>
-      </div>
 
+          <form name="nopin" method="GET">
+            <div class="form-row">
+              <div class="d-none d-md-block col-md-3">&nbsp;</div>
+              <div class="col-xs-12 col-sm-12 col-md-6 mt-1" style="text-align: center;">
+                <input type="text" name="p" id="pin" maxlength="6" size="35"
+                       oninput="this.value=this.value.replace(/[^0-9]/g,'');checkAndSendForNoPin(document.forms.nopin);"
+                       placeholder="Raum-PIN" class="form-control input-lg text-center">
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
     <!-- Bootstrap core JavaScript
         ================================================== -->
@@ -56,7 +56,7 @@
     <script src="/bootstrap/js/bootstrap.min.js"></script>
     <script src="/custom/js/next-input.js"></script>
     <script src="/custom/js/submit.js"></script>
-    
+
     <p id="footer"><font size="-1"><a href="imprint.html">Impressum</a> - <a href="privacypolicy.html">Datenschutzerklärung</a></font></p>
   </body>
 </html>
