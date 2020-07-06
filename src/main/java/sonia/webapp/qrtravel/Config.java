@@ -266,7 +266,9 @@ public class Config
     config.dbPassword = "<not set>";
     config.enableCheckExpired = true;
     config.checkExpiredCron = "0 5 0 * * ?";
+    config.expirationTimeInDays = 21;
     Config.writeConfig();
+    System.out.println( config.toString() );
   }
   
   //~--- fields ---------------------------------------------------------------
@@ -324,4 +326,7 @@ public class Config
   
   @Getter
   private boolean enableCheckExpired;  
+  
+  @Getter
+  private long expirationTimeInDays;
 }
