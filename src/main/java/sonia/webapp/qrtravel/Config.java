@@ -264,6 +264,8 @@ public class Config
     config.dbUrl = "jdbc:postgresql://qr.sonia.de:5432/qr";
     config.dbUser = "qr";
     config.dbPassword = "<not set>";
+    config.enableCheckExpired = true;
+    config.checkExpiredCron = "0 5 0 * * ?";
     Config.writeConfig();
   }
   
@@ -318,7 +320,7 @@ public class Config
   private String ldapSearchScope;
   
   @Getter
-  private long checkExpiredInterval;
+  private String checkExpiredCron;
   
   @Getter
   private boolean enableCheckExpired;  
