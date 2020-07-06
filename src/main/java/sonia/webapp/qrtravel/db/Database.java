@@ -19,10 +19,10 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaDelete;
-import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.query.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sonia.webapp.qrtravel.Config;
@@ -217,13 +217,21 @@ public class Database
     criteriaDelete.where(criteriaBuilder.lessThan(entry.get("updatedTimestamp"),
       expirationTimestamp));
 
-    String hql = "delete from attendee a where a.updatedTimestamp < :timestamp";
+    String hql = "select a.id from attendee a, room r where a.createdTimestamp < :timestamp and a.pin = r.pin and r.roomType > 1";
 
     Session session = getEntityManager().unwrap(Session.class);
     Transaction transaction = session.beginTransaction();
-    deletedEntries = session.createQuery(hql).setParameter("timestamp",
-      expirationTimestamp).executeUpdate();
-    transaction.commit();
+
+    List<Number> ids = session.createQuery(hql).setParameter("timestamp",
+      expirationTimestamp).list();
+
+    if (ids != null && ids.size() > 0)
+    {
+      deletedEntries = session.createQuery(
+        "delete from attendee a where a.id in (:ids)").setParameterList("ids",
+          ids).executeUpdate();
+    }
+    transaction.commit(); 
 
     LOGGER.info("Number of deleted attendee entries = {}", deletedEntries);
   }
