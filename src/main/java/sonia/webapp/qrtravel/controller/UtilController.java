@@ -6,7 +6,9 @@
 package sonia.webapp.qrtravel.controller;
 
 import java.util.HashMap;
+import java.util.logging.Level;
 import javax.servlet.http.HttpServletResponse;
+import org.quartz.JobExecutionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import sonia.webapp.qrtravel.BuildProperties;
+import sonia.webapp.qrtravel.CheckExpiredJob;
 import sonia.webapp.qrtravel.QrTravelToken;
 import static sonia.webapp.qrtravel.QrTravelToken.QR_TRAVEL_TOKEN;
 import static sonia.webapp.qrtravel.QrTravelToken.UNKNOWN_TOKEN;
@@ -41,6 +44,26 @@ public class UtilController
     map.put("cookieAccepted", Boolean.TRUE );
     LOGGER.debug( token.toString() );
     token.addToHttpServletResponse(response);
+    return map;
+  }
+
+  @GetMapping( path= "/check", produces = MediaType.APPLICATION_JSON_VALUE)
+  public HashMap<String,Boolean> checkExpired()
+  {
+    LOGGER.debug("checkExpired request");
+    
+    try
+    {
+      CheckExpiredJob job = new CheckExpiredJob();
+      job.execute(null);
+    }
+    catch (JobExecutionException ex)
+    {
+      LOGGER.error("checkExpired job failed ", ex );
+    }
+    
+    HashMap<String,Boolean> map = new HashMap<>();
+    map.put("check", Boolean.TRUE );
     return map;
   }
 }

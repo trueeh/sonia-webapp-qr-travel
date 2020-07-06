@@ -17,6 +17,10 @@ import java.util.concurrent.TimeUnit;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaDelete;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.slf4j.Logger;
@@ -105,14 +109,14 @@ public class Database
     return SINGLETON.entityManagerFactory.createEntityManager();
   }
 
-  public static void persist( Attendee attendee )
-  { 
-    LOGGER.debug( "persist attendee=" + attendee.toString());
+  public static void persist(Attendee attendee)
+  {
+    LOGGER.debug("persist attendee=" + attendee.toString());
 
     try (Session session = getEntityManager().unwrap(Session.class))
     {
       Transaction transaction = session.beginTransaction();
-      if ( attendee.getId() == 0)
+      if (attendee.getId() == 0)
       {
         session.save(attendee);
       }
@@ -123,8 +127,8 @@ public class Database
       transaction.commit();
     }
   }
-  
-  public static Attendee merge( Attendee attendee )
+
+  public static Attendee merge(Attendee attendee)
   {
     Session session = getEntityManager().unwrap(Session.class);
     Transaction transaction = session.beginTransaction();
@@ -133,7 +137,7 @@ public class Database
     transaction.commit();
     return a;
   }
-  
+
   public static Attendee lastAttendeeEntry(String pin, String uuid)
   {
     Attendee lastAttendee = null;
@@ -141,7 +145,8 @@ public class Database
     if (!Strings.isNullOrEmpty(pin) && !Strings.isNullOrEmpty(uuid))
     {
       List<Attendee> resultList;
-      TypedQuery<Attendee> query = getEntityManager().createNamedQuery( "lastAttendeeEntry", Attendee.class);
+      TypedQuery<Attendee> query = getEntityManager().createNamedQuery(
+        "lastAttendeeEntry", Attendee.class);
 
       query.setFirstResult(0);
       query.setMaxResults(1);
@@ -151,8 +156,8 @@ public class Database
       try
       {
         resultList = query.getResultList();
-     
-        if ( resultList != null && resultList.size() > 0 )
+
+        if (resultList != null && resultList.size() > 0)
         {
           lastAttendee = resultList.get(0);
         }
@@ -162,7 +167,7 @@ public class Database
         LOGGER.trace("findByName: ", e);
       }
 
-      LOGGER.debug( "Last attendee: " + lastAttendee );
+      LOGGER.debug("Last attendee: " + lastAttendee);
     }
 
     return lastAttendee;
@@ -193,6 +198,34 @@ public class Database
     }
 
     return result;
+  }
+
+  public static void deleteExpiredAttendeeEntries(long expirationTimestamp)
+  {
+    int deletedEntries = 0;
+    LOGGER.debug("deleteExpiredAttendeeEntries - expirationTimestamp={}",
+      expirationTimestamp);
+
+    CriteriaBuilder criteriaBuilder = getEntityManager().getCriteriaBuilder();
+
+    CriteriaDelete<Attendee> criteriaDelete = criteriaBuilder.
+      createCriteriaDelete(
+        Attendee.class);
+
+    Root<Attendee> entry = criteriaDelete.from(Attendee.class);
+
+    criteriaDelete.where(criteriaBuilder.lessThan(entry.get("updatedTimestamp"),
+      expirationTimestamp));
+
+    String hql = "delete from attendee a where a.updatedTimestamp < :timestamp";
+
+    Session session = getEntityManager().unwrap(Session.class);
+    Transaction transaction = session.beginTransaction();
+    deletedEntries = session.createQuery(hql).setParameter("timestamp",
+      expirationTimestamp).executeUpdate();
+    transaction.commit();
+
+    LOGGER.info("Number of deleted attendee entries = {}", deletedEntries);
   }
 
   private transient LoadingCache<String, Room> roomCache;
