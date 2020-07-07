@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import sonia.webapp.qrtravel.Config;
 import sonia.webapp.qrtravel.form.ExamForm;
 import sonia.webapp.qrtravel.QrTravelToken;
 import static sonia.webapp.qrtravel.QrTravelToken.QR_TRAVEL_TOKEN;
@@ -32,11 +33,14 @@ import sonia.webapp.qrtravel.db.Database;
 import sonia.webapp.qrtravel.db.Room;
 import sonia.webapp.qrtravel.ldap.LdapAccount;
 import sonia.webapp.qrtravel.ldap.LdapUtil;
+import sonia.webapp.qrtravel.ldap.LoginAttempt;
 
 @Controller
 public class ExamController
 {
   private final static String PW_IS_SET = "-Password Set-";
+
+  private final static Config CONFIG = Config.getInstance();
 
   private final static SimpleDateFormat DATE_TIME = new SimpleDateFormat(
     "yyyy-MM-dd HH:mm:ss");
@@ -116,7 +120,7 @@ public class ExamController
     LOGGER.debug("Exam GET Request");
     LOGGER.debug("pin = " + pin);
     LOGGER.debug("location = " + location);
-    
+
     if (!Strings.isNullOrEmpty(pin))
     {
       examForm.setPin(pin);
@@ -236,27 +240,38 @@ public class ExamController
     }
     else
     {
-      LdapAccount account = LdapUtil.bind(examForm.getUserId(),
-        examForm.getPassword());
-
-      if (account != null)
+      LoginAttempt loginAttempt = LdapUtil.getLoginAttempt(examForm.getUserId());
+      LOGGER.debug("loginAttempt=" + loginAttempt);
+      if (loginAttempt != null && loginAttempt.getCounter() < CONFIG.
+        getMaxLoginAttempts())
       {
-        attendee.setEmail(account.getMail());
-        token.setMail(account.getMail());
-        attendee.setGivenname(account.getGivenName());
-        token.setGivenName(account.getGivenName());
-        attendee.setSurname(account.getSn());
-        token.setSurname(account.getSn());
-        attendee.setStudentnumber(account.getSoniaStudentNumber());
+        LdapAccount account = LdapUtil.bind(examForm.getUserId(),
+          examForm.getPassword());
 
-        //
-        Database.persist(attendee);
-        examForm.setPassword(PW_IS_SET);
-        dataCommitted = true;
+        if (account != null)
+        {
+          attendee.setEmail(account.getMail());
+          token.setMail(account.getMail());
+          attendee.setGivenname(account.getGivenName());
+          token.setGivenName(account.getGivenName());
+          attendee.setSurname(account.getSn());
+          token.setSurname(account.getSn());
+          attendee.setStudentnumber(account.getSoniaStudentNumber());
+
+          Database.persist(attendee);
+          examForm.setPassword(PW_IS_SET);
+          dataCommitted = true;
+        }
+        else
+        {
+          loginAttempt.incrementCounter();
+          errorMessage = "Zugangsdaten falsch!";
+        }
       }
       else
       {
-        errorMessage = "Zugangsdaten falsch!";
+        errorMessage = "Dieser Account ist für " + CONFIG.
+          getLoginFailedBlockingDuration() + "s gesperrt!";
       }
     }
 

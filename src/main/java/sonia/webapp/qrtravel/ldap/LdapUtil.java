@@ -6,6 +6,9 @@
 package sonia.webapp.qrtravel.ldap;
 
 import com.google.common.base.Strings;
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
 import com.unboundid.ldap.sdk.BindResult;
 import com.unboundid.ldap.sdk.LDAPConnection;
 import com.unboundid.ldap.sdk.LDAPException;
@@ -15,6 +18,10 @@ import com.unboundid.ldap.sdk.SearchResultEntry;
 import com.unboundid.ldap.sdk.SearchScope;
 import java.text.MessageFormat;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.slf4j.LoggerFactory;
 import sonia.webapp.qrtravel.Config;
 
@@ -24,9 +31,27 @@ import sonia.webapp.qrtravel.Config;
  */
 public class LdapUtil
 {
-  private final static org.slf4j.Logger LOGGER = LoggerFactory.getLogger(LdapUtil.class.getName());
+  private final static org.slf4j.Logger LOGGER = LoggerFactory.getLogger(
+    LdapUtil.class.getName());
 
   private final static Config CONFIG = Config.getInstance();
+
+  private final static LdapUtil SINGLETON = new LdapUtil();
+
+  private LdapUtil()
+  {
+    loginAttemptsCache = CacheBuilder.newBuilder().expireAfterWrite(CONFIG.
+      getLoginFailedBlockingDuration(), TimeUnit.SECONDS).
+      build(new CacheLoader<String, LoginAttempt>()
+      {
+        @Override
+        public LoginAttempt load(String username)
+        {
+          LOGGER.debug("load login attempt cache for username=" + username);
+          return new LoginAttempt(username);
+        }
+      });
+  }
 
   public static LdapAccount bind(String uid, String password)
   {
@@ -151,4 +176,31 @@ public class LdapUtil
 
     return scope;
   }
+
+  private synchronized LoginAttempt _getLoginAttempt(String username)
+  {
+    LOGGER.debug("_getLoginAttempt");
+    LoginAttempt loginAttempt = null;
+
+    if (!Strings.isNullOrEmpty(username))
+    {
+      try
+      {
+        loginAttempt = loginAttemptsCache.get(username);
+        LOGGER.debug(loginAttempt.toString());
+      }
+      catch (ExecutionException ex)
+      {
+        LOGGER.error("Failed to get login attempt from cache ", ex);
+      }
+    }
+    return loginAttempt;
+  }
+
+  public static LoginAttempt getLoginAttempt(String username)
+  {
+    return SINGLETON._getLoginAttempt(username);
+  }
+
+  private LoadingCache<String, LoginAttempt> loginAttemptsCache;
 }

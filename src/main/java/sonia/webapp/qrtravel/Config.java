@@ -267,6 +267,8 @@ public class Config
     config.enableCheckExpired = true;
     config.checkExpiredCron = "0 5 0 * * ?";
     config.expirationTimeInDays = 21;
+    config.maxLoginAttempts = 3;
+    config.loginFailedBlockingDuration = 180;
     Config.writeConfig();
     System.out.println( config.toString() );
   }
@@ -329,4 +331,11 @@ public class Config
   
   @Getter
   private long expirationTimeInDays;
+  
+  @Getter
+  private int maxLoginAttempts;
+  
+  @Getter
+  private int loginFailedBlockingDuration;
+  
 }
