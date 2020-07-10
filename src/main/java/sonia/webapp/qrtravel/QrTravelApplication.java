@@ -1,6 +1,6 @@
 package sonia.webapp.qrtravel;
 
-import com.unboundid.ldap.sdk.LDAPException;
+import java.io.IOException;
 import org.quartz.CronScheduleBuilder;
 import org.quartz.CronTrigger;
 import org.quartz.JobBuilder;
@@ -23,18 +23,34 @@ public class QrTravelApplication
   private final static Logger LOGGER = LoggerFactory.getLogger(
     QrTravelApplication.class.getName());
 
-  public static void main(String[] args) throws SchedulerException
+  public static void main(String[] args) throws SchedulerException, IOException
   {
     if (System.getProperty("app.home") == null)
     {
       System.setProperty("app.home", ".");
     }
-    
-    Config config = Config.getInstance();
 
-    System.exit(0);
+    if (args.length == 1 && args[0].equalsIgnoreCase("-w"))
+    {
+      Config.writeSampleConfig();
+      System.exit(0);
+    }
+
+    if (args.length == 2 && args[0].equalsIgnoreCase("-e"))
+    {
+      System.out.println(args[1] + " = " + PasswordSerializer.encrypt(args[1]));
+      System.exit(0);
+    }
+
+    if (args.length == 1 && args[0].equalsIgnoreCase("-c"))
+    {
+      System.out.println(Config.getInstance().toString());
+      System.exit(0);
+    }
+
+    Config config = Config.getInstance();
     Database.initialize();
-    
+
     BuildProperties build = BuildProperties.getInstance();
     LOGGER.info("Project Name    : " + build.getProjectName());
     LOGGER.info("Project Version : " + build.getProjectVersion());

@@ -27,11 +27,6 @@ public final class Cipher
   /** secret key */
   private static final char[] KEY = Config.getInstance().getCipherKey().toCharArray();
   
-  public static void main(String[] args)
-  {
-    System.out.println( KEY );
-  }
-
   /** cipher */
   private static final AesSimpleCipher CIPHER = 
     AesSimpleCipher.builder().build(KEY);

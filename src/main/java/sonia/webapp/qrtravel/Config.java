@@ -3,6 +3,8 @@ package sonia.webapp.qrtravel;
 //~--- non-JDK imports --------------------------------------------------------
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import com.google.common.base.Strings;
 
@@ -53,12 +55,12 @@ public class Config
    * Field description
    */
   private final static Logger LOGGER = LoggerFactory.getLogger(
-          Config.class.getName());
+    Config.class.getName());
 
   /**
    * Field description
    */
-  private static final String APP_HOME;
+  private static String APP_HOME;
 
   /**
    * Field description
@@ -66,19 +68,6 @@ public class Config
   private static Config config;
 
   //~--- static initializers --------------------------------------------------
-  static
-  {
-    APP_HOME = System.getProperty("app.home");
-
-    try
-    {
-      config = new Config();
-      readConfig();
-    } catch (IOException ex)
-    {
-      LOGGER.error("Can't read configuration file", ex);
-    }
-  }
 
   //~--- methods --------------------------------------------------------------
   /**
@@ -95,12 +84,12 @@ public class Config
   {
     LOGGER.info("reading config file:" + configFile.getAbsolutePath());
 
-    if ( configFile.exists() && configFile.canRead())
+    if (configFile.exists() && configFile.canRead())
     {
       config = OBJECT_MAPPER.readValue(configFile, Config.class);
     }
-    
-    LOGGER.info( config.toString() );
+
+    LOGGER.info(config.toString());
     return config;
   }
 
@@ -128,7 +117,7 @@ public class Config
   public static void writeConfig(File configFile) throws IOException
   {
     OBJECT_MAPPER.writerWithDefaultPrettyPrinter().writeValue(configFile,
-            config);
+      config);
   }
 
   /**
@@ -174,8 +163,21 @@ public class Config
    *
    * @return
    */
-  public static Config getInstance()
+  public static synchronized Config getInstance()
   {
+    if (config == null)
+    {
+      APP_HOME = System.getProperty("app.home");
+      config = new Config();
+      try
+      {
+        readConfig();
+      }
+      catch (IOException ex)
+      {
+        LOGGER.error("Reading config ", ex);
+      }
+    }
     return config;
   }
 
@@ -224,30 +226,32 @@ public class Config
   {
     String fileName = CONFIG_NAME;
     String resourceFileName = CONFIG_NAME;
-    
+
     URL resourceUrl = Config.class.getResource(CONFIG_RESOURCENAME);
-    
-    if ( resourceUrl != null )
+
+    if (resourceUrl != null)
     {
       resourceFileName = resourceUrl.getFile();
     }
-    
+
     if (!Strings.isNullOrEmpty(APP_HOME))
     {
-      fileName = APP_HOME + File.separator + CONFIG_DIRECTORY_NAME + File.separator + CONFIG_NAME;
-    } else if (!Strings.isNullOrEmpty(resourceFileName))
+      fileName = APP_HOME + File.separator + CONFIG_DIRECTORY_NAME
+        + File.separator + CONFIG_NAME;
+    }
+    else if (!Strings.isNullOrEmpty(resourceFileName))
     {
       fileName = resourceFileName;
     }
 
-    LOGGER.debug( "config filename = " + fileName );
-    
+    LOGGER.debug("config filename = " + fileName);
+
     return new File(fileName);
   }
 
-  public static void main( String args[] ) throws Exception
+  public static void writeSampleConfig() throws IOException
   {
-    Config.getInstance();
+    config = new Config();
     config.cipherKey = "<not set>";
     config.tokenTimeout = 60 * 60 * 24 * 365; // timeout in s == 8h
     config.webServicePort = 8080;
@@ -271,20 +275,19 @@ public class Config
     config.maxLoginAttempts = 3;
     config.loginFailedBlockingDuration = 180;
     Config.writeConfig();
-    System.out.println( config.toString() );
+    System.out.println(config.toString());
   }
-  
-  //~--- fields ---------------------------------------------------------------
 
+  //~--- fields ---------------------------------------------------------------
   @Getter
   private String cipherKey;
-  
+
   @Getter
   private int tokenTimeout;
-  
+
   @Getter
   private String dbUrl;
-  
+
   @Getter
   private String dbDriverClassName;
 
@@ -292,27 +295,31 @@ public class Config
   private String dbUser;
 
   @Getter
+  @JsonSerialize(using = PasswordSerializer.class)
+  @JsonDeserialize(using = PasswordDeserializer.class)
   private String dbPassword;
-  
+
   @Getter
   private String webServiceUrl;
-  
+
   @Getter
   private int webServicePort;
-  
+
   @Getter
   private String ldapHostName;
-  
+
   @Getter
   private int ldapHostPort;
-  
+
   @Getter
   private boolean ldapHostSSL;
-  
+
   @Getter
   private String ldapBindDn;
-  
+
   @Getter
+  @JsonSerialize(using = PasswordSerializer.class)
+  @JsonDeserialize(using = PasswordDeserializer.class)
   private String ldapBindPassword;
 
   @Getter
@@ -326,20 +333,19 @@ public class Config
 
   @Getter
   private String ldapSearchScope;
-  
+
   @Getter
   private String checkExpiredCron;
-  
+
   @Getter
-  private boolean enableCheckExpired;  
-  
+  private boolean enableCheckExpired;
+
   @Getter
   private long expirationTimeInDays;
-  
+
   @Getter
   private int maxLoginAttempts;
-  
+
   @Getter
   private int loginFailedBlockingDuration;
-  
 }
