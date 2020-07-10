@@ -29,8 +29,10 @@ public class QrTravelApplication
     {
       System.setProperty("app.home", ".");
     }
-
+    
     Config config = Config.getInstance();
+
+    System.exit(0);
     Database.initialize();
     
     BuildProperties build = BuildProperties.getInstance();

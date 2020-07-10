@@ -25,19 +25,16 @@ public final class Cipher
 {
    
   /** secret key */
-  private static final char[] KEY = new char[]
+  private static final char[] KEY = Config.getInstance().getCipherKey().toCharArray();
+  
+  public static void main(String[] args)
   {
-    '5', 'a', '1', '4', '5', '9', '1', '2', 
-    '1', '4', '3', '7', 'f', 'e', '8', '9', 
-    'f', '1', 'e', 'f', '7', '1', 'c', 'a', 
-    '2', '4', 'c', 'a', 'b', '9', '4', 'e', 
-    'd', '1', '5', 'd', 'a', 'f', '4', 'a'
-  };
-   
+    System.out.println( KEY );
+  }
+
   /** cipher */
   private static final AesSimpleCipher CIPHER = 
     AesSimpleCipher.builder().build(KEY);
-   
 
   /**
    * Encrypt an plaint text value.

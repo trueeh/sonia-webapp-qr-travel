@@ -248,20 +248,21 @@ public class Config
   public static void main( String args[] ) throws Exception
   {
     Config.getInstance();
+    config.cipherKey = "<not set>";
     config.tokenTimeout = 60 * 60 * 24 * 365; // timeout in s == 8h
     config.webServicePort = 8080;
-    config.webServiceUrl = "https://qr.sonia.de";
-    config.ldapHostName = "dps1.sonia.de";
+    config.webServiceUrl = "https://qr.yourdomain.de";
+    config.ldapHostName = "ldap.yourdomain.de";
     config.ldapHostPort = 636;
     config.ldapHostSSL = true;
-    config.ldapBaseDn = "dc=sonia,dc=de";
-    config.ldapBindDn = "cn=qrreader,ou=Special Users,dc=sonia,dc=de";
+    config.ldapBaseDn = "dc=yourdomain,dc=de";
+    config.ldapBindDn = "cn=qrreader,ou=Special Users,dc=yourdomain,dc=de";
     config.ldapBindPassword = "<not set>";
     config.ldapSearchScope = "SUB";
     config.ldapSearchAttribute = "mail";
     config.ldapSearchFilter = "(mail={0})";
     config.dbDriverClassName = "org.postgresql.Driver";
-    config.dbUrl = "jdbc:postgresql://qr.sonia.de:5432/qr";
+    config.dbUrl = "jdbc:postgresql://localhost:5432/qr";
     config.dbUser = "qr";
     config.dbPassword = "<not set>";
     config.enableCheckExpired = true;
@@ -275,6 +276,9 @@ public class Config
   
   //~--- fields ---------------------------------------------------------------
 
+  @Getter
+  private String cipherKey;
+  
   @Getter
   private int tokenTimeout;
   
