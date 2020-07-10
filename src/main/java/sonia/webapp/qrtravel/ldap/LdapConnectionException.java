@@ -1,24 +1,8 @@
-/**
- * OSTFALIA, COMPUTING CENTER CONFIDENTIAL
- *
- * 2000 - 2013 Ostfalia University of Applied Sciences, Computing Center
- * All Rights Reserved.
- *
- * NOTICE: All information contained herein is, and remains the property of
- * Ostfalia University of Applied Sciences, Computing Center and its suppliers.
- * The intellectual and technical concepts contained herein are proprietary to
- * Ostfalia University of Applied Sciences, Computing Center. Dissemination of this
- * information or reproduction of this material is strictly forbidden unless prior
- * written permission is obtained from Ostfalia University of Applied Sciences,
- * Computing Center.
- */
-
-
 package sonia.webapp.qrtravel.ldap;
 
 /**
  *
- * @author Sebastian Sdorra
+ * @author Thorsten Ludewig <t.ludewig@ostfalia.de>Sebastian Sdorra
  */
 public class LdapConnectionException extends RuntimeException
 {

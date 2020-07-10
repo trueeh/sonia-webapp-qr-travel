@@ -5,7 +5,7 @@ import lombok.ToString;
 
 /**
  *
- * @author th
+ * @author Thorsten Ludewig <t.ludewig@ostfalia.de>
  */
 @ToString
 public class LoginAttempt

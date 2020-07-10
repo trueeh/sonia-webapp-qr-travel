@@ -1,15 +1,10 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package sonia.webapp.qrtravel.form;
 
 import sonia.webapp.qrtravel.QrTravelToken;
 
 /**
  *
- * @author th
+ * @author Thorsten Ludewig <t.ludewig@ostfalia.de>
  */
 public interface AttendeeForm
 {

@@ -23,7 +23,7 @@ import sonia.commons.crypt.util.Convert;
 
 /**
  *
- * @author Sebastian Sdorra
+ * @author Thorsten Ludewig <t.ludewig@ostfalia.de>
  * @since 1.1.0
  */
 public class Base64ByteConverter implements ByteConverter

@@ -10,7 +10,7 @@ import sonia.commons.crypt.cipher.AesSimpleCipher;
 
 /**
  *
- * @author th
+ * @author Thorsten Ludewig <t.ludewig@ostfalia.de>
  */
 public class PasswordSerializer extends JsonSerializer<String>
 {

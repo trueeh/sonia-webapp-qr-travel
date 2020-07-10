@@ -20,7 +20,7 @@ import sonia.webapp.qrtravel.Config;
 
 /**
  *
- * @author th
+ * @author Thorsten Ludewig <t.ludewig@ostfalia.de>
  */
 public class LdapUtil
 {

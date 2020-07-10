@@ -19,7 +19,7 @@ package sonia.commons.crypt.converter;
 
 /**
  *
- * @author Sebastian Sdorra
+ * @author Thorsten Ludewig <t.ludewig@ostfalia.de>
  * @since 1.1.0
  */
 public interface ByteConverter

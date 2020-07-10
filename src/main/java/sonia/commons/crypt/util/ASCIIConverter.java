@@ -19,7 +19,7 @@ package sonia.commons.crypt.util;
 
 /**
  *
- * @author  merlec
+ * @author Thorsten Ludewig <t.ludewig@ostfalia.de>
  */
 public class ASCIIConverter
 {

@@ -19,7 +19,6 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Random;
-import sonia.commons.crypt.converter.HexByteConverter;
 import sonia.commons.crypt.util.HEX;
 
 /**
@@ -27,7 +26,7 @@ import sonia.commons.crypt.util.HEX;
  *
  *
  * @version $version$, 18/08/19
- * @author Dr. Thorsten Ludewig <t.ludewig@gmail.com>
+ * @author Thorsten Ludewig <t.ludewig@ostfalia.de>Dr. Thorsten Ludewig <t.ludewig@gmail.com>
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @ToString

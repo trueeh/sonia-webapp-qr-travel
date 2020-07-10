@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package sonia.webapp.qrtravel.form;
 
 import javax.validation.constraints.Min;
@@ -16,7 +11,7 @@ import sonia.webapp.qrtravel.QrTravelToken;
 
 /**
  *
- * @author th
+ * @author Thorsten Ludewig <t.ludewig@ostfalia.de>
  */
 @ToString
 public class RegistrationForm implements AttendeeForm

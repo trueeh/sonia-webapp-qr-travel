@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  *
- * @author th
+ * @author Thorsten Ludewig <t.ludewig@ostfalia.de>
  */
 public class PasswordDeserializer extends JsonDeserializer<String>
 {

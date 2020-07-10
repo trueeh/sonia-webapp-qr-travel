@@ -8,29 +8,17 @@ package sonia.webapp.qrtravel;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import lombok.Getter;
 import lombok.ToString;
 import org.slf4j.LoggerFactory;
-import sonia.webapp.qrtravel.controller.ExamController;
 
 /**
  *
- * @author th
+ * @author Thorsten Ludewig <t.ludewig@ostfalia.de>
  */
 @ToString
 public class BuildProperties
-{
-  
-  /*
-  build.java.version=@java.version@
-build.java.vendor=@java.vendor@
-build.project.name=@project.name@
-build.project.version=@project.version@
-build.timestamp=@build.timestamp@
-  */
-  
+{  
   private final static BuildProperties SINGLETON = new BuildProperties();
   private final static org.slf4j.Logger LOGGER = LoggerFactory.getLogger(
     BuildProperties.class.getName());

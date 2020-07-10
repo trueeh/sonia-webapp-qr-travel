@@ -36,7 +36,7 @@ import javax.crypto.spec.SecretKeySpec;
 
 /**
  *
- * @author Sebastian Sdorra
+ * @author Thorsten Ludewig <t.ludewig@ostfalia.de>
  * @since 1.1.0
  */
 public final class AesSimpleCipher implements SimpleCipher
@@ -298,7 +298,7 @@ public final class AesSimpleCipher implements SimpleCipher
    *
    *
    * @version        Enter version here..., 13/07/10
-   * @author         Enter your name here...
+   * @author Thorsten Ludewig <t.ludewig@ostfalia.de>        Enter your name here...
    */
   public static final class Builder
   {
