@@ -3,6 +3,7 @@ package sonia.webapp.qrtravel;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.base.Strings;
 import java.util.UUID;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
@@ -12,6 +13,9 @@ import lombok.Setter;
 import lombok.ToString;
 import org.slf4j.LoggerFactory;
 import sonia.webapp.qrtravel.db.AttendeeData;
+import sonia.webapp.qrtravel.form.AttendeeForm;
+import sonia.webapp.qrtravel.form.ExamForm;
+import sonia.webapp.qrtravel.form.RegistrationForm;
 
 /**
  *
@@ -36,6 +40,28 @@ public class QrTravelToken implements AttendeeData
     uuid = UUID.randomUUID().toString();
   }
 
+  public void setAttendeeData( AttendeeForm data )
+  {
+    this.phone = (Strings.isNullOrEmpty(data.getPhone())) ? phone : data.getPhone();
+    this.city = (Strings.isNullOrEmpty(data.getCity())) ? city : data.getCity();
+    this.street = (Strings.isNullOrEmpty(data.getStreet())) ? street : data.getStreet();
+    this.location = (Strings.isNullOrEmpty(data.getLocation())) ? location : data.getLocation();
+
+    if ( data instanceof RegistrationForm )
+    {
+      RegistrationForm form = (RegistrationForm)data;
+      this.mail = (Strings.isNullOrEmpty(form.getMail())) ? mail : form.getMail();
+      this.surname = (Strings.isNullOrEmpty(form.getSurname())) ? surname : form.getSurname();
+      this.givenName = (Strings.isNullOrEmpty(form.getGivenName())) ? givenName : form.getGivenName();      
+    } 
+    else if ( data instanceof ExamForm )
+    {
+      ExamForm form = (ExamForm)data;
+      this.uid = (Strings.isNullOrEmpty(form.getUserId())) ? uid : form.getUserId();
+      this.password = (Strings.isNullOrEmpty(form.getPassword())) ? givenName : form.getPassword();      
+    }
+  }
+  
   public void addToHttpServletResponse(HttpServletResponse response)
   {
     if (cookieAccepted)

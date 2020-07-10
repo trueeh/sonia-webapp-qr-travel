@@ -45,6 +45,7 @@ public class RegistrationController
   private final static Logger LOGGER = LoggerFactory.getLogger(
     RegistrationController.class.getName());
 
+  /*
   private static void exchangeData(RegistrationForm registrationForm,
     QrTravelToken token, Attendee attendee)
   {
@@ -126,7 +127,9 @@ public class RegistrationController
       }
     }
   }
-
+*/
+  
+  
   @GetMapping("/registration")
   public String registration(
     @RequestParam(name = "p", required = false) String pin,
@@ -145,8 +148,6 @@ public class RegistrationController
 
     if (!Strings.isNullOrEmpty(pin))
     {
-      registrationForm.setPin(pin);
-
       if (!Strings.isNullOrEmpty(token.getMail()))
       {
         LOGGER.debug("Request token = " + token.toString());
@@ -157,12 +158,8 @@ public class RegistrationController
         token.setLocation(location);
       }
 
-      exchangeData(registrationForm, token, null);
-
-      if (!Strings.isNullOrEmpty(pin))
-      {
-        room = Database.findRoom(pin);
-      }
+      registrationForm.setAttendeeData(pin, token);
+      room = Database.findRoom(pin);
       
       if (!Strings.isNullOrEmpty(token.getUuid()))
       {
@@ -246,7 +243,10 @@ public class RegistrationController
       }
     }
 
-    exchangeData(registrationForm, token, attendee);
+     
+    // exchangeData(registrationForm, token, attendee);
+    token.setAttendeeData(registrationForm);
+    attendee.setAttendeeData(registrationForm.getPin(), token);
 
     boolean dataCommitted = false;
 

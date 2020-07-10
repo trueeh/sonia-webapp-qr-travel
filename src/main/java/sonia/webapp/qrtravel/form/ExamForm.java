@@ -10,23 +10,25 @@ import javax.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import sonia.webapp.qrtravel.db.AttendeeData;
+import sonia.webapp.qrtravel.QrTravelToken;
 
 /**
  *
  * @author th
  */
 @ToString
-public class ExamForm
+public class ExamForm implements AttendeeForm
 {
   
-  public void setAttendeeData( String pin, AttendeeData data )
+  public void setAttendeeData(String pin, QrTravelToken token)
   {
     this.pin = pin;
-    this.phone = data.getPhone();
-    this.location = data.getLocation();
-    this.city = data.getCity();
-    this.street = data.getStreet();
+    this.phone = token.getPhone();
+    this.location = token.getLocation();
+    this.city = token.getCity();
+    this.street = token.getStreet();
+    this.userId = token.getUid();
+    this.password = token.getPassword();
   }
   
   

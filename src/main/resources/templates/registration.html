@@ -84,7 +84,7 @@
             <div class="form-row">
               <div class="d-none d-md-block col-md-3">&nbsp;</div>
               <div class="col-xs-12 col-sm-12 col-md-6 mt-1" style="text-align: center;">
-                <div th:if="${#fields.hasErrors('location')}" th:errors="*{location}">mail Error</div>
+                <div th:if="${#fields.hasErrors('location')}" th:errors="*{location}">Error</div>
                 <input type="text" size="35" placeholder="Platz-Nr." th:field="*{location}" class="form-control input-lg text-center" >
               </div>
             </div>           
@@ -92,7 +92,7 @@
             <div class="form-row">
               <div class="d-none d-md-block col-md-3">&nbsp;</div>
               <div class="col-xs-12 col-sm-12 col-md-6 mt-1" style="text-align: center;">
-                <div th:if="${#fields.hasErrors('mail')}" th:errors="*{mail}">mail Error</div>
+                <div th:if="${#fields.hasErrors('mail')}" th:errors="*{mail}">Error</div>
                 <input type="text" size="35" placeholder="e-Mail" th:field="*{mail}" class="form-control input-lg text-center" >
               </div>
             </div>
@@ -100,7 +100,7 @@
             <div class="form-row">
               <div class="d-none d-md-block col-md-3">&nbsp;</div>
               <div class="col-xs-12 col-sm-12 col-md-6 mt-1" style="text-align: center;">
-                <div th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}">mail Error</div>
+                <div th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}">Error</div>
                 <input type="text" maxlength="24" size="35" placeholder="Telefonnummer" th:field="*{phone}" class="form-control input-lg text-center" >
               </div>
             </div>
@@ -108,7 +108,23 @@
             <div class="form-row">
               <div class="d-none d-md-block col-md-3">&nbsp;</div>
               <div class="col-xs-12 col-sm-12 col-md-6 mt-1" style="text-align: center;">
-                <div th:if="${#fields.hasErrors('givenName')}" th:errors="*{givenName}">mail Error</div>
+                <div th:if="${#fields.hasErrors('street')}" th:errors="*{street}">Error</div>
+                <input type="text" maxlength="24" size="35" placeholder="Straße Nr." th:field="*{street}" class="form-control input-lg text-center" >
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="d-none d-md-block col-md-3">&nbsp;</div>
+              <div class="col-xs-12 col-sm-12 col-md-6 mt-1" style="text-align: center;">
+                <div th:if="${#fields.hasErrors('city')}" th:errors="*{city}">Error</div>
+                <input type="text" maxlength="24" size="35" placeholder="PLZ Ort" th:field="*{city}" class="form-control input-lg text-center" >
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="d-none d-md-block col-md-3">&nbsp;</div>
+              <div class="col-xs-12 col-sm-12 col-md-6 mt-1" style="text-align: center;">
+                <div th:if="${#fields.hasErrors('givenName')}" th:errors="*{givenName}">Error</div>
                 <input type="text" size="35" placeholder="Vorname" th:field="*{givenName}" class="form-control input-lg text-center" >
               </div>
             </div>
@@ -116,7 +132,7 @@
             <div class="form-row">
               <div class="d-none d-md-block col-md-3">&nbsp;</div>
               <div class="col-xs-12 col-sm-12 col-md-6 mt-1" style="text-align: center;">
-                <div th:if="${#fields.hasErrors('surname')}" th:errors="*{surname}">mail Error</div>
+                <div th:if="${#fields.hasErrors('surname')}" th:errors="*{surname}">Error</div>
                 <input type="text" size="35" placeholder="Nachname" th:field="*{surname}" class="form-control input-lg text-center" >
               </div>
             </div>

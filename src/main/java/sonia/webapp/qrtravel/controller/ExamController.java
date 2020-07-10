@@ -48,78 +48,7 @@ public class ExamController
   private final static Logger LOGGER = LoggerFactory.getLogger(
     ExamController.class.getName());
 
-  private static void exchangeData(ExamForm examForm,
-    QrTravelToken token, Attendee attendee)
-  {
-    if (examForm != null && token != null)
-    {
-      // account id
-      if (Strings.isNullOrEmpty(examForm.getUserId()))
-      {
-        examForm.setUserId(token.getUid());
-      }
-      else
-      {
-        token.setUid(examForm.getUserId());
-      }
-
-      // phone
-      if (Strings.isNullOrEmpty(examForm.getPhone()))
-      {
-        examForm.setPhone(token.getPhone());
-      }
-      else
-      {
-        token.setPhone(examForm.getPhone());
-      }
-
-      // password
-      if (Strings.isNullOrEmpty(examForm.getPassword()))
-      {
-        examForm.setPassword(token.getPassword());
-      }
-      else
-      {
-        token.setPassword(examForm.getPassword());
-      }
-
-      // location
-      if (Strings.isNullOrEmpty(examForm.getLocation()))
-      {
-        examForm.setLocation(token.getLocation());
-      }
-      else
-      {
-        token.setLocation(examForm.getLocation());
-      }
-
-      // street
-      if (Strings.isNullOrEmpty(examForm.getStreet()))
-      {
-        examForm.setStreet(token.getStreet());
-      }
-      else
-      {
-        token.setStreet(examForm.getStreet());
-      }
-
-      // city
-      if (Strings.isNullOrEmpty(examForm.getCity()))
-      {
-        examForm.setCity(token.getCity());
-      }
-      else
-      {
-        token.setCity(examForm.getCity());
-      }
-
-      if (attendee != null)
-      {
-        attendee.setAttendeeData(examForm.getPin(), token);
-      }
-    }
-  }
-
+ 
   @GetMapping("/exam")
   public String exam(
     @RequestParam(name = "p", required = false) String pin,
@@ -148,14 +77,10 @@ public class ExamController
       {
         token.setLocation(location);
       }
-
-      exchangeData(examForm, token, null);
-
-      if (!Strings.isNullOrEmpty(pin))
-      {
-        room = Database.findRoom(pin);
-      }
-
+      
+      examForm.setAttendeeData(pin, token);
+      room = Database.findRoom(pin);
+        
       if (!Strings.isNullOrEmpty(token.getUuid()))
       {
         Attendee attendee = Database.lastAttendeeEntry(pin, token.getUuid());
@@ -236,7 +161,8 @@ public class ExamController
       }
     }
 
-    exchangeData(examForm, token, attendee);
+    token.setAttendeeData(examForm);
+    attendee.setAttendeeData(examForm.getPin(), token);
 
     LOGGER.trace("uid=" + examForm.getUserId() + " / " + token.getUid());
     LOGGER.trace("pwd=" + examForm.getPassword() + " / " + token.getPassword());
@@ -303,5 +229,4 @@ public class ExamController
     LOGGER.debug("Response token = " + token.toString());
     return "exam";
   }
-
 }

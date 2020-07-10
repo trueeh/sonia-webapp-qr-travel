@@ -51,7 +51,7 @@ h2 {
 
 #footer {
   position: absolute;
-  bottom: 16px;
+  bottom: 0px;
   font-family: sans-serif;
   width: 100%;
   text-align: center;
