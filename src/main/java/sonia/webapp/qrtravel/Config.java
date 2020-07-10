@@ -18,6 +18,9 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Random;
+import sonia.commons.crypt.converter.HexByteConverter;
+import sonia.commons.crypt.util.HEX;
 
 /**
  * Class description
@@ -251,8 +254,11 @@ public class Config
 
   public static void writeSampleConfig() throws IOException
   {
+    Random random = new Random(System.currentTimeMillis());
+    byte[] key = new byte[20];
+    random.nextBytes(key);
     config = new Config();
-    config.cipherKey = "<not set>";
+    config.cipherKey = HEX.convert(key).toLowerCase();
     config.tokenTimeout = 60 * 60 * 24 * 365; // timeout in s == 8h
     config.webServicePort = 8080;
     config.webServiceUrl = "https://qr.yourdomain.de";
