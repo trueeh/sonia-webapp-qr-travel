@@ -13,8 +13,6 @@
  * Computing Center.
  */
 
-
-
 package sonia.webapp.qrtravel.ldap;
 
 //~--- non-JDK imports --------------------------------------------------------
