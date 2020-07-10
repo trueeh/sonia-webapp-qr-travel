@@ -89,7 +89,7 @@ public class LdapUtil
     }
     catch (LDAPException ex)
     {
-      LOGGER.error("searchForMail", ex);
+      LOGGER.error("ldap connection failed", ex);
     }
     finally
     {
