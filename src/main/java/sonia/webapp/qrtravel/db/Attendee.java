@@ -38,6 +38,19 @@ public class Attendee implements Serializable
   private final static Logger LOGGER = LoggerFactory.getLogger(
     Attendee.class.getName());
 
+  public void setAttendeeData( String pin, AttendeeData data )
+  {
+    this.cookieUUID = data.getUuid();
+    this.email = data.getMail();
+    this.surname = data.getSurname();
+    this.givenname = data.getGivenName();
+    this.location = data.getLocation();
+    this.phonenumber = data.getPhone();
+    this.pin = pin;
+    this.street = data.getStreet();
+    this.city = data.getCity();
+  }
+  
   @PrePersist
   public void prePersist()
   {
@@ -135,4 +148,12 @@ public class Attendee implements Serializable
   
   @Getter
   private long updatedTimestamp;
+  
+  @Getter
+  @Setter
+  private String street;
+
+  @Getter
+  @Setter
+  private String city;
 }

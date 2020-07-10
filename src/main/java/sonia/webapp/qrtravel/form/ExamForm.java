@@ -10,6 +10,7 @@ import javax.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import sonia.webapp.qrtravel.db.AttendeeData;
 
 /**
  *
@@ -18,6 +19,17 @@ import lombok.ToString;
 @ToString
 public class ExamForm
 {
+  
+  public void setAttendeeData( String pin, AttendeeData data )
+  {
+    this.pin = pin;
+    this.phone = data.getPhone();
+    this.location = data.getLocation();
+    this.city = data.getCity();
+    this.street = data.getStreet();
+  }
+  
+  
   @NotNull
   @Size( min = 6, message = "Minimum 6 Zeichen" )  
   @Getter
@@ -45,4 +57,16 @@ public class ExamForm
   @Getter
   @Setter
   private String location;
+  
+  @Getter
+  @Setter
+  @NotNull
+  @Size( min = 2, message = "Minimum 2 Zeichen" )
+  private String street;
+
+  @Getter
+  @Setter
+  @NotNull
+  @Size( min = 2, message = "Minimum 2 Zeichen" )
+  private String city;
 }

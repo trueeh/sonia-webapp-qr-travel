@@ -100,15 +100,29 @@ public class RegistrationController
         token.setLocation(registrationForm.getLocation());
       }
 
+            // street
+      if (Strings.isNullOrEmpty(registrationForm.getStreet()))
+      {
+        registrationForm.setStreet(token.getStreet());
+      }
+      else
+      {
+        token.setStreet(registrationForm.getStreet());
+      }
+
+      // city
+      if (Strings.isNullOrEmpty(registrationForm.getCity()))
+      {
+        registrationForm.setCity(token.getCity());
+      }
+      else
+      {
+        token.setCity(registrationForm.getCity());
+      }
+
       if (attendee != null)
       {
-        attendee.setCookieUUID(token.getUuid());
-        attendee.setEmail(token.getMail());
-        attendee.setSurname(token.getSurname());
-        attendee.setGivenname(token.getGivenName());
-        attendee.setLocation(token.getLocation());
-        attendee.setPhonenumber(token.getPhone());
-        attendee.setPin(registrationForm.getPin());
+        attendee.setAttendeeData(registrationForm.getPin(), token);
       }
     }
   }

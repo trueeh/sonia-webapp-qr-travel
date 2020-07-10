@@ -56,4 +56,17 @@ public class RegistrationForm
   @Getter
   @Setter
   private String location;
+  
+    
+  @Getter
+  @Setter
+  @NotNull
+  @Size( min = 2, message = "Minimum 2 Zeichen" )
+  private String street;
+
+  @Getter
+  @Setter
+  @NotNull
+  @Size( min = 2, message = "Minimum 2 Zeichen" )
+  private String city;
 }

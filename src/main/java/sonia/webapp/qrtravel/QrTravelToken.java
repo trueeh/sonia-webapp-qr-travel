@@ -11,6 +11,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import org.slf4j.LoggerFactory;
+import sonia.webapp.qrtravel.db.AttendeeData;
 
 /**
  *
@@ -19,7 +20,7 @@ import org.slf4j.LoggerFactory;
 @XmlRootElement
 @JsonIgnoreProperties(ignoreUnknown = true)
 @ToString
-public class QrTravelToken
+public class QrTravelToken implements AttendeeData
 {
   public final static String QR_TRAVEL_TOKEN = "QrTravelToken";
 
@@ -145,6 +146,16 @@ public class QrTravelToken
   @Getter
   @JsonProperty("lc")
   private String location;
+  
+  @Setter
+  @Getter
+  @JsonProperty("st")
+  private String street;
+  
+  @Setter
+  @Getter
+  @JsonProperty("ci")
+  private String city;
 
   @Getter
   @JsonProperty("uu")

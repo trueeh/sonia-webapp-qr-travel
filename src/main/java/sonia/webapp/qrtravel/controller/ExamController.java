@@ -93,15 +93,29 @@ public class ExamController
         token.setLocation(examForm.getLocation());
       }
 
+      // street
+      if (Strings.isNullOrEmpty(examForm.getStreet()))
+      {
+        examForm.setStreet(token.getStreet());
+      }
+      else
+      {
+        token.setStreet(examForm.getStreet());
+      }
+
+      // city
+      if (Strings.isNullOrEmpty(examForm.getCity()))
+      {
+        examForm.setCity(token.getCity());
+      }
+      else
+      {
+        token.setCity(examForm.getCity());
+      }
+
       if (attendee != null)
       {
-        attendee.setCookieUUID(token.getUuid());
-        attendee.setEmail(token.getMail());
-        attendee.setSurname(token.getSurname());
-        attendee.setGivenname(token.getGivenName());
-        attendee.setLocation(token.getLocation());
-        attendee.setPhonenumber(token.getPhone());
-        attendee.setPin(examForm.getPin());
+        attendee.setAttendeeData(examForm.getPin(), token);
       }
     }
   }
