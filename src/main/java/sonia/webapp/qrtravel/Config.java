@@ -258,6 +258,8 @@ public class Config
     random.nextBytes(key);
     config = new Config();
     config.cipherKey = HEX.convert(key).toLowerCase();
+    random.nextBytes(key);
+    config.apiAuthToken = HEX.convert(key).toLowerCase();
     config.tokenTimeout = 60 * 60 * 24 * 365; // timeout in s == 8h
     config.webServicePort = 8080;
     config.webServiceUrl = "https://qr.yourdomain.de";
@@ -353,4 +355,7 @@ public class Config
 
   @Getter
   private int loginFailedBlockingDuration;
+  
+  @Getter
+  private String apiAuthToken;
 }
