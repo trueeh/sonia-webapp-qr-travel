@@ -20,7 +20,7 @@ public class UtilController
 {
   private final static Logger LOGGER = LoggerFactory.getLogger(UtilController.class.getName());
 
-  @GetMapping( path= "/build", produces = MediaType.APPLICATION_JSON_VALUE)
+  @GetMapping( path= "/api/build", produces = MediaType.APPLICATION_JSON_VALUE)
   public BuildProperties buildProperties()
   {
     LOGGER.debug("get build request");
@@ -41,7 +41,7 @@ public class UtilController
     return map;
   }
 
-  @GetMapping( path= "/check", produces = MediaType.APPLICATION_JSON_VALUE)
+  @GetMapping( path= "/api/check", produces = MediaType.APPLICATION_JSON_VALUE)
   public HashMap<String,Boolean> checkExpired()
   {
     LOGGER.debug("checkExpired request");

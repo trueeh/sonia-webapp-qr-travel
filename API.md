@@ -8,7 +8,6 @@
 
 `https://<service fqdn>/api/checkout`
 
-
 ### JSON POST Request
 
 Sample
@@ -41,4 +40,19 @@ Sample
   UNKNOWN_ROOM = 3
   ACCOUNT_BLOCKED = 4
   PHONENUMBER_IS_MISSING = 5
+```
+
+## BUILD Information
+
+`https://<service fqdn>/api/build`
+
+Sample
+```
+{
+  javaVersion: "11.0.7",
+  javaVendor: "BellSoft",
+  projectName: "sonia-webapp-qr-travel",
+  projectVersion: "1.0.0-SNAPSHOT",
+  timestamp: "2020-07-13 10:25:51"
+}
 ```
