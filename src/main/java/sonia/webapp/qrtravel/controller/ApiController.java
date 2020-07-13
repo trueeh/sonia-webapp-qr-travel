@@ -1,5 +1,7 @@
 package sonia.webapp.qrtravel.controller;
 
+import sonia.webapp.qrtravel.api.ApiResponse;
+import sonia.webapp.qrtravel.api.ApiRequest;
 import com.google.common.base.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

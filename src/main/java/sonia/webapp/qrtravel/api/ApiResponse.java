@@ -1,4 +1,4 @@
-package sonia.webapp.qrtravel.controller;
+package sonia.webapp.qrtravel.api;
 
 import lombok.Getter;
 
