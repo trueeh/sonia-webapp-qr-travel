@@ -152,6 +152,13 @@ public class RegistrationController
       {
         token.setLocation(location);
       }
+      else
+      {
+        if ( !token.getLastPin().equalsIgnoreCase(pin) )
+        {
+          token.setLocation(null);
+        }
+      }
 
       registrationForm.setAttendeeData(pin, token);
       room = Database.findRoom(pin);
@@ -239,11 +246,16 @@ public class RegistrationController
     }
 
     LOGGER.debug( "rf=" + registrationForm );
-    LOGGER.debug( "tok=" + registrationForm );
+    LOGGER.debug( "tok=" + token );
+    LOGGER.debug( "attendee=" + attendee );
     
-    // exchangeData(registrationForm, token, attendee);
     token.setAttendeeData(registrationForm);
   
+    if ( attendee != null )
+    {
+      attendee.setAttendeeData(registrationForm.getPin(), token);
+    }
+    
     boolean dataCommitted = false;
 
     if (bindingResult.hasErrors())
@@ -257,9 +269,10 @@ public class RegistrationController
     }
     else
     {
+      LOGGER.debug("1");
       if (attendee != null && attendee.getEmail() != null)
       {
-        attendee.setAttendeeData(registrationForm.getPin(), token);
+        LOGGER.debug("2");
         LdapAccount account = LdapUtil.searchForMail(attendee.getEmail());
         if (account != null)
         {

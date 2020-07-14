@@ -72,6 +72,13 @@ public class ExamController
       {
         token.setLocation(location);
       }
+      else
+      {
+        if ( !token.getLastPin().equalsIgnoreCase(pin) )
+        {
+          token.setLocation(null);
+        }
+      }
       
       examForm.setAttendeeData(pin, token);
       room = Database.findRoom(pin);
@@ -157,7 +164,11 @@ public class ExamController
     }
 
     token.setAttendeeData(examForm);
-
+    if ( attendee != null )
+    {
+      attendee.setAttendeeData(examForm.getPin(), token);
+    }
+    
     LOGGER.trace("uid=" + examForm.getUserId() + " / " + token.getUid());
     LOGGER.trace("pwd=" + examForm.getPassword() + " / " + token.getPassword());
 
@@ -174,7 +185,6 @@ public class ExamController
     }
     else
     {
-      attendee.setAttendeeData(examForm.getPin(), token);
       LoginAttempt loginAttempt = LdapUtil.getLoginAttempt(examForm.getUserId());
       LOGGER.debug("loginAttempt=" + loginAttempt);
       if (loginAttempt != null && loginAttempt.getCounter() < CONFIG.
