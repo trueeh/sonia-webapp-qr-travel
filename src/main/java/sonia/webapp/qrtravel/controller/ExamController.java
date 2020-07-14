@@ -74,7 +74,7 @@ public class ExamController
       }
       else
       {
-        if ( !token.getLastPin().equalsIgnoreCase(pin) )
+        if ( token.getLastPin() == null || !token.getLastPin().equalsIgnoreCase(pin) )
         {
           token.setLocation(null);
         }

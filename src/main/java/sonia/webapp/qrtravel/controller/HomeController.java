@@ -59,7 +59,6 @@ public class HomeController
     model.addAttribute("room", room);
     model.addAttribute("pin", pin);
     model.addAttribute("token", token);
-    token.setLastPin(pin);
     LOGGER.debug("Response token = " + token.toString());
 
     token.addToHttpServletResponse(response);
