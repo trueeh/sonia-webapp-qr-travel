@@ -238,11 +238,12 @@ public class RegistrationController
       }
     }
 
-     
+    LOGGER.debug( "rf=" + registrationForm );
+    LOGGER.debug( "tok=" + registrationForm );
+    
     // exchangeData(registrationForm, token, attendee);
     token.setAttendeeData(registrationForm);
-    attendee.setAttendeeData(registrationForm.getPin(), token);
-
+  
     boolean dataCommitted = false;
 
     if (bindingResult.hasErrors())
@@ -258,6 +259,7 @@ public class RegistrationController
     {
       if (attendee != null && attendee.getEmail() != null)
       {
+        attendee.setAttendeeData(registrationForm.getPin(), token);
         LdapAccount account = LdapUtil.searchForMail(attendee.getEmail());
         if (account != null)
         {
