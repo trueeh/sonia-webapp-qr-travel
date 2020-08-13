@@ -200,12 +200,14 @@ public class ApiController
           }
           else
           {
+            LOGGER.info( "Kartennummer: " + request.getCardSerialNumber()+ " nicht gefunden." );
             response = new ApiCardResponse(ApiResponse.ERROR,
             "Kartennummer nicht gefunden.");
           }
         }
         else
         {
+          LOGGER.info( "Unbekannter Raum: " + request.getPin() );
           response = new ApiCardResponse(ApiResponse.UNKNOWN_ROOM,
             "Unbekannter Raum!");
         }
