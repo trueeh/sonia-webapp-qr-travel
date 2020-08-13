@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import sonia.webapp.qrtravel.Config;
+import sonia.webapp.qrtravel.api.ApiCardRequest;
+import sonia.webapp.qrtravel.api.ApiCardResponse;
 import sonia.webapp.qrtravel.db.Database;
 import sonia.webapp.qrtravel.db.Room;
 import sonia.webapp.qrtravel.ldap.LdapAccount;
@@ -35,59 +37,69 @@ public class ApiController
     ApiResponse response = new ApiResponse(ApiResponse.ERROR,
       "Unbekannter Fehler");
 
-    if (Strings.isNullOrEmpty(request.getPhone()) || request.getPhone().length()
-      < 4)
+    if (Strings.isNullOrEmpty(request.getAuthToken())
+      || !request.getAuthToken().equalsIgnoreCase(CONFIG.getApiAuthToken()))
     {
-      response = new ApiResponse(ApiResponse.PHONENUMBER_IS_MISSING,
-        "Telefonnummer (minimum 4 Zahlen)");
+      response = new ApiResponse(ApiResponse.ERROR,
+        "Missing or wrong auth token");
     }
     else
     {
-      if (!Strings.isNullOrEmpty(request.getPin()))
+      if (Strings.isNullOrEmpty(request.getPhone()) || request.getPhone().
+        length()
+        < 4)
       {
-        Room room = Database.findRoom(request.getPin());
-
-        if (room != null)
+        response = new ApiResponse(ApiResponse.PHONENUMBER_IS_MISSING,
+          "Telefonnummer (minimum 4 Zahlen)");
+      }
+      else
+      {
+        if (!Strings.isNullOrEmpty(request.getPin()))
         {
-          if (!Strings.isNullOrEmpty(request.getUsername())
-            && !Strings.isNullOrEmpty(request.getPassword()))
-          {
-            LoginAttempt loginAttempt = LdapUtil.
-              getLoginAttempt(request.getUsername());
-            LOGGER.debug("loginAttempt=" + loginAttempt);
-            if (loginAttempt != null && loginAttempt.getCounter() < CONFIG.
-              getMaxLoginAttempts())
-            {
-              LdapAccount account = LdapUtil.bind(request.getUsername(),
-                request.getPassword());
+          Room room = Database.findRoom(request.getPin());
 
-              if (account != null)
+          if (room != null)
+          {
+            if (!Strings.isNullOrEmpty(request.getUsername())
+              && !Strings.isNullOrEmpty(request.getPassword()))
+            {
+              LoginAttempt loginAttempt = LdapUtil.
+                getLoginAttempt(request.getUsername());
+              LOGGER.debug("loginAttempt=" + loginAttempt);
+              if (loginAttempt != null && loginAttempt.getCounter() < CONFIG.
+                getMaxLoginAttempts())
               {
-                response = new ApiResponse(ApiResponse.OK, "OK");
+                LdapAccount account = LdapUtil.bind(request.getUsername(),
+                  request.getPassword());
+
+                if (account != null)
+                {
+                  response = new ApiResponse(ApiResponse.OK, "OK");
+                }
+                else
+                {
+                  loginAttempt.incrementCounter();
+                  response = new ApiResponse(ApiResponse.INVALID_CREDENTIALS,
+                    "Zugangsdaten falsch!");
+                }
               }
               else
               {
-                loginAttempt.incrementCounter();
-                response = new ApiResponse(ApiResponse.INVALID_CREDENTIALS,
-                  "Zugangsdaten falsch!");
+                response = new ApiResponse(ApiResponse.ACCOUNT_BLOCKED,
+                  "Dieser Account ist für " + CONFIG.
+                    getLoginFailedBlockingDuration() + "s gesperrt!");
               }
             }
-            else
-            {
-              response = new ApiResponse(ApiResponse.ACCOUNT_BLOCKED,
-                "Dieser Account ist für " + CONFIG.
-                  getLoginFailedBlockingDuration() + "s gesperrt!");
-            }
           }
-        }
-        else
-        {
-          response = new ApiResponse(ApiResponse.UNKNOWN_ROOM,
-            "Unbekannter Raum!");
+          else
+          {
+            response = new ApiResponse(ApiResponse.UNKNOWN_ROOM,
+              "Unbekannter Raum!");
+          }
         }
       }
     }
-    
+
     return response;
   }
 
@@ -100,4 +112,43 @@ public class ApiController
     LOGGER.trace("api request = " + request.toString());
     return new ApiResponse(0, "OK");
   }
+
+  @PostMapping(path = "/api/card",
+               consumes = MediaType.APPLICATION_JSON_VALUE,
+               produces = MediaType.APPLICATION_JSON_VALUE)
+  public ApiCardResponse apiCard(@RequestBody ApiCardRequest request)
+  {
+    LOGGER.debug("/api/card");
+    LOGGER.trace("api request = " + request.toString());
+
+    ApiCardResponse response = new ApiCardResponse(ApiResponse.ERROR,
+      "Unbekannter Fehler");
+
+    if (Strings.isNullOrEmpty(request.getAuthToken())
+      || !request.getAuthToken().equalsIgnoreCase(CONFIG.getApiAuthToken()))
+    {
+      response = new ApiCardResponse(ApiResponse.ERROR,
+        "Missing or wrong auth token");
+    }
+    else
+    {
+
+      if (!Strings.isNullOrEmpty(request.getPin()))
+      {
+        Room room = Database.findRoom(request.getPin());
+
+        if (room != null)
+        {
+          // lookup card serial
+        }
+        else
+        {
+          response = new ApiCardResponse(ApiResponse.UNKNOWN_ROOM,
+            "Unbekannter Raum!");
+        }
+      }
+    }
+    return response;
+  }
+
 }
