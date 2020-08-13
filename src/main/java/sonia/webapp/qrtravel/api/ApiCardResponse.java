@@ -48,6 +48,10 @@ public class ApiCardResponse
   
   @Getter
   @Setter
+  private String employeeType;
+  
+  @Getter
+  @Setter
   private String phoneNumber;
   
   @Getter

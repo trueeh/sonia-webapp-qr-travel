@@ -139,7 +139,27 @@ public class ApiController
 
         if (room != null)
         {
-          // lookup card serial
+          LdapAccount ldapAccount = LdapUtil.searchForCard(request.getCardSerialNumber());
+          
+          if ( ldapAccount != null )
+          {
+            LOGGER.debug(ldapAccount.toString());
+            response = new ApiCardResponse(ApiResponse.OK,
+            "OK - " + (request.isPresent() ? "kommen" : "gehen" ));
+            response.setSn( ldapAccount.getSn() );
+            response.setGivenName(ldapAccount.getGivenName() );
+            response.setEmployeeType(ldapAccount.getEmployeeType() );
+            response.setJpegPhoto(ldapAccount.getJpegPhoto() );
+            response.setMail(ldapAccount.getMail() );
+            response.setOu(ldapAccount.getOu() );
+            response.setSoniaStudentNumber(ldapAccount.getSoniaStudentNumber() );
+            response.setUid(ldapAccount.getUid() );
+          }
+          else
+          {
+            response = new ApiCardResponse(ApiResponse.ERROR,
+            "Kartennummer nicht gefunden.");
+          }
         }
         else
         {

@@ -4,6 +4,7 @@ import com.unboundid.ldap.sdk.Entry;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.apache.tomcat.util.codec.binary.Base64;
 
 /**
  *
@@ -19,8 +20,20 @@ public class LdapAccount
     this.sn = entry.getAttributeValue("sn");
     this.givenName = entry.getAttributeValue("givenName");
     this.mail = entry.getAttributeValue("mail");
-    this.soniaStudentNumber = entry.getAttributeValue(
-      "soniaStudentNumber");
+    this.soniaStudentNumber = entry.getAttributeValue("soniaStudentNumber");
+    this.jpegPhoto = null;
+
+    // 
+    this.ou = entry.getAttributeValue("ou");
+    this.employeeType = entry.getAttributeValue("employeeType");
+
+    // 
+    byte[] imageData = entry.getAttributeValueBytes("jpegPhoto");
+   
+    if ((imageData != null) && (imageData.length > 0))
+    {
+      jpegPhoto = Base64.encodeBase64String(imageData);
+    }
   }
 
   @Getter
@@ -45,4 +58,17 @@ public class LdapAccount
   @Getter
   @Setter
   private String soniaStudentNumber;
+
+  @Getter
+  @Setter
+  private String ou;
+
+  @Getter
+  @Setter
+  private String employeeType;
+
+  @Getter
+  @Setter
+  @ToString.Exclude
+  private String jpegPhoto;
 }
