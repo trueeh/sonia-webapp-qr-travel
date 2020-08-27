@@ -176,7 +176,7 @@ public class LdapUtil
         SearchResult searchResult = connection.search(CONFIG.getLdapBaseDn(),
           getSearchScope(), searchFilter,
           "uid", "mail", "sn", "givenName", "soniaStudentNumber", "ou",
-          "employeeType", "jpegPhoto");
+          "employeeType", "jpegPhoto", "soniaChipcardBarcode");
 
         List<SearchResultEntry> searchResultEntry = searchResult.
           getSearchEntries();

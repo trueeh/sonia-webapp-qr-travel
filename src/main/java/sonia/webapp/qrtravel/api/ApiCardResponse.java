@@ -41,6 +41,10 @@ public class ApiCardResponse
   @Getter
   @Setter
   private String soniaStudentNumber;
+
+  @Getter
+  @Setter
+  private String soniaChipcardBarcode;
   
   @Getter
   @Setter

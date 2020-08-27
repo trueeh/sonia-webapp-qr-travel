@@ -159,6 +159,7 @@ public class ApiController
             response.setMail(ldapAccount.getMail() );
             response.setOu(ldapAccount.getOu() );
             response.setSoniaStudentNumber(ldapAccount.getSoniaStudentNumber() );
+            response.setSoniaChipcardBarcode(ldapAccount.getSoniaChipcardBarcode() );
             response.setUid(ldapAccount.getUid() );
             
             // 

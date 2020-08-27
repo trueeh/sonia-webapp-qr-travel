@@ -21,6 +21,7 @@ public class LdapAccount
     this.givenName = entry.getAttributeValue("givenName");
     this.mail = entry.getAttributeValue("mail");
     this.soniaStudentNumber = entry.getAttributeValue("soniaStudentNumber");
+    this.soniaChipcardBarcode = entry.getAttributeValue("soniaChipcardBarcode");
     this.jpegPhoto = null;
 
     // 
@@ -58,6 +59,10 @@ public class LdapAccount
   @Getter
   @Setter
   private String soniaStudentNumber;
+
+  @Getter
+  @Setter
+  private String soniaChipcardBarcode;
 
   @Getter
   @Setter
