@@ -149,6 +149,59 @@ public class LdapUtil
     return account;
   }
 
+  public static LdapAccount searchForCard(long serialNumber)
+  {
+    LdapAccount account = null;
+    LDAPConnection connection = null;
+
+    LOGGER.debug("LDAP search for card = " + serialNumber);
+
+    if (serialNumber > 0)
+    {
+      try
+      {
+        connection = LdapConnectionFactory.getConnection();
+
+        MessageFormat searchFormat = new MessageFormat(
+          "(&(objectClass=soniaPerson)(!(soniaIsUnregistered=true))(soniaChipCardNumber={0}))"
+        );
+
+        String searchFilter = searchFormat.format(new Object[]
+        {
+          Long.toString(serialNumber)
+        });
+
+        LOGGER.debug(searchFilter);
+        
+        SearchResult searchResult = connection.search(CONFIG.getLdapBaseDn(),
+          getSearchScope(), searchFilter,
+          "uid", "mail", "sn", "givenName", "soniaStudentNumber", "ou",
+          "employeeType", "jpegPhoto", "soniaChipcardBarcode");
+
+        List<SearchResultEntry> searchResultEntry = searchResult.
+          getSearchEntries();
+
+        if (searchResultEntry.size() > 0)
+        {
+          account = new LdapAccount(searchResultEntry.get(0));
+          LOGGER.debug(account.toString());
+        }
+      }
+      catch (LDAPException ex)
+      {
+        LOGGER.error("searchForMail", ex);
+      }
+      finally
+      {
+        if (connection != null)
+        {
+          connection.close();
+        }
+      }
+    }
+    return account;
+  }
+
   private static SearchScope getSearchScope()
   {
     SearchScope scope;

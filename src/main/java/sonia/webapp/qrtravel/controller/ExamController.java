@@ -72,6 +72,13 @@ public class ExamController
       {
         token.setLocation(location);
       }
+      else
+      {
+        if ( token.getLastPin() == null || !token.getLastPin().equalsIgnoreCase(pin) )
+        {
+          token.setLocation(null);
+        }
+      }
       
       examForm.setAttendeeData(pin, token);
       room = Database.findRoom(pin);
@@ -157,8 +164,11 @@ public class ExamController
     }
 
     token.setAttendeeData(examForm);
-    attendee.setAttendeeData(examForm.getPin(), token);
-
+    if ( attendee != null )
+    {
+      attendee.setAttendeeData(examForm.getPin(), token);
+    }
+    
     LOGGER.trace("uid=" + examForm.getUserId() + " / " + token.getUid());
     LOGGER.trace("pwd=" + examForm.getPassword() + " / " + token.getPassword());
 
