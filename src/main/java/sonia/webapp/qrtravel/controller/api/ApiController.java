@@ -1,4 +1,4 @@
-package sonia.webapp.qrtravel.controller;
+package sonia.webapp.qrtravel.controller.api;
 
 import sonia.webapp.qrtravel.api.ApiResponse;
 import sonia.webapp.qrtravel.api.ApiRequest;
