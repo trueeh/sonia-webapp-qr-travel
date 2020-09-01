@@ -6,3 +6,4 @@ app.home_IS_UNDEFINED/
 config/
 logs/
 qr-travel.jar
+DEPLOY.sh
