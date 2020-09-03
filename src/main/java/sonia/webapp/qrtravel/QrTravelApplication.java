@@ -1,6 +1,8 @@
 package sonia.webapp.qrtravel;
 
 import java.io.IOException;
+import org.kohsuke.args4j.CmdLineException;
+import org.kohsuke.args4j.CmdLineParser;
 import org.quartz.CronScheduleBuilder;
 import org.quartz.CronTrigger;
 import org.quartz.JobBuilder;
@@ -30,9 +32,29 @@ public class QrTravelApplication
       System.setProperty("app.home", ".");
     }
 
-    if (args.length == 1 && args[0].equalsIgnoreCase("-w"))
+    Options options = new Options();
+    CmdLineParser parser = new CmdLineParser(options);
+
+    try
     {
-      Config.writeSampleConfig();
+      parser.parseArgument(args);
+    }
+    catch (CmdLineException e)
+    {
+      System.out.println(e.getMessage());
+      options.setHelp(true);
+    }
+
+    if (options.isHelp())
+    {
+      System.out.println("QR-Travel usage:");
+      parser.printUsage(System.out);
+      System.exit(0);
+    }
+
+    if (options.isCreateSampleConfig())
+    {
+      Config.writeSampleConfig(options.isForce());
       System.exit(0);
     }
 

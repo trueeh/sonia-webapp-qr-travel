@@ -26,7 +26,8 @@ import sonia.commons.crypt.util.HEX;
  *
  *
  * @version $version$, 18/08/19
- * @author Thorsten Ludewig <t.ludewig@ostfalia.de>Dr. Thorsten Ludewig <t.ludewig@gmail.com>
+ * @author Thorsten Ludewig <t.ludewig@ostfalia.de>Dr. Thorsten Ludewig
+ * <t.ludewig@gmail.com>
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @ToString
@@ -70,7 +71,6 @@ public class Config
   private static Config config;
 
   //~--- static initializers --------------------------------------------------
-
   //~--- methods --------------------------------------------------------------
   /**
    * Method description
@@ -159,6 +159,34 @@ public class Config
     return APP_HOME;
   }
 
+/*  static
+  {
+    APP_HOME = System.getProperty("app.home");
+
+    if (!Strings.isNullOrEmpty(APP_HOME))
+    {
+      APP_HOME = ".";
+    }
+
+    File configDirectory = new File(APP_HOME + File.separator
+      + CONFIG_DIRECTORY_NAME);
+    if (configDirectory.exists() && configDirectory.isDirectory()
+      && configDirectory.canWrite() && configDirectory.canRead())
+    {
+      LOGGER.info("Config directory: " + configDirectory.getAbsolutePath());
+    }
+    else
+    {
+      if (!configDirectory.mkdir())
+      {
+        LOGGER.error("ERROR: Can't create config directory: " + configDirectory.
+          getAbsolutePath());
+        System.exit(-1);
+      }
+    }
+  }
+*/
+  
   /**
    * Method description
    *
@@ -169,7 +197,7 @@ public class Config
   {
     if (config == null)
     {
-      APP_HOME = System.getProperty("app.home");
+
       config = new Config();
       try
       {
@@ -226,8 +254,9 @@ public class Config
    */
   private static File getDefaultConfigFile()
   {
-    String fileName = CONFIG_NAME;
-    String resourceFileName = CONFIG_NAME;
+    /*    String fileName = CONFIG_NAME;
+
+    /*    String resourceFileName = CONFIG_NAME;
 
     URL resourceUrl = Config.class.getResource(CONFIG_RESOURCENAME);
 
@@ -238,20 +267,24 @@ public class Config
 
     if (!Strings.isNullOrEmpty(APP_HOME))
     {
-      fileName = APP_HOME + File.separator + CONFIG_DIRECTORY_NAME
-        + File.separator + CONFIG_NAME;
-    }
+    
+     */
+
+    String fileName = APP_HOME + File.separator + CONFIG_DIRECTORY_NAME
+      + File.separator + CONFIG_NAME;
+
+    /*    }
     else if (!Strings.isNullOrEmpty(resourceFileName))
     {
       fileName = resourceFileName;
     }
-
+     */
     LOGGER.debug("config filename = " + fileName);
 
     return new File(fileName);
   }
 
-  public static void writeSampleConfig() throws IOException
+  public static void writeSampleConfig(boolean force) throws IOException
   {
     Random random = new Random(System.currentTimeMillis());
     byte[] key = new byte[20];
@@ -355,7 +388,7 @@ public class Config
 
   @Getter
   private int loginFailedBlockingDuration;
-  
+
   @Getter
   private String apiAuthToken;
 }
