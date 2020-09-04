@@ -23,6 +23,6 @@ public class PasswordDeserializer extends JsonDeserializer<String>
   {
     String value = parser.getText();
     LOGGER.debug( value );
-    return PasswordSerializer.decrypt(value);
+    return Cipher.decrypt(value);
   }
 }

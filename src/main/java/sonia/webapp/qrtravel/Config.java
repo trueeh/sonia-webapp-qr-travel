@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import com.google.common.base.Strings;
+import java.io.BufferedReader;
 
 import lombok.Getter;
 import lombok.ToString;
@@ -16,9 +17,12 @@ import org.slf4j.LoggerFactory;
 
 //~--- JDK imports ------------------------------------------------------------
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
-import java.net.URL;
+import java.io.PrintWriter;
 import java.util.Random;
+import java.util.logging.Level;
 import sonia.commons.crypt.util.HEX;
 
 /**
@@ -29,7 +33,10 @@ import sonia.commons.crypt.util.HEX;
  * @author Thorsten Ludewig <t.ludewig@ostfalia.de>Dr. Thorsten Ludewig
  * <t.ludewig@gmail.com>
  */
-@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonIgnoreProperties(ignoreUnknown = true, value =
+                    {
+                      "cipherKey"
+})
 @ToString
 public class Config
 {
@@ -65,10 +72,50 @@ public class Config
    */
   private static String APP_HOME;
 
+  private static String cipher = null;
+
   /**
    * Field description
    */
   private static Config config;
+
+  public Config()
+  {
+    Random random = new Random(System.currentTimeMillis());
+    byte[] key = new byte[20];
+    if (Strings.isNullOrEmpty(cipher))
+    {
+      random.nextBytes(key);
+      cipherKey = HEX.convert(key).toLowerCase();
+    }
+    else
+    {
+      cipherKey = cipher;
+    }
+    random.nextBytes(key);
+    apiAuthToken = HEX.convert(key).toLowerCase();
+    tokenTimeout = 60 * 60 * 24 * 365; // timeout in s == 8h
+    webServicePort = 8080;
+    webServiceUrl = "https://qr.yourdomain.de";
+    ldapHostName = "ldap.yourdomain.de";
+    ldapHostPort = 636;
+    ldapHostSSL = true;
+    ldapBaseDn = "dc=yourdomain,dc=de";
+    ldapBindDn = "cn=qrreader,ou=Special Users,dc=yourdomain,dc=de";
+    ldapBindPassword = "<not set>";
+    ldapSearchScope = "SUB";
+    ldapSearchAttribute = "mail";
+    ldapSearchFilter = "(mail={0})";
+    dbDriverClassName = "org.postgresql.Driver";
+    dbUrl = "jdbc:postgresql://localhost:5432/qr";
+    dbUser = "qr";
+    dbPassword = "<not set>";
+    enableCheckExpired = true;
+    checkExpiredCron = "0 5 0 * * ?";
+    expirationTimeInDays = 21;
+    maxLoginAttempts = 3;
+    loginFailedBlockingDuration = 180;
+  }
 
   //~--- static initializers --------------------------------------------------
   //~--- methods --------------------------------------------------------------
@@ -82,13 +129,36 @@ public class Config
    *
    * @throws IOException
    */
-  public static Config readConfig(File configFile) throws IOException
+  public static Config readConfig(File configFile)
   {
     LOGGER.info("reading config file:" + configFile.getAbsolutePath());
 
     if (configFile.exists() && configFile.canRead())
     {
-      config = OBJECT_MAPPER.readValue(configFile, Config.class);
+      File cipherFile = new File(APP_HOME + File.separator
+        + CONFIG_DIRECTORY_NAME + File.separator + "cipher.cfg");
+
+      try
+      {
+        BufferedReader reader = new BufferedReader(new FileReader(cipherFile));
+        cipher = reader.readLine();
+        reader.close();
+      }
+      catch (IOException ex)
+      {
+        LOGGER.error("Can not read cipher file");
+      }
+
+      config.cipherKey = cipher;
+
+      try
+      {
+        config = OBJECT_MAPPER.readValue(configFile, Config.class);
+      }
+      catch (IOException ex)
+      {
+        LOGGER.error("Can not read config file ", ex);
+      }
     }
 
     LOGGER.info(config.toString());
@@ -116,10 +186,30 @@ public class Config
    *
    * @throws IOException
    */
-  public static void writeConfig(File configFile) throws IOException
+  public static void writeConfig(File configFile, boolean force) throws
+    IOException
   {
-    OBJECT_MAPPER.writerWithDefaultPrettyPrinter().writeValue(configFile,
-      config);
+    if (!configFile.exists() || force)
+    {
+      File cipherFile = new File(APP_HOME + File.separator
+        + CONFIG_DIRECTORY_NAME + File.separator + "cipher.cfg");
+
+      if (!cipherFile.exists()) // never override cipher file
+      {
+        PrintWriter cipherWriter = new PrintWriter(cipherFile);
+        cipherWriter.println(config.cipherKey);
+        cipherWriter.close();
+      }
+
+      LOGGER.info("Writing config file: {}", configFile.getAbsolutePath());
+      OBJECT_MAPPER.writerWithDefaultPrettyPrinter().writeValue(configFile,
+        config);
+    }
+    else
+    {
+      LOGGER.info("NOT overwriting config file: {}", configFile.
+        getAbsolutePath());
+    }
   }
 
   /**
@@ -129,9 +219,9 @@ public class Config
    *
    * @throws IOException
    */
-  public static void writeConfig() throws IOException
+  public static void writeConfig(boolean force) throws IOException
   {
-    writeConfig(getDefaultConfigFile());
+    writeConfig(getDefaultConfigFile(), force);
   }
 
   //~--- get methods ----------------------------------------------------------
@@ -159,53 +249,61 @@ public class Config
     return APP_HOME;
   }
 
-/*  static
+  public static synchronized Config getInstance()
   {
-    APP_HOME = System.getProperty("app.home");
-
-    if (!Strings.isNullOrEmpty(APP_HOME))
-    {
-      APP_HOME = ".";
-    }
-
-    File configDirectory = new File(APP_HOME + File.separator
-      + CONFIG_DIRECTORY_NAME);
-    if (configDirectory.exists() && configDirectory.isDirectory()
-      && configDirectory.canWrite() && configDirectory.canRead())
-    {
-      LOGGER.info("Config directory: " + configDirectory.getAbsolutePath());
-    }
-    else
-    {
-      if (!configDirectory.mkdir())
-      {
-        LOGGER.error("ERROR: Can't create config directory: " + configDirectory.
-          getAbsolutePath());
-        System.exit(-1);
-      }
-    }
+    return getInstance(true);
   }
-*/
-  
+
   /**
    * Method description
    *
    *
    * @return
    */
-  public static synchronized Config getInstance()
+  public static synchronized Config getInstance(boolean readConfig)
   {
     if (config == null)
     {
-
       config = new Config();
-      try
+
+      APP_HOME = System.getProperty("app.home");
+
+      if (Strings.isNullOrEmpty(APP_HOME))
       {
-        readConfig();
+        APP_HOME = ".";
       }
-      catch (IOException ex)
+
+      File configDirectory = new File(APP_HOME + File.separator
+        + CONFIG_DIRECTORY_NAME);
+
+      if (configDirectory.exists() && configDirectory.isDirectory()
+        && configDirectory.canWrite() && configDirectory.canRead())
       {
-        LOGGER.error("Reading config ", ex);
+        LOGGER.info("Config directory: " + configDirectory.getAbsolutePath());
+      }
+      else
+      {
+        LOGGER.info("Creating config directory: {}", configDirectory.
+          getAbsolutePath());
+        if (!configDirectory.mkdirs())
+        {
+          LOGGER.error("ERROR: Can't create config directory: "
+            + configDirectory.
+              getAbsolutePath());
+          System.exit(-1);
+        }
+      }
+
+      if (readConfig)
+      {
+        try
+        {
+          readConfig();
+        }
+        catch (IOException ex)
+        {
+          LOGGER.error("Reading config ", ex);
+        }
       }
     }
     return config;
@@ -254,67 +352,19 @@ public class Config
    */
   private static File getDefaultConfigFile()
   {
-    /*    String fileName = CONFIG_NAME;
-
-    /*    String resourceFileName = CONFIG_NAME;
-
-    URL resourceUrl = Config.class.getResource(CONFIG_RESOURCENAME);
-
-    if (resourceUrl != null)
-    {
-      resourceFileName = resourceUrl.getFile();
-    }
-
-    if (!Strings.isNullOrEmpty(APP_HOME))
-    {
-    
-     */
-
-    String fileName = APP_HOME + File.separator + CONFIG_DIRECTORY_NAME
+    String filename = APP_HOME + File.separator + CONFIG_DIRECTORY_NAME
       + File.separator + CONFIG_NAME;
 
-    /*    }
-    else if (!Strings.isNullOrEmpty(resourceFileName))
-    {
-      fileName = resourceFileName;
-    }
-     */
-    LOGGER.debug("config filename = " + fileName);
+    File configFile = new File(filename);
+    LOGGER.debug("config filename = " + configFile.getAbsolutePath());
 
-    return new File(fileName);
+    return configFile;
   }
 
   public static void writeSampleConfig(boolean force) throws IOException
   {
-    Random random = new Random(System.currentTimeMillis());
-    byte[] key = new byte[20];
-    random.nextBytes(key);
-    config = new Config();
-    config.cipherKey = HEX.convert(key).toLowerCase();
-    random.nextBytes(key);
-    config.apiAuthToken = HEX.convert(key).toLowerCase();
-    config.tokenTimeout = 60 * 60 * 24 * 365; // timeout in s == 8h
-    config.webServicePort = 8080;
-    config.webServiceUrl = "https://qr.yourdomain.de";
-    config.ldapHostName = "ldap.yourdomain.de";
-    config.ldapHostPort = 636;
-    config.ldapHostSSL = true;
-    config.ldapBaseDn = "dc=yourdomain,dc=de";
-    config.ldapBindDn = "cn=qrreader,ou=Special Users,dc=yourdomain,dc=de";
-    config.ldapBindPassword = "<not set>";
-    config.ldapSearchScope = "SUB";
-    config.ldapSearchAttribute = "mail";
-    config.ldapSearchFilter = "(mail={0})";
-    config.dbDriverClassName = "org.postgresql.Driver";
-    config.dbUrl = "jdbc:postgresql://localhost:5432/qr";
-    config.dbUser = "qr";
-    config.dbPassword = "<not set>";
-    config.enableCheckExpired = true;
-    config.checkExpiredCron = "0 5 0 * * ?";
-    config.expirationTimeInDays = 21;
-    config.maxLoginAttempts = 3;
-    config.loginFailedBlockingDuration = 180;
-    Config.writeConfig();
+    Config.getInstance(false);
+    Config.writeConfig(force);
     System.out.println(config.toString());
   }
 

@@ -27,7 +27,7 @@ public class Options
   private String encrypt;
 
   @Getter
-  @Option( name="--create--sample-config", usage="Create a sample configuration file", required = false )
+  @Option( name="--create-sample-config", usage="Create a sample configuration file", required = false )
   private boolean createSampleConfig;
 
   @Getter

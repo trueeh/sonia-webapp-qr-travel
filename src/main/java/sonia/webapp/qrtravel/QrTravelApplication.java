@@ -1,5 +1,6 @@
 package sonia.webapp.qrtravel;
 
+import com.google.common.base.Strings;
 import java.io.IOException;
 import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
@@ -54,17 +55,20 @@ public class QrTravelApplication
 
     if (options.isCreateSampleConfig())
     {
+      Config.getInstance(false);
       Config.writeSampleConfig(options.isForce());
       System.exit(0);
     }
 
-    if (args.length == 2 && args[0].equalsIgnoreCase("-e"))
+    if (!Strings.isNullOrEmpty(options.getEncrypt()))
     {
-      System.out.println(args[1] + " = " + PasswordSerializer.encrypt(args[1]));
+      Config.getInstance();
+      System.out.println(options.getEncrypt() + " = " + Cipher.
+        encrypt(options.getEncrypt()));
       System.exit(0);
     }
 
-    if (args.length == 1 && args[0].equalsIgnoreCase("-c"))
+    if (options.isCheckConfig())
     {
       System.out.println(Config.getInstance().toString());
       System.exit(0);
