@@ -12,10 +12,15 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import sonia.webapp.qrtravel.Config;
 import sonia.webapp.qrtravel.QrTravelAdminToken;
 import static sonia.webapp.qrtravel.QrTravelAdminToken.QR_TRAVEL_ADMIN_TOKEN;
 import static sonia.webapp.qrtravel.QrTravelAdminToken.UNKNOWN_ADMIN_TOKEN;
+import sonia.webapp.qrtravel.db.Database;
 import sonia.webapp.qrtravel.form.LoginForm;
+import sonia.webapp.qrtravel.ldap.LdapAccount;
+import sonia.webapp.qrtravel.ldap.LdapUtil;
+import sonia.webapp.qrtravel.ldap.LoginAttempt;
 
 /**
  *
@@ -26,6 +31,8 @@ public class LoginController
 {
   private final static Logger LOGGER = LoggerFactory.getLogger(
     LoginController.class.getName());
+
+  private final static Config CONFIG = Config.getInstance();
 
   @GetMapping("/sys/login")
   public String httpGetLoginPage(
@@ -67,6 +74,8 @@ public class LoginController
     BindingResult bindingResult)
   {
     String page = "login";
+    boolean dataCommitted = false;
+    String errorMessage = null;
     
     LOGGER.debug("Login POST Request");
     QrTravelAdminToken token = QrTravelAdminToken.fromCookieValue(tokenValue);
@@ -85,10 +94,38 @@ public class LoginController
       LOGGER.trace("user id = {}", loginForm.getUserId());
       LOGGER.trace("password = {}", loginForm.getPassword());
       
-      token.setAuthenticated(true);
-      page = "redirect:/admin";
+      LoginAttempt loginAttempt = LdapUtil.getLoginAttempt(loginForm.getUserId());
+      LOGGER.debug("loginAttempt=" + loginAttempt);
+      
+      if (loginAttempt != null && loginAttempt.getCounter() < CONFIG.
+        getMaxLoginAttempts())
+      {
+        LdapAccount account = LdapUtil.adminBind(loginForm.getUserId(),
+          loginForm.getPassword());
+
+        if (account != null)
+        {
+          dataCommitted = true;
+          token.setAuthenticated(true);
+          token.setSn(account.getSn());
+          token.setGivenName(account.getGivenName());
+          page = "redirect:/admin";
+        }
+        else
+        {
+          loginAttempt.incrementCounter();
+          errorMessage = "Zugangsdaten falsch!";
+        }
+      }
+      else
+      {
+        errorMessage = "Dieser Account ist für " + CONFIG.
+          getLoginFailedBlockingDuration() + "s gesperrt!";
+      }
     }
 
+    model.addAttribute("dataCommitted", dataCommitted);
+    model.addAttribute("errorMessage", errorMessage);
     model.addAttribute("token", token);
     token.addToHttpServletResponse(response);
     return page;

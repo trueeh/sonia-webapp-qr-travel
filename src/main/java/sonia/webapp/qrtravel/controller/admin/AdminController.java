@@ -27,7 +27,7 @@ public class AdminController
                  defaultValue = UNKNOWN_ADMIN_TOKEN) String tokenValue,
     HttpServletResponse response, Model model, LoginForm loginForm)
   {
-    LOGGER.debug("Login GET Request");
+    LOGGER.debug("Admin home GET request");
     QrTravelAdminToken token = QrTravelAdminToken.fromCookieValue(tokenValue);
     model.addAttribute("token", token);
     token.addToHttpServletResponse(response);

@@ -117,6 +117,16 @@ public class QrTravelAdminToken
   private boolean authenticated;
 
   @Getter
+  @Setter
+  @JsonProperty("sn")
+  private String sn;
+
+  @Getter
+  @Setter
+  @JsonProperty("gn")
+  private String givenName;
+
+  @Getter
   @JsonProperty("ts")
   private long lastAccess;
 

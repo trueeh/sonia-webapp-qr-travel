@@ -55,7 +55,7 @@ public class LdapUtil
     {
       connection = LdapConnectionFactory.getConnection();
       SearchResult searchResult = connection.search(CONFIG.getLdapBaseDn(),
-        getSearchScope(), "(uid=" + uid + ")",
+        getSearchScope(CONFIG.getLdapSearchScope()), "(uid=" + uid + ")",
         "uid");
 
       String dn = null;
@@ -102,6 +102,66 @@ public class LdapUtil
     return account;
   }
 
+  public static LdapAccount adminBind(String uid, String password)
+  {
+    LdapAccount account = null;
+    LDAPConnection connection = null;
+
+    try
+    {
+      connection = LdapConnectionFactory.getConnection();
+
+      String filter = MessageFormat.format(CONFIG.getAdminLdapSearchFilter(),
+        uid);
+
+      LOGGER.debug("Admin ldap filter = {}", filter);
+
+      SearchResult searchResult = connection.search(CONFIG.getLdapBaseDn(),
+        getSearchScope(CONFIG.getAdminLdapSearchScope()), filter);
+
+      String dn = null;
+
+      if (searchResult.getEntryCount() == 1) // uid is unique
+      {
+        dn = searchResult.getSearchEntries().get(0).getDN();
+      }
+
+      LOGGER.debug("dn=" + dn);
+
+      if (!Strings.isNullOrEmpty(dn))
+      {
+        try
+        {
+          BindResult bindResult = connection.bind(dn, password);
+          if (bindResult.getResultCode() == ResultCode.SUCCESS)
+          {
+            LOGGER.debug("dn=" + dn + " bind success");
+            account = new LdapAccount(connection.getEntry(dn, "uid", "mail",
+              "sn", "givenName"));
+            LOGGER.debug(account.toString());
+          }
+        }
+        catch (LDAPException ex)
+        {
+          LOGGER.debug("dn=" + dn + " bind failed");
+        }
+      }
+    }
+    catch (LDAPException ex)
+    {
+      LOGGER.error("ldap connection failed", ex);
+    }
+    finally
+    {
+      if (connection != null)
+      {
+        connection.close();
+      }
+    }
+
+    return account;
+  }
+
   public static LdapAccount searchForMail(String mail)
   {
     LdapAccount account = null;
@@ -122,7 +182,7 @@ public class LdapUtil
       });
 
       SearchResult searchResult = connection.search(CONFIG.getLdapBaseDn(),
-        getSearchScope(), searchFilter,
+        getSearchScope(CONFIG.getLdapSearchScope()), searchFilter,
         "uid", "mail", "sn", "givenName", "soniaStudentNumber");
 
       List<SearchResultEntry> searchResultEntry = searchResult.
@@ -172,9 +232,9 @@ public class LdapUtil
         });
 
         LOGGER.debug(searchFilter);
-        
+
         SearchResult searchResult = connection.search(CONFIG.getLdapBaseDn(),
-          getSearchScope(), searchFilter,
+          getSearchScope(CONFIG.getLdapSearchScope()), searchFilter,
           "uid", "mail", "sn", "givenName", "soniaStudentNumber", "ou",
           "employeeType", "jpegPhoto", "soniaChipcardBarcode");
 
@@ -202,11 +262,11 @@ public class LdapUtil
     return account;
   }
 
-  private static SearchScope getSearchScope()
+  private static SearchScope getSearchScope(String name)
   {
     SearchScope scope;
 
-    switch (CONFIG.getLdapSearchScope())
+    switch (name)
     {
       case "ONE":
         scope = SearchScope.ONE;

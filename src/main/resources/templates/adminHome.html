@@ -27,9 +27,10 @@
         <div class="d-none d-md-block col-md-3 ">&nbsp;</div>
       </div>
 
-      <p>
-        <a href="/sys/logout">Logout</a>
-      </p>
+      <div id="logout">
+        <span th:text="${token.givenName}" /> <span th:text="${token.sn}" />
+        <a style='margin-left: 1em' class="btn btn-primary" href="/sys/logout" role="button">Logout</a>
+      </div>
       
     </div>
 
