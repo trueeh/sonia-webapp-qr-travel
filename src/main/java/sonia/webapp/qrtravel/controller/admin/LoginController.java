@@ -12,10 +12,9 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import sonia.webapp.qrtravel.QrTravelToken;
-import static sonia.webapp.qrtravel.QrTravelToken.QR_TRAVEL_TOKEN;
-import static sonia.webapp.qrtravel.QrTravelToken.UNKNOWN_TOKEN;
-import sonia.webapp.qrtravel.controller.HomeController;
+import sonia.webapp.qrtravel.QrTravelAdminToken;
+import static sonia.webapp.qrtravel.QrTravelAdminToken.QR_TRAVEL_ADMIN_TOKEN;
+import static sonia.webapp.qrtravel.QrTravelAdminToken.UNKNOWN_ADMIN_TOKEN;
 import sonia.webapp.qrtravel.form.LoginForm;
 
 /**
@@ -26,15 +25,16 @@ import sonia.webapp.qrtravel.form.LoginForm;
 public class LoginController
 {
   private final static Logger LOGGER = LoggerFactory.getLogger(
-    HomeController.class.getName());
+    LoginController.class.getName());
 
   @GetMapping("/admin/login")
   public String httpGetLoginPage(
-    @CookieValue(value = QR_TRAVEL_TOKEN, defaultValue = UNKNOWN_TOKEN) String tokenValue,
+    @CookieValue(value = QR_TRAVEL_ADMIN_TOKEN,
+                 defaultValue = UNKNOWN_ADMIN_TOKEN) String tokenValue,
     HttpServletResponse response, Model model, LoginForm loginForm)
   {
     LOGGER.debug("Login GET Request");
-    QrTravelToken token = QrTravelToken.fromCookieValue(tokenValue);
+    QrTravelAdminToken token = QrTravelAdminToken.fromCookieValue(tokenValue);
 
     model.addAttribute("token", token);
     token.addToHttpServletResponse(response);
@@ -43,12 +43,13 @@ public class LoginController
 
   @PostMapping("/admin/login")
   public String httpPostloginPage(
-    @CookieValue(value = QR_TRAVEL_TOKEN, defaultValue = UNKNOWN_TOKEN) String tokenValue,
+    @CookieValue(value = QR_TRAVEL_ADMIN_TOKEN,
+                 defaultValue = UNKNOWN_ADMIN_TOKEN) String tokenValue,
     HttpServletResponse response, Model model, @Valid LoginForm loginForm,
     BindingResult bindingResult)
   {
     LOGGER.debug("Login POST Request");
-    QrTravelToken token = QrTravelToken.fromCookieValue(tokenValue);
+    QrTravelAdminToken token = QrTravelAdminToken.fromCookieValue(tokenValue);
 
     if (bindingResult.hasErrors())
     {
@@ -61,8 +62,8 @@ public class LoginController
     }
     else
     {
-      LOGGER.trace( "user id = {}", loginForm.getUserId());
-      LOGGER.trace( "password = {}", loginForm.getPassword());
+      LOGGER.trace("user id = {}", loginForm.getUserId());
+      LOGGER.trace("password = {}", loginForm.getPassword());
     }
 
     model.addAttribute("token", token);

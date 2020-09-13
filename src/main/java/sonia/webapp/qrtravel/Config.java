@@ -17,26 +17,19 @@ import org.slf4j.LoggerFactory;
 
 //~--- JDK imports ------------------------------------------------------------
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Random;
-import java.util.logging.Level;
 import sonia.commons.crypt.util.HEX;
 
 /**
  * Class description
  *
  *
- * @version $version$, 18/08/19
- * @author Thorsten Ludewig <t.ludewig@ostfalia.de>Dr. Thorsten Ludewig
- * <t.ludewig@gmail.com>
+ * @author Dr. Thorsten Ludewig <t.ludewig@gmail.com>
  */
-@JsonIgnoreProperties(ignoreUnknown = true, value =
-                    {
-                      "cipherKey"
-})
+@JsonIgnoreProperties(ignoreUnknown = true, value = { "cipherKey" })
 @ToString
 public class Config
 {
@@ -50,11 +43,6 @@ public class Config
    * Field description
    */
   private final static String CONFIG_DIRECTORY_NAME = "config";
-
-  /**
-   * Field description
-   */
-  private final static String CONFIG_RESOURCENAME = "/" + CONFIG_NAME;
 
   /**
    * Field description
@@ -94,7 +82,8 @@ public class Config
     }
     random.nextBytes(key);
     apiAuthToken = HEX.convert(key).toLowerCase();
-    tokenTimeout = 60 * 60 * 24 * 365; // timeout in s == 8h
+    tokenTimeout = 60 * 60 * 24 * 365; // timeout in s == 1Y
+    adminTokenTimeout = 60 * 60; // timeout in s == 1h
     webServicePort = 8080;
     webServiceUrl = "https://qr.yourdomain.de";
     ldapHostName = "ldap.yourdomain.de";
@@ -115,9 +104,14 @@ public class Config
     expirationTimeInDays = 21;
     maxLoginAttempts = 3;
     loginFailedBlockingDuration = 180;
+    
+    random.nextBytes(key);
+    adminCipherKey = HEX.convert(key).toLowerCase();
+    adminLdapSearchScope = "SUB";
+    adminLdapSearchAttribute = "uid";
+    adminLdapSearchFilter = "(&(uid={0})(isMemberOf=cn=qr-travel-admin,ou=groups,dc=yourdomain,dc=de))";
   }
 
-  //~--- static initializers --------------------------------------------------
   //~--- methods --------------------------------------------------------------
   /**
    * Method description
@@ -127,7 +121,6 @@ public class Config
    *
    * @return
    *
-   * @throws IOException
    */
   public static Config readConfig(File configFile)
   {
@@ -183,7 +176,7 @@ public class Config
    *
    *
    * @param configFile
-   *
+   * @param force *
    * @throws IOException
    */
   public static void writeConfig(File configFile, boolean force) throws
@@ -373,72 +366,88 @@ public class Config
   private String cipherKey;
 
   @Getter
-  private int tokenTimeout;
+  private final int tokenTimeout;
 
   @Getter
-  private String dbUrl;
+  private final String dbUrl;
 
   @Getter
-  private String dbDriverClassName;
+  private final String dbDriverClassName;
 
   @Getter
-  private String dbUser;
-
-  @Getter
-  @JsonSerialize(using = PasswordSerializer.class)
-  @JsonDeserialize(using = PasswordDeserializer.class)
-  private String dbPassword;
-
-  @Getter
-  private String webServiceUrl;
-
-  @Getter
-  private int webServicePort;
-
-  @Getter
-  private String ldapHostName;
-
-  @Getter
-  private int ldapHostPort;
-
-  @Getter
-  private boolean ldapHostSSL;
-
-  @Getter
-  private String ldapBindDn;
+  private final String dbUser;
 
   @Getter
   @JsonSerialize(using = PasswordSerializer.class)
   @JsonDeserialize(using = PasswordDeserializer.class)
-  private String ldapBindPassword;
+  private final String dbPassword;
 
   @Getter
-  private String ldapBaseDn;
+  private final String webServiceUrl;
 
   @Getter
-  private String ldapSearchFilter;
+  private final int webServicePort;
 
   @Getter
-  private String ldapSearchAttribute;
+  private final String ldapHostName;
 
   @Getter
-  private String ldapSearchScope;
+  private final int ldapHostPort;
 
   @Getter
-  private String checkExpiredCron;
+  private final boolean ldapHostSSL;
 
   @Getter
-  private boolean enableCheckExpired;
+  private final String ldapBindDn;
 
   @Getter
-  private long expirationTimeInDays;
+  @JsonSerialize(using = PasswordSerializer.class)
+  @JsonDeserialize(using = PasswordDeserializer.class)
+  private final String ldapBindPassword;
 
   @Getter
-  private int maxLoginAttempts;
+  private final String ldapBaseDn;
 
   @Getter
-  private int loginFailedBlockingDuration;
+  private final String ldapSearchFilter;
 
   @Getter
-  private String apiAuthToken;
+  private final String ldapSearchAttribute;
+
+  @Getter
+  private final String ldapSearchScope;
+
+  @Getter
+  private final String checkExpiredCron;
+
+  @Getter
+  private final boolean enableCheckExpired;
+
+  @Getter
+  private final long expirationTimeInDays;
+
+  @Getter
+  private final int maxLoginAttempts;
+
+  @Getter
+  private final int loginFailedBlockingDuration;
+
+  @Getter
+  private final String apiAuthToken;
+  
+  
+  @Getter
+  private final String adminCipherKey;
+  
+  @Getter
+  private final String adminLdapSearchFilter;
+  
+  @Getter
+  private final String adminLdapSearchAttribute;
+
+  @Getter
+  private final String adminLdapSearchScope;
+
+  @Getter  
+  private final int adminTokenTimeout;
 }

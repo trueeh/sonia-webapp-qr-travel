@@ -4,7 +4,7 @@ import sonia.commons.crypt.cipher.AesSimpleCipher;
  
 /**
  *
- * @author Thorsten Ludewig <t.ludewig@ostfalia.de>your name
+ * @author Thorsten Ludewig <t.ludewig@ostfalia.de>
  */
 public final class Cipher 
 {
