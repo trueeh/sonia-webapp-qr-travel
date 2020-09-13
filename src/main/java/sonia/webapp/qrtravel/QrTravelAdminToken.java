@@ -12,6 +12,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import org.slf4j.LoggerFactory;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  *
@@ -70,6 +71,23 @@ public class QrTravelAdminToken
     return token;
   }
 
+  public static QrTravelAdminToken fromHttpRequest(HttpServletRequest request)
+  {
+    Cookie[] cookies = request.getCookies();
+    String cookieValue = UNKNOWN_ADMIN_TOKEN;
+    
+    for( Cookie cookie : cookies )
+    {
+      if ( cookie.getName().equals(QR_TRAVEL_ADMIN_TOKEN))
+      {
+        cookieValue = cookie.getValue();
+        break;
+      }
+    }
+    
+    return fromCookieValue(cookieValue);
+  }
+
   public Cookie toCookie()
   {
     Cookie cookie = null;
@@ -95,13 +113,8 @@ public class QrTravelAdminToken
 
   @Getter
   @Setter
-  @JsonProperty("ca")
-  private boolean cookieAccepted;
-
-  @Getter
-  @Setter
-  @JsonProperty("ad")
-  private boolean loginSuccessful;
+  @JsonProperty("au")
+  private boolean authenticated;
 
   @Getter
   @JsonProperty("ts")

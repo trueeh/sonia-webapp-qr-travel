@@ -27,7 +27,7 @@ public class LoginController
   private final static Logger LOGGER = LoggerFactory.getLogger(
     LoginController.class.getName());
 
-  @GetMapping("/admin/login")
+  @GetMapping("/sys/login")
   public String httpGetLoginPage(
     @CookieValue(value = QR_TRAVEL_ADMIN_TOKEN,
                  defaultValue = UNKNOWN_ADMIN_TOKEN) String tokenValue,
@@ -41,13 +41,29 @@ public class LoginController
     return "login";
   }
 
-  @PostMapping("/admin/login")
+  @GetMapping("/sys/logout")
+  public String httpGetLogoutPage(
+    @CookieValue(value = QR_TRAVEL_ADMIN_TOKEN,
+                 defaultValue = UNKNOWN_ADMIN_TOKEN) String tokenValue,
+    HttpServletResponse response, Model model, LoginForm loginForm)
+  {
+    LOGGER.debug("Login GET Request");
+    QrTravelAdminToken token = QrTravelAdminToken.fromCookieValue(tokenValue);
+    token.setAuthenticated(false);
+    model.addAttribute("token", token);
+    token.addToHttpServletResponse(response);
+    return "redirect:/sys/login";
+  }
+
+  @PostMapping("/sys/login")
   public String httpPostloginPage(
     @CookieValue(value = QR_TRAVEL_ADMIN_TOKEN,
                  defaultValue = UNKNOWN_ADMIN_TOKEN) String tokenValue,
     HttpServletResponse response, Model model, @Valid LoginForm loginForm,
     BindingResult bindingResult)
   {
+    String page = "login";
+    
     LOGGER.debug("Login POST Request");
     QrTravelAdminToken token = QrTravelAdminToken.fromCookieValue(tokenValue);
 
@@ -64,10 +80,13 @@ public class LoginController
     {
       LOGGER.trace("user id = {}", loginForm.getUserId());
       LOGGER.trace("password = {}", loginForm.getPassword());
+      
+      token.setAuthenticated(true);
+      page = "redirect:/admin";
     }
 
     model.addAttribute("token", token);
     token.addToHttpServletResponse(response);
-    return "login";
+    return page;
   }
 }
