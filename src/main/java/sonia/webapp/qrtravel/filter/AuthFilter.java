@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+import sonia.webapp.qrtravel.Config;
 import sonia.webapp.qrtravel.QrTravelAdminToken;
 
 /**
@@ -23,34 +24,50 @@ public class AuthFilter implements Filter
 {
   private final static org.slf4j.Logger LOGGER = LoggerFactory.getLogger(
     AuthFilter.class.getName());
-
+  
+  private final static Config CONFIG = Config.getInstance();
+  
   @Override
-  public void doFilter( ServletRequest servletRequest, 
+  public void doFilter(ServletRequest servletRequest,
     ServletResponse servletResponse,
     FilterChain chain) throws IOException, ServletException
   {
     HttpServletRequest request = (HttpServletRequest) servletRequest;
     HttpServletResponse response = (HttpServletResponse) servletResponse;
-    
+
     boolean followChain = true;
-    
+
     String uri = request.getRequestURI();
-    if ( uri.startsWith("/sys") || uri.startsWith("/admin"))
+    if (uri.startsWith("/sys") || uri.startsWith("/admin"))
     {
-      LOGGER.debug("Logging Request {} : {}", request.getMethod(), uri );
+      LOGGER.debug("Logging Request {} : {}", request.getMethod(), uri);
       QrTravelAdminToken token = QrTravelAdminToken.fromHttpRequest(request);
-      LOGGER.trace( token.toString() );
-      
-      if ( uri.startsWith("/admin") && !token.isAuthenticated())
+      LOGGER.trace(token.toString());
+
+      if (uri.startsWith("/admin") && !token.isAuthenticated())
       {
         followChain = false;
-        response.sendRedirect("/sys/login");
+      }
+      else
+      {
+        long lastAccessDiff = (System.currentTimeMillis()
+          - token.getLastAccess()) / 1000;        
+        if ( lastAccessDiff > (long)CONFIG.getAdminTokenTimeout() )
+        {
+          token.setAuthenticated(false);
+          token.addToHttpServletResponse(response);
+          followChain = false;
+        }
       }
     }
 
-    if ( followChain )
+    if (followChain)
     {
       chain.doFilter(request, response);
+    }
+    else
+    {
+      response.sendRedirect("/sys/login");
     }
   }
 }

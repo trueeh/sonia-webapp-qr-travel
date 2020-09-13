@@ -33,12 +33,16 @@ public class LoginController
                  defaultValue = UNKNOWN_ADMIN_TOKEN) String tokenValue,
     HttpServletResponse response, Model model, LoginForm loginForm)
   {
+    String page = "login";
     LOGGER.debug("Login GET Request");
     QrTravelAdminToken token = QrTravelAdminToken.fromCookieValue(tokenValue);
-
+    if( token.isAuthenticated() )
+    {
+      page = "redirect:/admin";
+    }
     model.addAttribute("token", token);
     token.addToHttpServletResponse(response);
-    return "login";
+    return page;
   }
 
   @GetMapping("/sys/logout")
@@ -56,7 +60,7 @@ public class LoginController
   }
 
   @PostMapping("/sys/login")
-  public String httpPostloginPage(
+  public String httpPostLoginPage(
     @CookieValue(value = QR_TRAVEL_ADMIN_TOKEN,
                  defaultValue = UNKNOWN_ADMIN_TOKEN) String tokenValue,
     HttpServletResponse response, Model model, @Valid LoginForm loginForm,
