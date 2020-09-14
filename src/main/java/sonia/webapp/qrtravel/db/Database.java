@@ -273,7 +273,10 @@ public class Database
 
     transaction.commit();
    
-    LOGGER.info("Number of departured attendee entries = {}", departuredEntries ); 
+    if ( departuredEntries > 0 )
+    {
+      LOGGER.info("Number of departured attendee entries = {}", departuredEntries );
+    }
   }
   
   private transient LoadingCache<String, Room> roomCache;

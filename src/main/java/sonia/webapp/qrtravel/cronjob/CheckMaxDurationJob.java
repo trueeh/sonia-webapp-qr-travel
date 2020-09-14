@@ -24,8 +24,8 @@ public class CheckMaxDurationJob implements Job
   public void execute(JobExecutionContext jec) throws JobExecutionException
   {
     long maxDurationTimestamp = System.currentTimeMillis() - (CONFIG.getMaxDurationInMinutes() * MILLIS_PER_MINUTE);
-    LOGGER.info("Check max duration job started");
-    LOGGER.info("Current time millis = {}, expirationTimestamp={}", System.currentTimeMillis(),
+    LOGGER.debug("Check max duration job started");
+    LOGGER.debug("Current time millis = {}, expirationTimestamp={}", System.currentTimeMillis(),
       maxDurationTimestamp);
     Database.departureMaxDurationAttendeeEntries(maxDurationTimestamp);
   }
