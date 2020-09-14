@@ -1,10 +1,11 @@
-package sonia.webapp.qrtravel;
+package sonia.webapp.qrtravel.cronjob;
 
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import sonia.webapp.qrtravel.Config;
 import sonia.webapp.qrtravel.db.Database;
 
 /**

@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import sonia.webapp.qrtravel.BuildProperties;
-import sonia.webapp.qrtravel.CheckExpiredJob;
+import sonia.webapp.qrtravel.cronjob.CheckExpiredJob;
 import sonia.webapp.qrtravel.QrTravelToken;
 import static sonia.webapp.qrtravel.QrTravelToken.QR_TRAVEL_TOKEN;
 import static sonia.webapp.qrtravel.QrTravelToken.UNKNOWN_TOKEN;

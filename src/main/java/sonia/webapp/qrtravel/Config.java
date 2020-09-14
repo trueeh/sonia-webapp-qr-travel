@@ -102,6 +102,11 @@ public class Config
     enableCheckExpired = true;
     checkExpiredCron = "0 5 0 * * ?";
     expirationTimeInDays = 21;
+    
+    enableCheckMaxDuration = true;
+    checkMaxDurationCron = "0 0/5 * * * ?";
+    maxDurationInMinutes = 12 * 60;
+    
     maxLoginAttempts = 3;
     loginFailedBlockingDuration = 180;
     
@@ -425,6 +430,17 @@ public class Config
 
   @Getter
   private final long expirationTimeInDays;
+  
+  
+  @Getter
+  private final String checkMaxDurationCron;
+
+  @Getter
+  private final boolean enableCheckMaxDuration;
+
+  @Getter
+  private final long maxDurationInMinutes;
+  
 
   @Getter
   private final int maxLoginAttempts;

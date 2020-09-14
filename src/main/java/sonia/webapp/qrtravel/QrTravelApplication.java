@@ -1,5 +1,6 @@
 package sonia.webapp.qrtravel;
 
+import sonia.webapp.qrtravel.cronjob.CheckExpiredJob;
 import com.google.common.base.Strings;
 import java.io.IOException;
 import org.kohsuke.args4j.CmdLineException;
@@ -18,6 +19,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import sonia.webapp.qrtravel.cronjob.CheckMaxDurationJob;
 import sonia.webapp.qrtravel.db.Database;
 
 @SpringBootApplication
@@ -82,12 +84,12 @@ public class QrTravelApplication
     LOGGER.info("Project Version : " + build.getProjectVersion());
     LOGGER.info("Build Timestamp : " + build.getTimestamp());
 
+    SchedulerFactory schedulerFactory = new StdSchedulerFactory();
+    Scheduler scheduler = schedulerFactory.getScheduler();
+    scheduler.start();
+
     if (config.isEnableCheckExpired())
     {
-      SchedulerFactory schedulerFactory = new StdSchedulerFactory();
-      Scheduler scheduler = schedulerFactory.getScheduler();
-      scheduler.start();
-
       JobDetail job = JobBuilder.newJob(CheckExpiredJob.class)
         .withIdentity("CheckExpiredJob", "group1")
         .build();
@@ -96,6 +98,21 @@ public class QrTravelApplication
         .withIdentity("trigger1", "group1")
         .withSchedule(CronScheduleBuilder.cronSchedule(config.
           getCheckExpiredCron()))
+        .build();
+
+      scheduler.scheduleJob(job, trigger);
+    }
+
+    if (config.isEnableCheckMaxDuration())
+    {
+      JobDetail job = JobBuilder.newJob(CheckMaxDurationJob.class)
+        .withIdentity("CheckMaxDurationJob", "group2")
+        .build();
+
+      CronTrigger trigger = TriggerBuilder.newTrigger()
+        .withIdentity("trigger2", "group2")
+        .withSchedule(CronScheduleBuilder.cronSchedule(config.
+          getCheckMaxDurationCron()))
         .build();
 
       scheduler.scheduleJob(job, trigger);
