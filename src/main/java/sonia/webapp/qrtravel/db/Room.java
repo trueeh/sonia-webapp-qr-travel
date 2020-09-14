@@ -10,6 +10,8 @@ import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import lombok.Getter;
 import lombok.ToString;
@@ -19,6 +21,10 @@ import lombok.ToString;
  * @author Thorsten Ludewig <t.ludewig@ostfalia.de>
  */
 @Entity(name = "room")
+@NamedQueries(
+{
+  @NamedQuery(name = "listRooms", query = "select a, upper(a.description) as orderName from room a order by orderName")
+})
 @ToString
 public class Room implements Serializable
 {

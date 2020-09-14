@@ -31,9 +31,17 @@
         <span th:text="${token.givenName}" /> <span th:text="${token.sn}" />
         <a style='margin-left: 1em' class="btn btn-primary" href="/sys/logout" role="button">Logout</a>
       </div>
-      
-      Raumtyp
-      
+
+      <table>
+        <tbody>
+          <tr th:each="roomType: ${roomTypes}">
+            <td th:text="${roomType.rtype}" />
+            <td th:text="${roomType.description}" />
+          </tr>
+        </tbody>
+      </table>
+
+
       Beschreibung
 
       Hinzufügen
@@ -41,7 +49,7 @@
       <hr/>
 
       Tabelle: 
-      
+
       URL
 
       Raumtyp
@@ -53,6 +61,18 @@
       Info
 
       Export
+
+      <table>
+        <tbody>
+          <tr th:each="room: ${rooms}">
+            <td th:text="${room.pin}" />
+            <td th:text="${room.description}" />
+            <td th:text="${room.ownerUid}" />
+            <td th:text="${room.creation}" />
+            <td th:text="${room.domain}" />
+          </tr>
+        </tbody>
+      </table>
 
     </div>
 

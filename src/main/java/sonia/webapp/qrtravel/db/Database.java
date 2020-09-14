@@ -188,7 +188,34 @@ public class Database
     }
     catch (javax.persistence.NoResultException e)
     {
-      LOGGER.debug("list", e);
+      LOGGER.debug("list room types", e);
+    }
+
+    return result;
+  }
+
+  public static List<Room> listRooms()
+  {
+    List<Object[]> resultList;
+    List<Room> result = null;
+
+    TypedQuery<Object[]> query = getEntityManager().createNamedQuery(
+      "listRooms", Object[].class);
+
+    try
+    {
+      resultList = query.getResultList();
+      result = new ArrayList<>();
+
+      for (Object[] o : resultList)
+      {
+        result.add((Room) o[0]);
+      }
+
+    }
+    catch (javax.persistence.NoResultException e)
+    {
+      LOGGER.debug("list rooms", e);
     }
 
     return result;
@@ -225,7 +252,7 @@ public class Database
         "delete from attendee a where a.id in (:ids)").setParameterList("ids",
           ids).executeUpdate();
     }
-    transaction.commit(); 
+    transaction.commit();
 
     LOGGER.info("Number of deleted attendee entries = {}", deletedEntries);
   }

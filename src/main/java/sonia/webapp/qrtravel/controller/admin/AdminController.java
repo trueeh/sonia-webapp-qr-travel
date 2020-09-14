@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import sonia.webapp.qrtravel.QrTravelAdminToken;
 import static sonia.webapp.qrtravel.QrTravelAdminToken.QR_TRAVEL_ADMIN_TOKEN;
 import static sonia.webapp.qrtravel.QrTravelAdminToken.UNKNOWN_ADMIN_TOKEN;
+import sonia.webapp.qrtravel.db.Database;
 import sonia.webapp.qrtravel.form.LoginForm;
 
 /**
@@ -29,6 +30,9 @@ public class AdminController
   {
     LOGGER.debug("Admin home GET request");
     QrTravelAdminToken token = QrTravelAdminToken.fromCookieValue(tokenValue);
+    
+    model.addAttribute("roomTypes", Database.listRoomTypes());
+    model.addAttribute("rooms", Database.listRooms());
     model.addAttribute("token", token);
     token.addToHttpServletResponse(response);
     return "adminHome";
