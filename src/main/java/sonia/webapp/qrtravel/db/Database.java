@@ -33,7 +33,7 @@ public class Database
 
   private final static SimpleDateFormat DATE_TIME = new SimpleDateFormat(
     "yyyy-MM-dd HH:mm:ss");
-  
+
   /**
    * Field description
    */
@@ -248,12 +248,13 @@ public class Database
     LOGGER.info("Number of deleted attendee entries = {}", deletedEntries);
   }
 
-  public static void departureMaxDurationAttendeeEntries(long maxDurationTimestamp)
+  public static void departureMaxDurationAttendeeEntries(
+    long maxDurationTimestamp)
   {
     int departuredEntries = 0;
     LOGGER.debug("departureMaxDurationAttendeeEntries - expirationTimestamp={}",
       maxDurationTimestamp);
- 
+
     String hql = "select a.id from attendee a where a.createdTimestamp < :timestamp and a.departure is null";
 
     Session session = getEntityManager().unwrap(Session.class);
@@ -263,22 +264,79 @@ public class Database
       maxDurationTimestamp).list();
 
     String departure = DATE_TIME.format(new Date());
-    
+
     if (ids != null && ids.size() > 0)
     {
       departuredEntries = session.createQuery(
-        "update attendee a set a.departure=:departure where a.id in (:ids)").setParameterList("ids",
+        "update attendee a set a.departure=:departure where a.id in (:ids)").
+        setParameterList("ids",
           ids).setParameter("departure", departure).executeUpdate();
     }
 
     transaction.commit();
-   
-    if ( departuredEntries > 0 )
+
+    if (departuredEntries > 0)
     {
-      LOGGER.info("Number of departured attendee entries = {}", departuredEntries );
+      LOGGER.info("Number of departured attendee entries = {}",
+        departuredEntries);
     }
   }
-  
+
+  public static void storeStatistics()
+  {
+    LOGGER.debug("storeStatistics");
+
+    List<Room> roomList = listRooms();
+    for (Room room : roomList)
+    {
+      int numberOfAttendees = 0;
+      int currentAttendees = 0;
+      int departuredAttendees = 0;
+      int forcedDeparture = 0;
+      int averageDuration = 0;
+      int durationSum = 0;
+      int correctDepartureAttendees = 0;
+
+      long forcedDepartureTime = CONFIG.getMaxDurationInMinutes() * 60 * 1000;
+
+      if (room.getAttendees() != null && room.getAttendees().size() > 0)
+      {
+        for (Attendee attendee : room.getAttendees())
+        {
+          numberOfAttendees++;
+
+          if (Strings.isNullOrEmpty(attendee.getDeparture()))
+          {
+            currentAttendees++;
+          }
+          else
+          {
+            long durationTime = attendee.getUpdatedTimestamp() - attendee.
+              getCreatedTimestamp();
+            if (durationTime >= forcedDepartureTime)
+            {
+              forcedDeparture++;
+            }
+            else
+            {
+              durationSum += durationTime;
+              correctDepartureAttendees++;
+            }
+            departuredAttendees++;
+          }
+        }
+      }
+
+      if ( correctDepartureAttendees > 0 )
+      {
+        averageDuration = ( durationSum / correctDepartureAttendees ) / ( 1000 * 60 );
+      }
+      
+      InfluxDbWriter.write(room.getPin(), numberOfAttendees,
+        currentAttendees, departuredAttendees, forcedDeparture, averageDuration);
+    }
+  }
+
   private transient LoadingCache<String, Room> roomCache;
 
   private transient final EntityManagerFactory entityManagerFactory;

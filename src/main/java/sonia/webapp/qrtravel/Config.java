@@ -115,6 +115,13 @@ public class Config
     adminLdapSearchScope = "SUB";
     adminLdapSearchAttribute = "uid";
     adminLdapSearchFilter = "(&(uid={0})(isMemberOf=cn=qr-travel-admin,ou=groups,dc=yourdomain,dc=de))";
+    
+    influxDbForStatisticsEnabled = false;
+    influxDbCron = "0 0/5 * * * ?";
+    influxDbUrl = "https://influxdb.your.domain:8086/write?db=qr";
+    influxDbUseAuthentication = true;
+    influxDbUser = "qr";
+    influxDbPassword = "<not set>";    
   }
 
   //~--- methods --------------------------------------------------------------
@@ -451,7 +458,6 @@ public class Config
   @Getter
   private final String apiAuthToken;
   
-  
   @Getter
   private final String adminCipherKey;
   
@@ -466,4 +472,26 @@ public class Config
 
   @Getter  
   private final int adminTokenTimeout;
+  
+  
+  @Getter
+  private final boolean influxDbForStatisticsEnabled;
+
+  @Getter
+  private final String influxDbCron;
+  
+  @Getter
+  private final String influxDbUrl;
+  
+  @Getter
+  private final boolean influxDbUseAuthentication;
+
+  @Getter
+  private final String influxDbUser;
+
+  @Getter
+  @JsonSerialize(using = PasswordSerializer.class)
+  @JsonDeserialize(using = PasswordDeserializer.class)
+  private final String influxDbPassword;
+
 }

@@ -20,6 +20,7 @@ import org.springframework.boot.SpringApplication;
 
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import sonia.webapp.qrtravel.cronjob.CheckMaxDurationJob;
+import sonia.webapp.qrtravel.cronjob.InfluxDbStatisticsJob;
 import sonia.webapp.qrtravel.db.Database;
 
 @SpringBootApplication
@@ -113,6 +114,20 @@ public class QrTravelApplication
         .withIdentity("trigger2", "group2")
         .withSchedule(CronScheduleBuilder.cronSchedule(config.
           getCheckMaxDurationCron()))
+        .build();
+
+      scheduler.scheduleJob(job, trigger);
+    }
+
+    if (config.isInfluxDbForStatisticsEnabled())
+    {
+      JobDetail job = JobBuilder.newJob(InfluxDbStatisticsJob.class)
+        .withIdentity("InfulxDbStatisticsJob", "group3")
+        .build();
+
+      CronTrigger trigger = TriggerBuilder.newTrigger()
+        .withIdentity("trigger3", "group3")
+        .withSchedule(CronScheduleBuilder.cronSchedule(config.getInfluxDbCron()))
         .build();
 
       scheduler.scheduleJob(job, trigger);
