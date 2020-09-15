@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package sonia.webapp.qrtravel.db;
 
 import java.io.BufferedReader;
@@ -18,7 +13,7 @@ import sonia.webapp.qrtravel.Config;
 
 /**
  *
- * @author th
+ * @author Thorsten Ludewig <t.ludewig@ostfalia.de>
  */
 public class InfluxDbWriter
 {
@@ -38,12 +33,12 @@ public class InfluxDbWriter
     HttpURLConnection connection = null;
 
     String message = "room,pin=r" + pin
-       + " numberOfAttendees=" + numberOfAttendees
-       + ",currentAttendees=" + currentAttendees
-       + ",departuredAttendees=" + departuredAttendees
-       + ",forcedDeparture=" + forcedDeparture
-       + ",averageDuration=" + averageDuration
-       + "\n";
+      + " numberOfAttendees=" + numberOfAttendees
+      + ",currentAttendees=" + currentAttendees
+      + ",departuredAttendees=" + departuredAttendees
+      + ",forcedDeparture=" + forcedDeparture
+      + ",averageDuration=" + averageDuration
+      + "\n";
 
     try
     {
@@ -51,18 +46,18 @@ public class InfluxDbWriter
       connection = (HttpURLConnection) connectionUrl.openConnection();
       connection.setDoOutput(true);
       connection.setRequestMethod("POST");
-      
-      if ( CONFIG.isInfluxDbUseAuthentication())
+
+      if (CONFIG.isInfluxDbUseAuthentication())
       {
-        String auth = CONFIG.getInfluxDbUser() + ":" + CONFIG.getInfluxDbPassword();
-        // byte[] encodedAuth = Base64.encodeBase64(auth.getBytes(StandardCharsets.UTF_8));
-        // String authHeaderValue = "Basic " + new String(encodedAuth);
-        String authHeaderValue = "Basic " + Base64.getEncoder().encodeToString(auth.getBytes(StandardCharsets.UTF_8));
+        String auth = CONFIG.getInfluxDbUser() + ":" + CONFIG.
+          getInfluxDbPassword();
+        String authHeaderValue = "Basic " + Base64.getEncoder().encodeToString(
+          auth.getBytes(StandardCharsets.UTF_8));
         connection.setRequestProperty("Authorization", authHeaderValue);
       }
-      
+
       LOGGER.debug(message);
-      
+
       try (PrintWriter writer = new PrintWriter(connection.getOutputStream()))
       {
         writer.write(message);
