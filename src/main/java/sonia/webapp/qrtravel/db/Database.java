@@ -311,9 +311,10 @@ public class Database
           }
           else
           {
-            long durationTime = attendee.getUpdatedTimestamp() - attendee.
-              getCreatedTimestamp();
-            if (durationTime >= forcedDepartureTime)
+            
+            long durationTime = attendee.getUpdatedTimestamp() - attendee.getCreatedTimestamp();
+            
+            if ( attendee.getUpdatedTimestamp() == 0 || durationTime >= forcedDepartureTime)
             {
               forcedDeparture++;
             }
