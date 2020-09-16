@@ -122,6 +122,7 @@ public class Config
     influxDbUseAuthentication = true;
     influxDbUser = "qr";
     influxDbPassword = "<not set>";    
+    domain = "your.domain";    
   }
 
   //~--- methods --------------------------------------------------------------
@@ -493,5 +494,7 @@ public class Config
   @JsonSerialize(using = PasswordSerializer.class)
   @JsonDeserialize(using = PasswordDeserializer.class)
   private final String influxDbPassword;
-
+  
+  @Getter
+  private final String domain;
 }

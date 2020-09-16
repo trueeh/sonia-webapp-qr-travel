@@ -16,7 +16,6 @@ import sonia.webapp.qrtravel.Config;
 import sonia.webapp.qrtravel.QrTravelAdminToken;
 import static sonia.webapp.qrtravel.QrTravelAdminToken.QR_TRAVEL_ADMIN_TOKEN;
 import static sonia.webapp.qrtravel.QrTravelAdminToken.UNKNOWN_ADMIN_TOKEN;
-import sonia.webapp.qrtravel.db.Database;
 import sonia.webapp.qrtravel.form.LoginForm;
 import sonia.webapp.qrtravel.ldap.LdapAccount;
 import sonia.webapp.qrtravel.ldap.LdapUtil;
@@ -109,6 +108,7 @@ public class LoginController
           token.setAuthenticated(true);
           token.setSn(account.getSn());
           token.setGivenName(account.getGivenName());
+          token.setUid(loginForm.getUserId());
           page = "redirect:/admin";
         }
         else

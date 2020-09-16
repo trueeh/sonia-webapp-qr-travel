@@ -31,7 +31,7 @@ public class Database
   private final static Logger LOGGER = LoggerFactory.getLogger(
     Database.class.getName());
 
-  private final static SimpleDateFormat DATE_TIME = new SimpleDateFormat(
+  public final static SimpleDateFormat DATE_TIME = new SimpleDateFormat(
     "yyyy-MM-dd HH:mm:ss");
 
   /**
@@ -120,6 +120,18 @@ public class Database
       {
         session.update(attendee);
       }
+      transaction.commit();
+    }
+  }
+
+  public static void persist(Room room)
+  {
+    LOGGER.debug("persist room=" + room.toString());
+
+    try (Session session = getEntityManager().unwrap(Session.class))
+    {
+      Transaction transaction = session.beginTransaction();
+      session.save(room);
       transaction.commit();
     }
   }
