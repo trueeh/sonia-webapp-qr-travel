@@ -1,4 +1,6 @@
-# sonia-webapp-qr-travel
+# QR-Travel
+
+- [Smartcard Reader Applikation](https://github.com/thorsten-l/sonia-app-qr-smartcard) for this Web-Service.
 
 ## Initial Build
 - `git clone https://github.com/thorsten-l/sonia-webapp-qr-travel.git`
