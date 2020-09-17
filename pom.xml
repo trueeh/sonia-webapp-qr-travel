@@ -208,10 +208,26 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-resources-plugin</artifactId>
-        <version>3.1.0</version>
-        <configuration>
-          <encoding>UTF-8</encoding>
-        </configuration>
+        <version>3.2.0</version>
+        <executions>
+          <execution>
+            <id>copy-resources</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>copy-resources</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${basedir}/target/classes/static/</outputDirectory>
+              <resources>          
+                <resource>
+                  <directory>private/static/</directory>
+                  <filtering>false</filtering>
+                </resource>
+              </resources>
+              <encoding>UTF-8</encoding>           
+            </configuration>            
+          </execution>
+        </executions>
       </plugin>
     </plugins>
   </build>
