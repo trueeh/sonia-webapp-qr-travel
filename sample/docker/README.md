@@ -1,6 +1,6 @@
 # Docker Compose
 
-To have PostgreSQL, InfluxDB and Grafana for your development environment.
+Have PostgreSQL, InfluxDB and Grafana for your development environment.
 
 ## Start
 
