@@ -21,5 +21,6 @@ public class WebServerCustomizer
   {
     LOGGER.info("WebServerCustomizer.customize");
     factory.setPort(CONFIG.getWebServicePort());
+    factory.setContextPath(CONFIG.getContextPath());
   }
 }
