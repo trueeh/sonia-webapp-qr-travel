@@ -123,7 +123,7 @@ public class Config
     influxDbUser = "qr";
     influxDbPassword = "<not set>";    
     domain = "your.domain";    
-    contextPath = "/";
+    contextPath = "";
   }
 
   //~--- methods --------------------------------------------------------------
