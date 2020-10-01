@@ -99,7 +99,11 @@ public class QrTravelAdminToken
       String value = objectMapper.writeValueAsString(this);
       value = AdminCipher.getInstance().encrypt(value);
       cookie = new Cookie(QR_TRAVEL_ADMIN_TOKEN, value);
-      cookie.setPath("/");
+      if (!"".equals(CONFIG.getContextPath())) {
+    	  cookie.setPath(CONFIG.getContextPath());
+      } else {
+    	  cookie.setPath("/");
+      }
       cookie.setMaxAge(CONFIG.getAdminTokenTimeout());
       cookie.setHttpOnly(true);
     }
