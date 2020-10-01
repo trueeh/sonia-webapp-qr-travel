@@ -20,6 +20,8 @@ import static sonia.webapp.qrtravel.QrTravelAdminToken.UNKNOWN_ADMIN_TOKEN;
 import sonia.webapp.qrtravel.db.Database;
 import sonia.webapp.qrtravel.db.Room;
 import sonia.webapp.qrtravel.form.AdminRoomForm;
+import sonia.webapp.qrtravel.form.RoomPinForm;
+import sonia.webapp.qrtravel.ldap.util.Counter;
 
 /**
  *
@@ -39,7 +41,8 @@ public class AdminController
   public String httpGetAdminPage(
     @CookieValue(value = QR_TRAVEL_ADMIN_TOKEN,
                  defaultValue = UNKNOWN_ADMIN_TOKEN) String tokenValue,
-    HttpServletResponse response, Model model, AdminRoomForm adminRoomForm)
+    HttpServletResponse response, Model model, AdminRoomForm adminRoomForm,
+    RoomPinForm roomPinForm)
   {
     LOGGER.debug("Admin home GET request");
     QrTravelAdminToken token = QrTravelAdminToken.fromCookieValue(tokenValue);
@@ -48,6 +51,7 @@ public class AdminController
     model.addAttribute("rooms", Database.listRooms());
     model.addAttribute("token", token);
     model.addAttribute("config", CONFIG);
+    model.addAttribute("counter", new Counter());
     token.addToHttpServletResponse(response);
     return "adminHome";
   }
@@ -57,7 +61,7 @@ public class AdminController
     @CookieValue(value = QR_TRAVEL_ADMIN_TOKEN,
                  defaultValue = UNKNOWN_ADMIN_TOKEN) String tokenValue,
     HttpServletResponse response, Model model,
-    @Valid AdminRoomForm adminRoomForm,
+    @Valid AdminRoomForm adminRoomForm, RoomPinForm roomPinForm,
     BindingResult bindingResult)
   {
     LOGGER.debug("Admin home POST request");
@@ -97,7 +101,7 @@ public class AdminController
 
       Room room = new Room(newPin, adminRoomForm.getRoomType(), adminRoomForm.
         getDescription(), token.getUid(), CONFIG.getDomain());
-      
+
       Database.persist(room);
     }
 
@@ -107,6 +111,32 @@ public class AdminController
     model.addAttribute("rooms", Database.listRooms());
     model.addAttribute("token", token);
     model.addAttribute("config", CONFIG);
+    model.addAttribute("counter", new Counter());
+    token.addToHttpServletResponse(response);
+    return "adminHome";
+  }
+
+  @PostMapping("/admin/deleteRoom")
+  public String httpPostAdminDeleteRoom(
+    @CookieValue(value = QR_TRAVEL_ADMIN_TOKEN,
+                 defaultValue = UNKNOWN_ADMIN_TOKEN) String tokenValue,
+    HttpServletResponse response, Model model, AdminRoomForm adminRoomForm,
+    RoomPinForm roomPinForm)
+  {
+    LOGGER.debug("Admin httpPostAdminDeleteRoom POST request");
+    QrTravelAdminToken token = QrTravelAdminToken.fromCookieValue(tokenValue);
+
+    LOGGER.debug("deleting room pin={}", roomPinForm.getPin());
+
+    //TODO: implement "delete room"
+    
+    adminRoomForm.setRoomType(0);
+    adminRoomForm.setDescription(null);
+    model.addAttribute("roomTypes", Database.listRoomTypes());
+    model.addAttribute("rooms", Database.listRooms());
+    model.addAttribute("token", token);
+    model.addAttribute("config", CONFIG);
+    model.addAttribute("counter", new Counter());
     token.addToHttpServletResponse(response);
     return "adminHome";
   }

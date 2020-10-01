@@ -13,10 +13,12 @@
     <!-- Custom styles for this template -->
     <link href="/custom/css/starter-template.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="/css/main.css">
+    <link rel="stylesheet" type="text/css" href="/css/fontawesome.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/solid.min.css">
   </head>
 
   <body>
-    <div class="container">
+    <div class="container" style='margin-left: 0; margin-right: 0; max-width: 100%'>
       <img id="qrlogo" width="64" height="64" src="/image/logo.png" />
 
       <div class="row">
@@ -29,9 +31,8 @@
 
       <div id="logout">
         <span th:text="${token.givenName}" /> <span th:text="${token.sn}" />
-        <a style='margin-left: 1em' class="btn btn-primary" href="/sys/logout" role="button">Logout</a>
+        <a title="Logout" style='margin-left: 1em' class="btn btn-primary" href="/sys/logout" role="button"><i class="fas fa-sign-out-alt"></i></a>
       </div>
-
 
       <form name="adminRoomForm" action="#" th:action="@{/admin}" th:object="${adminRoomForm}" method="POST" >
         <div style='margin-top: 1em; margin-bottom: 1em'>
@@ -54,7 +55,7 @@
               <div th:if="${#fields.hasErrors('description')}" th:errors="*{description}">Error</div>
             </div>
             <div class="col-sm-1">
-              <button type="submit" class="btn btn-success">+</button>
+              <button type="submit" class="btn btn-success"><i class="fas fa-plus-square"></i></button>
             </div>
           </div>
         </div>
@@ -63,8 +64,10 @@
       <table class="table table-striped table-hover">
         <thead class="thead-dark">
           <tr>
-            <th scope="col">URL</th>
+            <th scope="col">#</th>
+            <th scope="col">QR</th>
             <th scope="col">PIN</th>
+            <th scope="col">Typ</th>
             <th scope="col">Bezeichnung</th>
             <th scope="col">Eigentümer</th>
             <th scope="col">Angelegt</th>
@@ -75,18 +78,46 @@
         </thead>
         <tbody>
           <tr th:each="room: ${rooms}">
-            <td><a target='_blank' th:href='${config.webServiceUrl + "/view?p=" + room.pin}'>QR</a></td>
+            <td th:text="${counter.increment}" />
+            <td><a class="btn btn-light" target='_blank' th:href='${config.webServiceUrl + "/view?p=" + room.pin}'><i class="fas fa-qrcode"></i></a></td>
             <td th:text="${room.pin}" />
+            <td th:text="${room.roomType.description}" />
             <td th:text="${room.description}" />
             <td th:text="${room.ownerUid}" />
-            <td th:text="${room.creation}" />
+            <td style="white-space: nowrap" th:text="${#dates.format(new java.util.Date(room.creation), 'yyyy-MM-dd HH:mm')}" />
             <td th:text="${room.domain}" />
             <td th:text="${room.statistics}" />
-            <td><a th:href='${config.webServiceUrl + "/admin/csvexport?p=" + room.pin}'>CSV</a></td>
+            <td style="white-space: nowrap">
+              <a class="btn btn-warning" th:href='${config.webServiceUrl + "/admin/csvexport?p=" + room.pin}'><i class="fas fa-file-csv"></i></a>&nbsp;
+              <button class="btn btn-danger" data-toggle="modal" data-target="#deleteDialog" th:attr="data-roompin=|${room.pin}|"  ><i class="fas fa-trash"></i></button>
+            </td>
           </tr>
         </tbody>
       </table>
 
+      <!-- Modal -->
+      <div class="modal fade" id="deleteDialog" tabindex="-1" role="dialog" aria-labelledby="deleteDialogTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="deleteDialogTitle">Raum wirklich löschen?</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <form th:action="@{/admin/deleteRoom}" th:object="${roomPinForm}" method='POST'>
+              <div class="modal-body">
+                <label for="recipient-name" class="col-form-label">Raum PIN</label>
+                <input name="pin" type="text" class="form-control" id="recipient-name" readonly="true">
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Nein</button>
+                <button type="submit" class="btn btn-danger">Löschen</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- Bootstrap core JavaScript
@@ -104,6 +135,12 @@
       showCommitMessage();
       </script>
     </div>
+
+    <script>
+      $('#deleteDialog').on('show.bs.modal', function (event) {
+        $(this).find('.modal-body input').val($(event.relatedTarget).data('roompin'));
+      });
+    </script>
 
     <p id="footer"><font size="-1"><a href="imprint.html">Impressum</a> - <a href="privacypolicy.html">Datenschutzerklärung</a></font></p>
 
