@@ -23,6 +23,7 @@ public class LdapAccount
     this.soniaStudentNumber = entry.getAttributeValue("soniaStudentNumber");
     this.soniaChipcardBarcode = entry.getAttributeValue("soniaChipcardBarcode");
     this.jpegPhoto = null;
+    this.locality = entry.getAttributeValue("l");
 
     // 
     this.ou = entry.getAttributeValue("ou");
@@ -76,4 +77,7 @@ public class LdapAccount
   @Setter
   @ToString.Exclude
   private String jpegPhoto;
+  
+  @Getter
+  private final String locality;
 }
