@@ -120,7 +120,7 @@ public class AdminController
   public String httpPostAdminDeleteRoom(
     @CookieValue(value = QR_TRAVEL_ADMIN_TOKEN,
                  defaultValue = UNKNOWN_ADMIN_TOKEN) String tokenValue,
-    HttpServletResponse response, Model model, AdminRoomForm adminRoomForm,
+    HttpServletResponse response, Model model,
     RoomPinForm roomPinForm)
   {
     LOGGER.debug("Admin httpPostAdminDeleteRoom POST request");
@@ -129,16 +129,8 @@ public class AdminController
     LOGGER.debug("deleting room pin={}", roomPinForm.getPin());
 
     //TODO: implement "delete room"
-    
-    adminRoomForm.setRoomType(0);
-    adminRoomForm.setDescription(null);
-    model.addAttribute("roomTypes", Database.listRoomTypes());
-    model.addAttribute("rooms", Database.listRooms());
-    model.addAttribute("token", token);
-    model.addAttribute("config", CONFIG);
-    model.addAttribute("counter", new Counter());
     token.addToHttpServletResponse(response);
-    return "adminHome";
+    return "redirect:/admin";
   }
 
   private String randomPin()

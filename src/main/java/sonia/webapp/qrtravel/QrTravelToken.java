@@ -19,7 +19,7 @@ import sonia.webapp.qrtravel.form.RegistrationForm;
 
 /**
  *
- * @author Thorsten Ludewig <t.ludewig@ostfalia.de>
+ * @author Dr.-Ing. Thorsten Ludewig <t.ludewig@ostfalia.de>
  */
 @XmlRootElement
 @JsonIgnoreProperties(ignoreUnknown = true)

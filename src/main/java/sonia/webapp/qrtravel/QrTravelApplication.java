@@ -23,6 +23,10 @@ import sonia.webapp.qrtravel.cronjob.CheckMaxDurationJob;
 import sonia.webapp.qrtravel.cronjob.InfluxDbStatisticsJob;
 import sonia.webapp.qrtravel.db.Database;
 
+/**
+ *
+ * @author Dr.-Ing. Thorsten Ludewig <t.ludewig@ostfalia.de>
+ */
 @SpringBootApplication
 public class QrTravelApplication
 {
