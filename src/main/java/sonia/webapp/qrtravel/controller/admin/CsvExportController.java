@@ -95,7 +95,7 @@ public class CsvExportController
     {
       String[] header = new String[]
       {
-        "#", "PIN", "Bezeichnung", "Typ", "Ort"
+        "#", "PIN", "Bezeichnung", "Typ", "Ort", "Domain"
       };
 
       CSVWriter writer = new CSVWriter(response.getWriter(), ';', '"', '\\',
@@ -110,7 +110,7 @@ public class CsvExportController
         {
           Integer.toString(++counter),
           r.getPin(), r.getDescription(), r.getRoomType().getDescription(), 
-          LdapUtil.getLocalityFromUid(r.getOwnerUid())
+          LdapUtil.getLocalityFromUid(r.getOwnerUid()), r.getDomain()
         };
 
         writer.writeNext(row);
