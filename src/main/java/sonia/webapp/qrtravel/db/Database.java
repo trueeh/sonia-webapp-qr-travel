@@ -100,6 +100,19 @@ public class Database
     return room;
   }
 
+  public static void deleteRoom(String pin)
+  {
+    LOGGER.debug("Delete room = {}", pin);
+   
+    try (Session session = getEntityManager().unwrap(Session.class))
+    {
+      Transaction transaction = session.beginTransaction();
+      session.createQuery("delete from room where pin = :pin")
+        .setParameter("pin", pin).executeUpdate();
+      transaction.commit();
+    }
+  }
+
   private static EntityManager getEntityManager()
   {
     return SINGLETON.entityManagerFactory.createEntityManager();
@@ -323,10 +336,12 @@ public class Database
           }
           else
           {
-            
-            long durationTime = attendee.getUpdatedTimestamp() - attendee.getCreatedTimestamp();
-            
-            if ( attendee.getUpdatedTimestamp() == 0 || durationTime >= forcedDepartureTime)
+
+            long durationTime = attendee.getUpdatedTimestamp() - attendee.
+              getCreatedTimestamp();
+
+            if (attendee.getUpdatedTimestamp() == 0 || durationTime
+              >= forcedDepartureTime)
             {
               forcedDeparture++;
             }
@@ -340,11 +355,12 @@ public class Database
         }
       }
 
-      if ( correctDepartureAttendees > 0 )
+      if (correctDepartureAttendees > 0)
       {
-        averageDuration = ( durationSum / correctDepartureAttendees ) / ( 1000 * 60 );
+        averageDuration = (durationSum / correctDepartureAttendees)
+          / (1000 * 60);
       }
-      
+
       InfluxDbWriter.write(room.getPin(), numberOfAttendees,
         currentAttendees, departuredAttendees, forcedDeparture, averageDuration);
     }

@@ -1,4 +1,4 @@
-package sonia.webapp.qrtravel.ldap.util;
+package sonia.webapp.qrtravel.util;
 
 import lombok.Getter;
 import lombok.Setter;

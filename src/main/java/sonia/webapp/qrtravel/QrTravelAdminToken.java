@@ -75,16 +75,19 @@ public class QrTravelAdminToken
   {
     Cookie[] cookies = request.getCookies();
     String cookieValue = UNKNOWN_ADMIN_TOKEN;
-    
-    for( Cookie cookie : cookies )
+
+    if (cookies != null)
     {
-      if ( cookie.getName().equals(QR_TRAVEL_ADMIN_TOKEN))
+      for (Cookie cookie : cookies)
       {
-        cookieValue = cookie.getValue();
-        break;
+        if (cookie.getName().equals(QR_TRAVEL_ADMIN_TOKEN))
+        {
+          cookieValue = cookie.getValue();
+          break;
+        }
       }
     }
-    
+
     return fromCookieValue(cookieValue);
   }
 
