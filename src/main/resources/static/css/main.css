@@ -39,6 +39,7 @@ h2 {
 }
 
 #logout {
+  white-space: nowrap;
   position: absolute;
   top: 15px;
   right: 15px;
