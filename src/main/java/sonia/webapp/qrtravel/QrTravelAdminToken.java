@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.base.Strings;
 import java.util.UUID;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
@@ -102,10 +103,13 @@ public class QrTravelAdminToken
       String value = objectMapper.writeValueAsString(this);
       value = AdminCipher.getInstance().encrypt(value);
       cookie = new Cookie(QR_TRAVEL_ADMIN_TOKEN, value);
-      if (!"".equals(CONFIG.getContextPath())) {
-    	  cookie.setPath(CONFIG.getContextPath());
-      } else {
-    	  cookie.setPath("/");
+      if (!Strings.isNullOrEmpty(CONFIG.getContextPath()))
+      {
+        cookie.setPath(CONFIG.getContextPath());
+      }
+      else
+      {
+        cookie.setPath("/");
       }
       cookie.setMaxAge(CONFIG.getAdminTokenTimeout());
       cookie.setHttpOnly(true);

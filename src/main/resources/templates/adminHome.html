@@ -60,7 +60,7 @@
             <td th:text="${room.domain}" />
             <td th:text="${room.statistics}" />
             <td style="white-space: nowrap">
-              <a class="btn btn-warning" th:href='${config.webServiceUrl + "/admin/csvexport?p=" + room.pin}'><i class="fas fa-file-csv"></i></a>&nbsp;
+              <a class="btn btn-warning" th:href='@{/admin/csvexport?p={pin}(pin=${room.pin})}'><i class="fas fa-file-csv"></i></a>&nbsp;
               <button class="btn btn-danger" data-toggle="modal" data-target="#deleteDialog" th:attr="data-roompin=|${room.pin}|"  ><i class="fas fa-trash"></i></button>
             </td>
           </tr>

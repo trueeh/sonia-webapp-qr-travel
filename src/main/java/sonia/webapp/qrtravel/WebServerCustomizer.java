@@ -1,5 +1,6 @@
 package sonia.webapp.qrtravel;
 
+import com.google.common.base.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
@@ -21,6 +22,16 @@ public class WebServerCustomizer
   {
     LOGGER.info("WebServerCustomizer.customize");
     factory.setPort(CONFIG.getWebServicePort());
-    factory.setContextPath(CONFIG.getContextPath());
+    
+    if ( ! Strings.isNullOrEmpty(CONFIG.getContextPath()))
+    {
+      LOGGER.info( "set context path to: " + CONFIG.getContextPath());
+      factory.setContextPath(CONFIG.getContextPath());
+    }
+    else
+    {
+      LOGGER.info( "set context path to root" );
+      factory.setContextPath("");
+    }
   }
 }
