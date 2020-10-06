@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8">
+    <title>QR Travel</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="Ostfalia, Rechenzentrum">
+    <title>Raumsuche</title>
+    <!-- Bootstrap core CSS -->
+    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom styles for this template -->
+    <link href="custom/css/starter-template.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="css/main.css">
+  </head>
+
+  <body>
+    <div class="container">
+      <img id="qrlogo" width="64" height="64" src="image/logo.png" />
+
+      <div class="row">
+        <div class="d-none d-md-block col-md-3 ">&nbsp;</div>
+        <div class="col-xs-12 col-sm-12 col-md-6 mt-1" style="text-align: center;">
+          <h1 id="roomtype" >Search Page</h1>
+        </div>
+        <div class="d-none d-md-block col-md-3 ">&nbsp;</div>
+      </div>
+
+      <div id="logout">
+        <span th:text="${token.givenName}" /> <span th:text="${token.sn}" />
+        <a style='margin-left: 1em' class="btn btn-primary" href="sys/logout" role="button">Logout</a>
+      </div>
+
+
+      <form name="searchRoomForm" action="#" th:action="@{/search}" th:object="${searchRoomForm}" method="POST" >
+        <div style='margin-top: 1em; margin-bottom: 1em'>
+          <div class="row">
+            <div class="col-sm-3">
+              <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                  <label class="input-group-text" 
+                         for="inputGroupSelect01">Raum Typ</label>
+                </div>
+                <select class="custom-select" id="inputGroupSelect01" th:field="*{roomType}" >
+                  <option th:each="roomType: ${roomTypes}" 
+                          th:value="${roomType.rtype}" 
+                          th:text="${roomType.description}"></option>
+                </select>
+              </div>
+            </div>
+            <div class="col-sm-8 input-group">
+              <input type="text" class="form-control" th:field="*{description}" placeholder="Bezeichnung" aria-label="Recipient's username" aria-describedby="basic-addon2">
+              <div th:if="${#fields.hasErrors('description')}" th:errors="*{description}">Error</div>
+            </div>
+            <div class="col-sm-1">
+              <button type="submit" class="btn btn-success">?</button>
+            </div>
+          </div>
+        </div>
+      </form>
+
+      <table class="table table-striped table-hover">
+        <thead class="thead-dark">
+          <tr>
+            <th scope="col">URL</th>
+<!--
+            <th scope="col">PIN</th>
+ --> 
+            <th scope="col">Bezeichnung</th>
+            <th scope="col">Eigentümer</th>
+<!--
+             <th scope="col">Angelegt</th>
+            <th scope="col">Domain</th>
+ --> 
+            <th scope="col">Statistik</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr th:each="room: ${rooms}">
+            <td><a target='_blank' th:href='${config.webServiceUrl + "/view?p=" + room.pin}'>QR</a></td>
+<!--
+            <td th:text="${room.pin}" />
+ --> 
+            <td th:text="${room.description}" />
+            <td th:text="${room.ownerUid}" />
+<!--
+            <td th:text="${room.creation}" />
+            <td th:text="${room.domain}" />
+ --> 
+            <td th:text="${room.statistics}" />
+          </tr>
+        </tbody>
+      </table>
+
+    </div>
+
+    <!-- Bootstrap core JavaScript
+        ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+
+    <script src="jquery/jquery-3.5.1.min.js" integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2" crossorigin="anonymous"></script>
+    <script>window.jQuery;</script>
+    <script src="bootstrap/js/bootstrap.min.js"></script>
+    <script src="custom/js/next-input.js"></script>
+    <script src="custom/js/submit.js"></script>
+
+    <div th:if="${dataCommitted}">
+      <script>
+      showCommitMessage();
+      </script>
+    </div>
+
+    <p id="footer"><font size="-1"><a href="imprint.html">Impressum</a> - <a href="privacypolicy.html">Datenschutzerklärung</a></font></p>
+
+  </body>
+</html>

@@ -235,6 +235,117 @@ public class Database
     return result;
   }
 
+  /**
+   * find roomType by id
+ * @param id	id of RoomType
+ * @return	RoomType
+ */
+public static RoomType searchRoomTypeById(int id)
+  {
+    return getEntityManager().find(RoomType.class, id);
+  }
+
+/**
+ * search  rooms by roomtype and description (wildcard) 
+ * @param roomType 	the RoomType
+ * @param description	the description
+ * @return list of rooms
+ */
+public static List<Room> searchRoomsByTypeAndDescription(RoomType roomType, String description)
+  {
+    List<Object[]> resultList;
+    List<Room> result = null;
+
+    TypedQuery<Object[]> query = getEntityManager().createNamedQuery(
+      "searchRoomsByTypeAndDescription", Object[].class);
+
+    try
+    {
+      query.setParameter("roomType", roomType );
+      query.setParameter("description", "%" + description + "%");
+      resultList = query.getResultList();
+      result = new ArrayList<>();
+
+      for (Object[] o : resultList)
+      {
+        result.add((Room) o[0]);
+      }
+
+    }
+    catch (javax.persistence.NoResultException e)
+    {
+      LOGGER.debug("search rooms by type and description", e);
+    }
+
+    return result;
+  }
+
+/**
+ * search rooms by type
+ * @param roomType	the roomtype
+ * @return list of rooms
+ */
+public static List<Room> searchRoomsByType(RoomType roomType)
+  {
+    List<Object[]> resultList;
+    List<Room> result = null;
+
+    TypedQuery<Object[]> query = getEntityManager().createNamedQuery(
+      "searchRoomsByType", Object[].class);
+
+    try
+    {
+      query.setParameter("roomType", roomType );
+      resultList = query.getResultList();
+      result = new ArrayList<>();
+
+      for (Object[] o : resultList)
+      {
+        result.add((Room) o[0]);
+      }
+
+    }
+    catch (javax.persistence.NoResultException e)
+    {
+      LOGGER.debug("search rooms by type", e);
+    }
+
+    return result;
+  }
+
+/**
+ * search rooms by description (wildcard) 
+ * @param description the description
+ * @return list of rooms
+ */
+public static List<Room> searchRoomsByDescription(String description)
+  {
+    List<Object[]> resultList;
+    List<Room> result = null;
+
+    TypedQuery<Object[]> query = getEntityManager().createNamedQuery(
+      "searchRoomsByDescription", Object[].class);
+
+    try
+    {
+      query.setParameter("description", "%" + description + "%");
+      resultList = query.getResultList();
+      result = new ArrayList<>();
+
+      for (Object[] o : resultList)
+      {
+        result.add((Room) o[0]);
+      }
+
+    }
+    catch (javax.persistence.NoResultException e)
+    {
+      LOGGER.debug("search rooms by description", e);
+    }
+
+    return result;
+  }
+
   public static void deleteExpiredAttendeeEntries(long expirationTimestamp)
   {
     int deletedEntries = 0;

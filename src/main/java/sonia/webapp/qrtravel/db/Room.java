@@ -31,7 +31,13 @@ import org.slf4j.LoggerFactory;
 @NamedQueries(
   {
     @NamedQuery(name = "listRooms",
-                query = "select a, upper(a.description) as orderName from room a order by orderName")
+                query = "select a, upper(a.description) as orderName from room a order by orderName"),
+    @NamedQuery(name = "searchRoomsByTypeAndDescription",
+    			query = "select a, upper(a.description) as orderName from room a where a.roomType = :roomType and a.description like :description order by orderName"),
+    @NamedQuery(name = "searchRoomsByType",
+    			query = "select a, upper(a.description) as orderName from room a where a.roomType = :roomType order by orderName"),
+    @NamedQuery(name = "searchRoomsByDescription",
+				query = "select a, upper(a.description) as orderName from room a where a.description like :description order by orderName")
   })
 @ToString
 public class Room implements Serializable
@@ -135,6 +141,11 @@ public class Room implements Serializable
   @Column(name = "owner_uid")
   private @JsonIgnore
   String ownerUid;
+
+  @Getter
+  @Column(unique=true, nullable=true, name = "external_id")
+  private @JsonIgnore
+  Long externalId;
 
   @Getter
   private String domain;
