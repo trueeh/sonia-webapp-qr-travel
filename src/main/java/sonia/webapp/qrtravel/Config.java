@@ -27,7 +27,7 @@ import sonia.commons.crypt.util.HEX;
  * Class description
  *
  *
- * @author Dr. Thorsten Ludewig <t.ludewig@gmail.com>
+ * @author Dr.-Ing. Thorsten Ludewig <t.ludewig@ostfalia.de>
  */
 @JsonIgnoreProperties(ignoreUnknown = true, value = { "cipherKey" })
 @ToString
@@ -124,6 +124,7 @@ public class Config
     influxDbPassword = "<not set>";    
     domain = "your.domain";    
     contextPath = "";
+    addressClientClassName = "sonia.webapp.qrtravel.address.GenericAddressClientImpl";
   }
 
   //~--- methods --------------------------------------------------------------
@@ -502,4 +503,6 @@ public class Config
   @Getter
   private final String contextPath;
 
+  @Getter
+  private final String addressClientClassName;
 }
