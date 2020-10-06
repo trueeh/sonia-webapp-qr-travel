@@ -26,7 +26,7 @@ public class QrViewController
   {
     LOGGER.info("pin = " + pin + ", location=" + location );
     
-    String qrUrl = "/qrcode?p=" + pin;
+    String qrUrl = "qrcode?p=" + pin;
     if ( location != null )
     {
       qrUrl += "&l=" + location;

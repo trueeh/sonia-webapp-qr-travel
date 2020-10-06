@@ -123,6 +123,7 @@ public class Config
     influxDbUser = "qr";
     influxDbPassword = "<not set>";    
     domain = "your.domain";    
+    contextPath = "";
     addressClientClassName = "sonia.webapp.qrtravel.address.GenericAddressClientImpl";
   }
 
@@ -498,6 +499,9 @@ public class Config
   
   @Getter
   private final String domain;
+  
+  @Getter
+  private final String contextPath;
 
   @Getter
   private final String addressClientClassName;

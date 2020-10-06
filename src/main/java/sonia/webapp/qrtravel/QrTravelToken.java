@@ -110,7 +110,11 @@ public class QrTravelToken implements AttendeeData
       String value = objectMapper.writeValueAsString(this);
       value = Cipher.encrypt(value);
       cookie = new Cookie(QR_TRAVEL_TOKEN, value);
-      cookie.setPath("/");
+      if (!"".equals(CONFIG.getContextPath())) {
+    	  cookie.setPath(CONFIG.getContextPath());
+      } else {
+    	  cookie.setPath("/");
+      }
       cookie.setMaxAge(CONFIG.getTokenTimeout());
       cookie.setHttpOnly(true);
     }
