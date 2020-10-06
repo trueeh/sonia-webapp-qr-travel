@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-  <div th:replace="fragments :: adminPageHeader(title='Raum-Administration')" th:remove="tag">Page Header</div>
+  <div th:replace="fragments :: pageHeader(title='Raum-Administration')" th:remove="tag">Page Header</div>
   <body>
     <div class="container" style='margin-left: 0; margin-right: 0; max-width: 100%'>
       <div th:replace="fragments :: adminBodyHeader(title='Raum-Administration')" th:remove="tag">Body Header</div>
@@ -92,7 +92,7 @@
       </div>
     </div>
 
-    <div th:replace="fragments :: adminBodyFooter" />      
+    <div th:replace="fragments :: bodyFooter" />      
 
     <script>
       $('#deleteDialog').on('show.bs.modal', function (event) {

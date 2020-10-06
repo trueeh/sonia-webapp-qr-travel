@@ -3,11 +3,11 @@
   <head>
     <meta charset="UTF-8">
     <title>QR Raumverwaltung</title>
-    <link rel="stylesheet" type="text/css" href="css/main.css">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/main.css}">
   </head>
   <body>
     <div class='qrbody'>
-      <img id="qrlogo" src="image/logo.png" />
+      <img id="qrlogo" th:src="@{/image/logo.png}" />
       <div th:if="${room != null}">
         <h1><div th:text="${room.roomType.description}" /></h1>
         <h2><div th:text="${room.description}" /></h2>
