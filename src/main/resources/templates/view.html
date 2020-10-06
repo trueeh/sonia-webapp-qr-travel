@@ -24,9 +24,9 @@
           <script th:inline="javascript">
             function getNumberOfAttendees() {
               var noa = document.getElementById('noAttendees');
-              var pin = [[${room.pin}]];
+              var apiUrl = [[${apiUrl}]];
 
-              fetch('room?p=' + pin).then(resp => resp.json()).then(function (room) {
+              fetch(apiUrl).then(resp => resp.json()).then(function (room) {
                 noa.innerHTML = "Aktuell: " + room.attendeesCount + " Personen";
               });
             }
