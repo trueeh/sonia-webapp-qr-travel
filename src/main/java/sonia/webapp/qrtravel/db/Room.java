@@ -137,6 +137,11 @@ public class Room implements Serializable
   String ownerUid;
 
   @Getter
+  @Column(unique=true, nullable=true, name = "external_id")
+  private @JsonIgnore
+  Long externalId;
+
+  @Getter
   private String domain;
 
   @Getter
