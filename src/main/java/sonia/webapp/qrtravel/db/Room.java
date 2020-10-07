@@ -33,11 +33,11 @@ import org.slf4j.LoggerFactory;
     @NamedQuery(name = "listRooms",
                 query = "select a, upper(a.description) as orderName from room a order by orderName"),
     @NamedQuery(name = "searchRoomsByTypeAndDescription",
-    			query = "select a, upper(a.description) as orderName from room a where a.roomType = :roomType and a.description like :description order by orderName"),
+    			query = "select a, upper(a.description) as orderName from room a where a.roomType = :roomType and upper(a.description) like :description order by orderName"),
     @NamedQuery(name = "searchRoomsByType",
     			query = "select a, upper(a.description) as orderName from room a where a.roomType = :roomType order by orderName"),
     @NamedQuery(name = "searchRoomsByDescription",
-				query = "select a, upper(a.description) as orderName from room a where a.description like :description order by orderName")
+				query = "select a, upper(a.description) as orderName from room a where upper(a.description) like :description order by orderName")
   })
 @ToString
 public class Room implements Serializable
