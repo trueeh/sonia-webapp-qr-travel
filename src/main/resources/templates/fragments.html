@@ -119,7 +119,7 @@
       <script>
         $('.dropdown-toggle').dropdown();
       </script>
-      <p id="footer"><font size="-1"><a th:href="@{/imprint.html}">Impressum</a> - <a th:href="@{/privacypolicy.html}">Datenschutzerklärung</a></font></p>
+      <p id="footer"><font size="-1"><a th:href="${config.imprintLink} ? ${config.imprintLink} : @{/imprint.html}">Impressum</a> - <a th:href="@{/privacypolicy.html}">Datenschutzerklärung</a> - <a th:href="${config.accessibilityLink} ? ${config.accessibilityLink} : @{/accessibility.html}">Erklärung zur Barrierefreiheit</a></font></p>
     </div>
 
 
