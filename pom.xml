@@ -169,6 +169,9 @@
       <resource>
         <directory>src/main/resources</directory>
         <filtering>false</filtering>
+        <excludes>
+			<exclude>**/main.css</exclude>
+		</excludes>
       </resource>
       <resource>
         <directory>src/main/config</directory>

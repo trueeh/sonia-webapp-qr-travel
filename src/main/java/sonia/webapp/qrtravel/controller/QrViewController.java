@@ -34,6 +34,7 @@ public class QrViewController
       qrUrl += "&l=" + location;
     }
     
+	model.addAttribute("config", CONFIG);
     model.addAttribute("webServiceUrl", CONFIG.getWebServiceUrl());
     model.addAttribute("room", Database.findRoom(pin));
     model.addAttribute("location", location );

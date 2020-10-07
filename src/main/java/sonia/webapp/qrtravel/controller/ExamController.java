@@ -106,6 +106,7 @@ public class ExamController
     model.addAttribute("room", room);
     model.addAttribute("pin", pin);
     model.addAttribute("token", token);
+	model.addAttribute("config", CONFIG);
     model.addAttribute("submitButtonText", createEntry ? "Kommen" : "Gehen");
 
     token.setLastPin(pin);
@@ -220,6 +221,7 @@ public class ExamController
       }
     }
 
+	model.addAttribute("config", CONFIG);
     model.addAttribute("room", room);
     model.addAttribute("token", token);
     model.addAttribute("pin", examForm.getPin());

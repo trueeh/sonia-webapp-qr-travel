@@ -9,6 +9,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import sonia.webapp.qrtravel.Config;
 import sonia.webapp.qrtravel.QrTravelToken;
 import static sonia.webapp.qrtravel.QrTravelToken.QR_TRAVEL_TOKEN;
 import static sonia.webapp.qrtravel.QrTravelToken.UNKNOWN_TOKEN;
@@ -20,6 +22,8 @@ public class HomeController
 {
   private final static Logger LOGGER = LoggerFactory.getLogger(
     HomeController.class.getName());
+
+  private final static Config CONFIG = Config.getInstance();
 
   @GetMapping("/kaputt")
   public void kaputt()
@@ -59,6 +63,8 @@ public class HomeController
     model.addAttribute("room", room);
     model.addAttribute("pin", pin);
     model.addAttribute("token", token);
+	model.addAttribute("config", CONFIG);
+
     LOGGER.debug("Response token = " + token.toString());
 
     token.addToHttpServletResponse(response);

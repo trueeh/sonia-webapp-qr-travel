@@ -124,6 +124,7 @@ public class LoginController
       }
     }
 
+	model.addAttribute("config", CONFIG);
     model.addAttribute("dataCommitted", dataCommitted);
     model.addAttribute("errorMessage", errorMessage);
     model.addAttribute("token", token);
