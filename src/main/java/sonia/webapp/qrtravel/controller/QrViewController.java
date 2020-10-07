@@ -26,7 +26,9 @@ public class QrViewController
   {
     LOGGER.info("pin = " + pin + ", location=" + location );
     
-    String qrUrl = "qrcode?p=" + pin;
+    String qrUrl = CONFIG.getWebServiceUrl() + "/qrcode?p=" + pin;
+    String apiUrl = CONFIG.getWebServiceUrl() + "/room?p=" + pin;
+    
     if ( location != null )
     {
       qrUrl += "&l=" + location;
@@ -36,6 +38,7 @@ public class QrViewController
     model.addAttribute("room", Database.findRoom(pin));
     model.addAttribute("location", location );
     model.addAttribute("qrUrl", qrUrl );
+    model.addAttribute("apiUrl", apiUrl );
     return "view";
   }
 }

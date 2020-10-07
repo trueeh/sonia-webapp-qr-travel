@@ -1,25 +1,10 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-  <head>
-    <meta charset="UTF-8">
-    <title>QR Travel</title>
-
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="Ostfalia, Rechenzentrum">
-    <title>Poolraum Anmeldung</title>
-    <!-- Bootstrap core CSS -->
-    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Custom styles for this template -->
-    <link href="custom/css/starter-template.css" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="css/main.css">
-  </head>
+  <div th:replace="fragments :: pageHeader(title='Anmeldung')" th:remove="tag">Page Header</div>
 
   <body>
     <div class="container">
-      <div th:replace="fragments :: cookieMessage" />      
+      <div th:replace="fragments :: cookieMessage"></div>      
       <img id="qrlogo" width="64" height="64" src="image/logo.png" />
       <div th:if="${token.cookieAccepted}">
         <div th:if="${room == null}">
@@ -47,16 +32,6 @@
         </div>
       </div>
     </div>
-    <!-- Bootstrap core JavaScript
-        ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-
-    <script src="jquery/jquery-3.5.1.min.js" integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2" crossorigin="anonymous"></script>
-    <script>window.jQuery;</script>
-    <script src="bootstrap/js/bootstrap.min.js"></script>
-    <script src="custom/js/next-input.js"></script>
-    <script src="custom/js/submit.js"></script>
-
-    <p id="footer"><font size="-1"><a href="imprint.html">Impressum</a> - <a href="privacypolicy.html">Datenschutzerklärung</a></font></p>
+    <div th:replace="fragments :: bodyFooter" th:remove="tag">Body Footer</div>
   </body>
 </html>

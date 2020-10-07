@@ -1,5 +1,6 @@
 package sonia.webapp.qrtravel.filter;
 
+import com.google.common.base.Strings;
 import java.io.IOException;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -38,6 +39,19 @@ public class AuthFilter implements Filter
     boolean followChain = true;
 
     String uri = request.getRequestURI();
+    
+    String contextPath = "";
+    
+    if ( ! Strings.isNullOrEmpty(CONFIG.getContextPath()))
+    {
+      contextPath = CONFIG.getContextPath();
+      uri = uri.substring(contextPath.length());
+      if ( ! contextPath.endsWith("/"))
+      {
+        contextPath += "/";
+      }
+    }
+    
     if (uri.startsWith("/sys") || uri.startsWith("/admin"))
     {
       LOGGER.debug("Logging Request {} : {}", request.getMethod(), uri);
@@ -67,7 +81,7 @@ public class AuthFilter implements Filter
     }
     else
     {
-      response.sendRedirect("/sys/login");
+      response.sendRedirect( contextPath + "/sys/login");
     }
   }
 }
