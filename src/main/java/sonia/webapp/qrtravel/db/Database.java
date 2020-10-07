@@ -262,7 +262,7 @@ public static List<Room> searchRoomsByTypeAndDescription(RoomType roomType, Stri
     try
     {
       query.setParameter("roomType", roomType );
-      query.setParameter("description", "%" + description + "%");
+      query.setParameter("description", "%" + description.toUpperCase() + "%");
       resultList = query.getResultList();
       result = new ArrayList<>();
 
@@ -328,7 +328,7 @@ public static List<Room> searchRoomsByDescription(String description)
 
     try
     {
-      query.setParameter("description", "%" + description + "%");
+      query.setParameter("description", "%" + description.toUpperCase() + "%");
       resultList = query.getResultList();
       result = new ArrayList<>();
 
