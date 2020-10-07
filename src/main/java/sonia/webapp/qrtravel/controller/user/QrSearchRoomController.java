@@ -1,4 +1,4 @@
-package sonia.webapp.qrtravel.user;
+package sonia.webapp.qrtravel.controller.user;
 
 import static sonia.webapp.qrtravel.QrTravelAdminToken.QR_TRAVEL_ADMIN_TOKEN;
 import static sonia.webapp.qrtravel.QrTravelAdminToken.UNKNOWN_ADMIN_TOKEN;
