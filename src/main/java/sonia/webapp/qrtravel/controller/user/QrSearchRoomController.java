@@ -1,8 +1,5 @@
 package sonia.webapp.qrtravel.controller.user;
 
-import static sonia.webapp.qrtravel.QrTravelAdminToken.QR_TRAVEL_ADMIN_TOKEN;
-import static sonia.webapp.qrtravel.QrTravelAdminToken.UNKNOWN_ADMIN_TOKEN;
-
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
@@ -20,11 +17,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import sonia.webapp.qrtravel.Config;
 import sonia.webapp.qrtravel.QrTravelAdminToken;
+import static sonia.webapp.qrtravel.QrTravelAdminToken.QR_TRAVEL_ADMIN_TOKEN;
+import static sonia.webapp.qrtravel.QrTravelAdminToken.UNKNOWN_ADMIN_TOKEN;
 import sonia.webapp.qrtravel.db.Database;
 import sonia.webapp.qrtravel.db.Room;
 import sonia.webapp.qrtravel.db.RoomType;
 import sonia.webapp.qrtravel.form.AdminRoomForm;
 import sonia.webapp.qrtravel.form.SearchRoomForm;
+import sonia.webapp.qrtravel.util.Counter;
 
 /**
  * search functions for room list
@@ -43,7 +43,6 @@ public class QrSearchRoomController {
 			HttpServletResponse response, Model model, SearchRoomForm searchRoomForm) {
 		LOGGER.debug("Search home GET request");
 		QrTravelAdminToken token = QrTravelAdminToken.fromCookieValue(tokenValue);
-		// QrTravelAdminToken token = null;
 
 		List<RoomType> roomTypes = Database.listRoomTypes();
 		roomTypes.add(new RoomType());
@@ -51,6 +50,7 @@ public class QrSearchRoomController {
 		model.addAttribute("rooms", Database.listRooms());
 		model.addAttribute("token", token);
 		model.addAttribute("config", CONFIG);
+	    model.addAttribute("counter", new Counter());
 		token.addToHttpServletResponse(response);
 		return "searchRoom";
 	}
@@ -98,6 +98,7 @@ public class QrSearchRoomController {
 		model.addAttribute("rooms", roomList);
 		model.addAttribute("token", token);
 		model.addAttribute("config", CONFIG);
+	    model.addAttribute("counter", new Counter());
 		token.addToHttpServletResponse(response);
 		return "searchRoom";
 	}
