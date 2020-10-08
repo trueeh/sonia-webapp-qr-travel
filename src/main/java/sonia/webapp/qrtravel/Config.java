@@ -129,6 +129,9 @@ public class Config
     imprintLink = null;
     privacyPolicyLink = null;
     accessibilityLink = null;
+    
+    submitKommen = "Kommen";
+    submitGehen = "Gehen";
   }
 
   //~--- methods --------------------------------------------------------------
@@ -518,4 +521,10 @@ public class Config
   
   @Getter
   private final String accessibilityLink;
+  
+  @Getter
+  private final String submitKommen;
+
+  @Getter
+  private final String submitGehen;
 }
