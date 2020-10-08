@@ -12,7 +12,7 @@
                   <label class="input-group-text" 
                          for="inputGroupSelect01">Raum Typ</label>
                 </div>
-                <select class="custom-select" id="inputGroupSelect01" th:field="*{roomType}" >
+                <select class="custom-select" id="inputGroupSelect01" th:field="*{roomType}" th:onchange="this.form.submit()">
                   <option th:each="roomType: ${roomTypes}" 
                           th:value="${roomType.rtype}" 
                           th:text="${roomType.description}"></option>
