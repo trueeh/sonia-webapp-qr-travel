@@ -46,6 +46,7 @@ public class AdminTraceContactsController
       getAttribute(QR_TRAVEL_ERROR_MESSAGE);
     LOGGER.debug("Error message ({})", errorMessage);
 
+    model.addAttribute("config", CONFIG);
     model.addAttribute("token", token);
     model.addAttribute("errorMessage", errorMessage);
     token.addToHttpServletResponse(response);

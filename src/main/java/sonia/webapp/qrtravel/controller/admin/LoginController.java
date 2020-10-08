@@ -46,6 +46,7 @@ public class LoginController
     {
       page = "redirect:/admin";
     }
+	model.addAttribute("config", CONFIG);
     model.addAttribute("token", token);
     token.addToHttpServletResponse(response);
     return page;
@@ -60,6 +61,7 @@ public class LoginController
     LOGGER.debug("Login GET Request");
     QrTravelAdminToken token = QrTravelAdminToken.fromCookieValue(tokenValue);
     token.setAuthenticated(false);
+	model.addAttribute("config", CONFIG);
     model.addAttribute("token", token);
     token.addToHttpServletResponse(response);
     return "redirect:/sys/login";
