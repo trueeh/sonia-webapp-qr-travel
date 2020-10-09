@@ -106,7 +106,8 @@ public class ExamController
     model.addAttribute("room", room);
     model.addAttribute("pin", pin);
     model.addAttribute("token", token);
-    model.addAttribute("submitButtonText", createEntry ? "Kommen" : "Gehen");
+	model.addAttribute("config", CONFIG);
+    model.addAttribute("submitButtonText", createEntry ? CONFIG.getSubmitKommen() : CONFIG.getSubmitGehen());
 
     token.setLastPin(pin);
     LOGGER.debug("Response token = " + token.toString());
@@ -220,11 +221,12 @@ public class ExamController
       }
     }
 
+	model.addAttribute("config", CONFIG);
     model.addAttribute("room", room);
     model.addAttribute("token", token);
     model.addAttribute("pin", examForm.getPin());
     model.addAttribute("submitButtonText",
-      (createEntry ^ dataCommitted) ? "Kommen" : "Gehen");
+      (createEntry ^ dataCommitted) ? CONFIG.getSubmitKommen() : CONFIG.getSubmitGehen());
     model.addAttribute("dataCommitted", dataCommitted);
     model.addAttribute("errorMessage", errorMessage);
 

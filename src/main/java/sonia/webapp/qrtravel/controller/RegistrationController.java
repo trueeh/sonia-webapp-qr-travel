@@ -100,10 +100,11 @@ public class RegistrationController
     
     LOGGER.debug( "create entry = " + createEntry );
 
+	model.addAttribute("config", CONFIG);
     model.addAttribute("room", room);
     model.addAttribute("pin", pin);
     model.addAttribute("token", token);
-    model.addAttribute("submitButtonText", ( createEntry ? "Kommen" : "Gehen"));
+    model.addAttribute("submitButtonText", ( createEntry ? CONFIG.getSubmitKommen() : CONFIG.getSubmitGehen()));
 
     token.setLastPin(pin);
     LOGGER.debug("Response token = " + token.toString());
@@ -215,11 +216,12 @@ public class RegistrationController
     
     LOGGER.debug( "create entry = " + createEntry + ", data commited = " + dataCommitted );
     
+	model.addAttribute("config", CONFIG);
     model.addAttribute("room", room);
     model.addAttribute("token", token);
     model.addAttribute("pin", registrationForm.getPin());
     model.addAttribute("submitButtonText",
-      (createEntry ^ dataCommitted) ? "Kommen" : "Gehen");
+      (createEntry ^ dataCommitted) ? CONFIG.getSubmitKommen() : CONFIG.getSubmitGehen());
     model.addAttribute("dataCommitted", dataCommitted);
 
     token.setLastPin(registrationForm.getPin());

@@ -82,7 +82,7 @@ public class AdminController
     LOGGER.debug("Admin home POST request ({})", uuid);
     QrTravelAdminToken token = QrTravelAdminToken.fromCookieValue(tokenValue);
 
-    if (bindingResult.hasErrors())
+    if (bindingResult.hasErrors()) 
     {
       LOGGER.error("bind result has errors");
       List<FieldError> fel = bindingResult.getFieldErrors();

@@ -125,6 +125,13 @@ public class Config
     domain = "your.domain";    
     contextPath = "";
     addressClientClassName = "sonia.webapp.qrtravel.address.GenericAddressClientImpl";
+
+    imprintLink = null;
+    privacyPolicyLink = null;
+    accessibilityLink = null;
+    
+    submitKommen = "Kommen";
+    submitGehen = "Gehen";
   }
 
   //~--- methods --------------------------------------------------------------
@@ -505,4 +512,19 @@ public class Config
 
   @Getter
   private final String addressClientClassName;
+  
+  @Getter
+  private final String imprintLink;
+  
+  @Getter
+  private final String privacyPolicyLink;
+  
+  @Getter
+  private final String accessibilityLink;
+  
+  @Getter
+  private final String submitKommen;
+
+  @Getter
+  private final String submitGehen;
 }
