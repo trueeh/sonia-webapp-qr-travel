@@ -7,3 +7,6 @@ config/
 logs/
 qr-travel.jar
 DEPLOY.sh
+.project
+.classpath
+.settings
